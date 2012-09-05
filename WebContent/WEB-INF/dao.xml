@@ -8,13 +8,13 @@
 	
 	<!-- hibernate -->
 	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-		<property name="configLocation"><value>classpath:maks105fm.hibernate.cfg.xml</value></property>
+		<property name="configLocation"><value>/WEB-INF/spring/maks105fm.hibernate.cfg.xml</value></property>
 		<property name="dataSource" ref="dataSource"></property>
 		<property name="hibernateProperties">
 			<props>
 				<prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
 				<prop key="hibernate.show_sql">false</prop>
-				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.hbm2ddl.auto">validate</prop>
 			</props>
 		</property>
 	</bean>
