@@ -15,8 +15,8 @@
     <context-param>
     	<param-name>contextConfiguration</param-name>
     	<param-value>
-    		/WEB-INF/spring/security.xml
-    		/WEB-INF/spring/appServlet/servlet-context.xml
+    		/WEB-INF/security.xml
+    		/WEB-INF/applicationContext.xml
     	</param-value>
     </context-param>
  
@@ -33,7 +33,7 @@
  
     <servlet-mapping>
         <servlet-name>appServlet</servlet-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
     
     <listener>
