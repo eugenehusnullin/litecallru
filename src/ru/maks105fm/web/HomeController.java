@@ -33,9 +33,9 @@ public class HomeController {
 		return "home";
 	}
 
-	@RequestMapping(value = "/request", method = RequestMethod.GET)
+	@RequestMapping(value = "/request", method = RequestMethod.POST)
 	public String request(@RequestParam("queue") String queue,
-			@RequestParam("from") Date from, @RequestParam("to") Date to) {
+			@RequestParam("from") Date from, @RequestParam("to") Date to, Model model) {
 		
 		return "home";
 	}
