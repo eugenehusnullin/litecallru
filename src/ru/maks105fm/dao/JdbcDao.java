@@ -1,6 +1,8 @@
 package ru.maks105fm.dao;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -20,16 +22,26 @@ public class JdbcDao implements Dao {
 	}
 
 	@Override
-	public List<String> getQueues(String username) {
+	public List<Map<String, Object>> getQueues(String username) {
 		long clientid = jdbcTemplate.queryForLong(
-				"select a.id from client a where a.username = ?", username);
+				"select a.clientid from \"user\" a where a.username = ?", username);
 		if (clientid == 0) {
 			return null;
 		}
+		
+		return jdbcTemplate.queryForList("select a.name, a.description from queue a where a.clientid = ?",
+				clientid);
 
-		return jdbcTemplate.queryForList(
-				"select a.name from clientqueue a where a.clientid = ?",
-				String.class, clientid);
+//		return jdbcTemplate.queryForList(
+//				"select a.description from clientqueue a where a.clientid = ?",
+//				String.class, clientid);
+	}
+
+	@Override
+	public List<Map<String, Object>> getQueueLog(String queuename, Date from,
+			Date to) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -6,34 +6,39 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Home</title>
+<title>Статистика</title>
 </head>
 <body>
 	<div>Вы авторизованы: <c:out value="${username}"/> </div>
 	<br />
 	
-	<form action="request" method="post">
+	<form action="request" method="get">
 		<label>Установите параметры</label>
 		<br />
 
 		<label>Очередь:</label>
-		<select id="queue">
+		<select name="queue">
 			<c:forEach items="${queues}" var="qi">
-				<option value="${qi}">${qi}</option>
+				<option value="${qi.name}">${qi.description}</option>
 			</c:forEach>
-		</select>
-		
+		</select>		
 		<br />
+		
 		<label>С</label>
-		<input type="date" id="from"/>
-		
+		<input name="from" value=""/>		
 		<br />
+		
 		<label>По</label>
-		<input type="date" id="to"/>
-		
+		<input name="to"/>		
 		<br />
-		<input type="submit" value="Показать" id="submit"/>
+		
+		<input type="submit" value="Показать"/>
 	</form>
+	
+	<br />
+	<br />
+	
+	<table></table>
 	
 </body>
 </html>
