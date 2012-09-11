@@ -76,7 +76,7 @@
 						<td>${call.callerid}</td>
 						<td>${call.waittime}</td>
 						<td>${call.calltime}</td>
-						<td>Здесь будет флеш</td>
+						<td><a href="http://31.31.23.219:11983/monitor/${call.uniqueid}.wav">Запись</a></td>
 					</tr>
 				</c:forEach>
 			</table>
