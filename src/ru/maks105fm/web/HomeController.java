@@ -76,6 +76,7 @@ public class HomeController {
 			}
 
 			model.addAttribute("calls", calls);
+			model.addAttribute("callsCount", callsCount);
 			model.addAttribute("curPage", page);
 			model.addAttribute("pagesCount", pagesCount);
 		}

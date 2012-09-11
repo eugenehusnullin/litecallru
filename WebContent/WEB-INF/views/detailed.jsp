@@ -13,12 +13,21 @@
 	<a href="/logout">Выход</a> </div>
 	<br />
 	
+	<div>Детализированная статистика</div>
+	<a href="commonLog?queue=${queue}&period=${period}&from=${from}&to=${to}">Перейти в общую статистику</a>
+	
 	<form action="detailedLog" method="get">
 		<label>Выберите номер:</label>
 		<select name="queue" title="QQwww">
 			<c:forEach items="${queues}" var="qi">
-				<c:if test="${qi.name==queue}"><option selected="selected" value="${qi.name}">${qi.description}</option></c:if>
-				<c:if test="${qi.name!=queue}"><option value="${qi.name}">${qi.description}</option></c:if>
+				<c:choose>
+					<c:when test="${qi.name==queue}">
+						<option selected="selected" value="${qi.name}">${qi.description}</option>
+					</c:when>
+					<c:otherwise>
+						<option value="${qi.name}">${qi.description}</option>
+					</c:otherwise>
+				</c:choose>
 			</c:forEach>
 		</select>		
 		<br />
@@ -26,8 +35,14 @@
 		<label>Выберите период:</label>
 		<select name="period">
 			<c:forEach items="${periods}" var="pi">
-				<c:if test="${pi.name==period}"><option selected="selected" value="${pi.name}">${pi.description}</option></c:if>
-				<c:if test="${pi.name!=period}"><option value="${pi.name}">${pi.description}</option></c:if>
+				<c:choose>
+					<c:when test="${pi.name==period}">
+						<option selected="selected" value="${pi.name}">${pi.description}</option>
+					</c:when>
+					<c:otherwise>
+						<option value="${pi.name}">${pi.description}</option>
+					</c:otherwise>
+				</c:choose>
 			</c:forEach>
 		</select>
 				
@@ -39,56 +54,54 @@
 		<input type="hidden" name="page" value="1"/>
 	</form>
 
-	<c:if test="${calls!=null}">	
-		<br />
-		<table>
-			<thead>
-				<tr>
-					<td>Соединение</td>
-					<td>Дата</td>
-					<td>Событие</td>
-					<td>Ожидание сек.</td>
-					<td>Время разговора сек.</td>
-				</tr>
-			</thead>
-			<c:forEach items="${calls}" var="call">
-				<tr>
-					<td>${call.call}</td>
-					<td>${call.eventdate}</td>
-					<td>${call.event}</td>
-					<td>${call.waittime}</td>
-					<td>${call.calltime}</td>
-				</tr>
-			</c:forEach>
-		</table>
-		<div>
-			<%--For displaying Previous link except for the 1st page --%>
-			<c:if test="${curPage != 1}">
-				<td><a href="detailedLog?queue=${queue}&period=${period}&from=${from}&to=${to}&page=${curPage - 1}">Назад</a></td>
-			</c:if>
-
-			<%--For displaying Page numbers.
-    		The when condition does not display a link for the current page--%>
+	<c:choose>
+	
+		<c:when test="${callsCount!=0}">
+			<br />
 			<table>
-				<tr>
-					<c:forEach begin="1" end="${pagesCount}" var="i">
-						<c:choose>
-							<c:when test="${curPage eq i}">
-								<td>${i}</td>
-							</c:when>
-							<c:otherwise>
-								<td><a href="detailedLog?queue=${queue}&period=${period}&from=${from}&to=${to}&page=${i}">${i}</a></td>
-							</c:otherwise>
-						</c:choose>
-					</c:forEach>
-				</tr>
+				<thead>
+					<tr>
+						<td>№</td>
+						<td>Время</td>
+						<td>Номер звонящего</td>
+						<td>Время ожидания в сек.</td>
+						<td>Длительность разговора в мин.</td>
+						<td>Запись разговора</td>
+					</tr>
+				</thead>
+				<c:forEach items="${calls}" var="call">
+					<tr>
+						<td>${((curPage-1)*10)+call.rownum}</td>
+						<td>${call.eventdate}</td>
+						<td>${call.callerid}</td>
+						<td>${call.waittime}</td>
+						<td>${call.calltime}</td>
+						<td>Здесь будет флеш</td>
+					</tr>
+				</c:forEach>
 			</table>
-
-			<%--For displaying Next link --%>
-			<c:if test="${curPage lt pagesCount}">
-				<td><a href="detailedLog?queue=${queue}&period=${period}&from=${from}&to=${to}&page=${curPage + 1}">Далее</a></td>
-			</c:if>
-		</div>
-	</c:if>
+			<div>
+				Найдено вызовов: <b>${callsCount}</b>
+			</div>
+			<div>
+				Страницы:
+				<c:forEach begin="1" end="${pagesCount}" var="i">
+					<c:choose>
+						<c:when test="${curPage eq i}">
+							<c:out value="${i}"></c:out>
+						</c:when>
+						<c:otherwise>
+							<a href="detailedLog?queue=${queue}&period=${period}&from=${from}&to=${to}&page=${i}">${i}</a>
+						</c:otherwise>
+					</c:choose>
+				</c:forEach>
+			</div>
+		</c:when>
+		
+		<c:otherwise>
+			<div>По вашему запросу ничего не найдено.</div>
+		</c:otherwise>
+	</c:choose>
+		
 </body>
 </html>

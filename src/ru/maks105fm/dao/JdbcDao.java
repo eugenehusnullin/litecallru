@@ -47,7 +47,9 @@ public class JdbcDao implements Dao {
 		int offset = (page - 1) * pagesize;
 		int limit = pagesize;
 
-		String sql = "SELECT eventdate, uniqueid, queuename, agent, event, waittime, calltime, call FROM cdr_queue_view a"
+		String sql = "SELECT to_char(eventdate, 'DD.MM.YY HH24:MI') eventdate, uniqueid, queuename, "
+				+ " agent, event, waittime, ((calltime / 60) + 1) calltime, call, callerid, "
+				+ " row_number() over(order by a.eventdate DESC) rownum FROM cdr_queue_view a"
 				+ " WHERE a.queuename = ? AND"
 				+ " a.eventdate >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND"
 				+ " a.eventdate <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS')"
@@ -117,7 +119,7 @@ public class JdbcDao implements Dao {
 		String strFrom = from + " 00:00:00";
 		String strTo = to + " 23:59:59";
 
-		String sql = "SELECT count(1) FROM cdr_queue_view a" + " WHERE a.queuename = ? AND"
+		String sql = "SELECT count(1) FROM cdr_queue_view a WHERE a.queuename = ? AND"
 				+ " a.eventdate >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND"
 				+ " a.eventdate <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS')";
 
