@@ -12,9 +12,27 @@ public interface Dao {
 
 	List<Map<String, Object>> getQueueLogCurMonth(String queueName, int pagesize, int page);
 
-	int getQueueLogCustomCallsCount(String queueName, String strFrom, String strTo);
+	int getCustomCallsCount(String queueName, String strFrom, String strTo);
 
-	int getQueueLogPrvMonthCallsCount(String queueName);
+	int getPrvMonthCallsCount(String queueName);
 
-	int getQueueLogCurMonthCallsCount(String queueName);
+	int getCurMonthCallsCount(String queueName);
+
+	int getCustomReceivedCallsCount(String queueName, String strFrom, String strTo);
+
+	int getCustomAverageWaitTime(String queueName, String strFrom, String strTo);
+
+	long getCustomSumCallTime(String queueName, String strFrom, String strTo);
+
+	int getPrvMonthReceivedCallsCount(String queueName);
+
+	int getPrvMonthAverageWaitTime(String queueName);
+
+	long getPrvMonthSumCallTime(String queueName);
+
+	int getCurMonthReceivedCallsCount(String queueName);
+
+	int getCurMonthAverageWaitTime(String queueName);
+
+	long getCurMonthSumCallTime(String queueName);
 }

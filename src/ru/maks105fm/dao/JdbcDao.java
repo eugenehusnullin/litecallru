@@ -58,64 +58,58 @@ public class JdbcDao implements Dao {
 		return jdbcTemplate.queryForList(sql, queueName, strFrom, strTo, limit, offset);
 	}
 
-	@Override
-	public List<Map<String, Object>> getQueueLogPrvMonth(String queueName, int pagesize, int page) {
-		Calendar c;
-
-		c = Calendar.getInstance();
-		c.add(Calendar.MONTH, -1);
+	private Date getStartOfMonth(int add) {
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.MONTH, add);
 		c.set(Calendar.DAY_OF_MONTH, c.getActualMinimum(Calendar.DAY_OF_MONTH));
 		c.set(Calendar.HOUR_OF_DAY, c.getActualMinimum(Calendar.HOUR_OF_DAY));
 		c.set(Calendar.MINUTE, c.getActualMinimum(Calendar.MINUTE));
 		c.set(Calendar.SECOND, c.getActualMinimum(Calendar.SECOND));
-		Date from = c.getTime();
+		return c.getTime();
+	}
+	
+	private String getStartOfMonthStr(int add) {
+		DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
+		return df.format(getStartOfMonth(add));
+	}
 
-		c = Calendar.getInstance();
+	private Date getEndOfMonth(int add) {
+		Calendar c = Calendar.getInstance();
 		c.add(Calendar.MONTH, -1);
 		c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
 		c.set(Calendar.HOUR_OF_DAY, c.getActualMaximum(Calendar.HOUR_OF_DAY));
 		c.set(Calendar.MINUTE, c.getActualMaximum(Calendar.MINUTE));
 		c.set(Calendar.SECOND, c.getActualMaximum(Calendar.SECOND));
-		Date to = c.getTime();
+		return c.getTime();
+	}
+	
+	private String getEndOfMonthStr(int add) {
+		DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
+		return df.format(getEndOfMonth(add));
+	}
 
+	@Override
+	public List<Map<String, Object>> getQueueLogPrvMonth(String queueName, int pagesize, int page) {
 		// DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 		// String strFrom = df.format(from);
 		// String strTo = df.format(to);
 
-		DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
-		String strFrom = df.format(from);
-		String strTo = df.format(to);
+		String strFrom = getStartOfMonthStr(-1);
+		String strTo = getEndOfMonthStr(-1);
 
 		return getQueueLogCustom(queueName, strFrom, strTo, pagesize, page);
 	}
 
 	@Override
 	public List<Map<String, Object>> getQueueLogCurMonth(String queueName, int pagesize, int page) {
-		Calendar c;
-
-		c = Calendar.getInstance();
-		c.set(Calendar.DAY_OF_MONTH, c.getActualMinimum(Calendar.DAY_OF_MONTH));
-		c.set(Calendar.HOUR_OF_DAY, c.getActualMinimum(Calendar.HOUR_OF_DAY));
-		c.set(Calendar.MINUTE, c.getActualMinimum(Calendar.MINUTE));
-		c.set(Calendar.SECOND, c.getActualMinimum(Calendar.SECOND));
-		Date from = c.getTime();
-
-		c = Calendar.getInstance();
-		c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
-		c.set(Calendar.HOUR_OF_DAY, c.getActualMaximum(Calendar.HOUR_OF_DAY));
-		c.set(Calendar.MINUTE, c.getActualMaximum(Calendar.MINUTE));
-		c.set(Calendar.SECOND, c.getActualMaximum(Calendar.SECOND));
-		Date to = c.getTime();
-
-		DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
-		String strFrom = df.format(from);
-		String strTo = df.format(to);
+		String strFrom = getStartOfMonthStr(0);
+		String strTo = getEndOfMonthStr(0);
 
 		return getQueueLogCustom(queueName, strFrom, strTo, pagesize, page);
 	}
 
 	@Override
-	public int getQueueLogCustomCallsCount(String queueName, String from, String to) {
+	public int getCustomCallsCount(String queueName, String from, String to) {
 		String strFrom = from + " 00:00:00";
 		String strTo = to + " 23:59:59";
 
@@ -127,54 +121,102 @@ public class JdbcDao implements Dao {
 	}
 
 	@Override
-	public int getQueueLogPrvMonthCallsCount(String queueName) {
-		Calendar c;
+	public int getPrvMonthCallsCount(String queueName) {
+		String strFrom = getStartOfMonthStr(-1);
+		String strTo = getEndOfMonthStr(-1);
 
-		c = Calendar.getInstance();
-		c.add(Calendar.MONTH, -1);
-		c.set(Calendar.DAY_OF_MONTH, c.getActualMinimum(Calendar.DAY_OF_MONTH));
-		c.set(Calendar.HOUR_OF_DAY, c.getActualMinimum(Calendar.HOUR_OF_DAY));
-		c.set(Calendar.MINUTE, c.getActualMinimum(Calendar.MINUTE));
-		c.set(Calendar.SECOND, c.getActualMinimum(Calendar.SECOND));
-		Date from = c.getTime();
-
-		c = Calendar.getInstance();
-		c.add(Calendar.MONTH, -1);
-		c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
-		c.set(Calendar.HOUR_OF_DAY, c.getActualMaximum(Calendar.HOUR_OF_DAY));
-		c.set(Calendar.MINUTE, c.getActualMaximum(Calendar.MINUTE));
-		c.set(Calendar.SECOND, c.getActualMaximum(Calendar.SECOND));
-		Date to = c.getTime();
-
-		DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
-		String strFrom = df.format(from);
-		String strTo = df.format(to);
-
-		return getQueueLogCustomCallsCount(queueName, strFrom, strTo);
+		return getCustomCallsCount(queueName, strFrom, strTo);
 	}
 
 	@Override
-	public int getQueueLogCurMonthCallsCount(String queueName) {
-		Calendar c;
+	public int getCurMonthCallsCount(String queueName) {
+		String strFrom = getStartOfMonthStr(0);
+		String strTo = getEndOfMonthStr(0);
 
-		c = Calendar.getInstance();
-		c.set(Calendar.DAY_OF_MONTH, c.getActualMinimum(Calendar.DAY_OF_MONTH));
-		c.set(Calendar.HOUR_OF_DAY, c.getActualMinimum(Calendar.HOUR_OF_DAY));
-		c.set(Calendar.MINUTE, c.getActualMinimum(Calendar.MINUTE));
-		c.set(Calendar.SECOND, c.getActualMinimum(Calendar.SECOND));
-		Date from = c.getTime();
+		return getCustomCallsCount(queueName, strFrom, strTo);
+	}
 
-		c = Calendar.getInstance();
-		c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
-		c.set(Calendar.HOUR_OF_DAY, c.getActualMaximum(Calendar.HOUR_OF_DAY));
-		c.set(Calendar.MINUTE, c.getActualMaximum(Calendar.MINUTE));
-		c.set(Calendar.SECOND, c.getActualMaximum(Calendar.SECOND));
-		Date to = c.getTime();
+	@Override
+	public int getCustomReceivedCallsCount(String queueName, String from, String to) {
+		String strFrom = from + " 00:00:00";
+		String strTo = to + " 23:59:59";
 
-		DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
-		String strFrom = df.format(from);
-		String strTo = df.format(to);
+		String sql = "SELECT count(1) FROM cdr_queue_view a WHERE a.queuename = ? AND"
+				+ " a.eventdate >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND"
+				+ " a.eventdate <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND a.call = 1";
 
-		return getQueueLogCustomCallsCount(queueName, strFrom, strTo);
+		return jdbcTemplate.queryForInt(sql, queueName, strFrom, strTo);
+	}
+
+	@Override
+	public int getCustomAverageWaitTime(String queueName, String from, String to) {
+		String strFrom = from + " 00:00:00";
+		String strTo = to + " 23:59:59";
+
+		String sql = "SELECT round(avg(a.waittime)) FROM cdr_queue_view a WHERE a.queuename = ? AND"
+				+ " a.eventdate >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND"
+				+ " a.eventdate <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS')";
+
+		return jdbcTemplate.queryForInt(sql, queueName, strFrom, strTo);
+	}
+
+	@Override
+	public long getCustomSumCallTime(String queueName, String from, String to) {
+		String strFrom = from + " 00:00:00";
+		String strTo = to + " 23:59:59";
+
+		String sql = "SELECT sum(((calltime / 60) + 1)) FROM cdr_queue_view a WHERE a.queuename = ? AND"
+				+ " a.eventdate >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND"
+				+ " a.eventdate <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS')";
+
+		return jdbcTemplate.queryForInt(sql, queueName, strFrom, strTo);
+	}
+
+	@Override
+	public int getPrvMonthReceivedCallsCount(String queueName) {
+		String strFrom = getStartOfMonthStr(-1);
+		String strTo = getEndOfMonthStr(-1);
+		
+		return getCustomReceivedCallsCount(queueName, strFrom, strTo);
+	}
+
+	@Override
+	public int getPrvMonthAverageWaitTime(String queueName) {
+		String strFrom = getStartOfMonthStr(-1);
+		String strTo = getEndOfMonthStr(-1);
+		
+		return getCustomAverageWaitTime(queueName, strFrom, strTo);
+	}
+
+	@Override
+	public long getPrvMonthSumCallTime(String queueName) {
+		String strFrom = getStartOfMonthStr(-1);
+		String strTo = getEndOfMonthStr(-1);
+		
+		return getCustomSumCallTime(queueName, strFrom, strTo);
+	}
+
+	@Override
+	public int getCurMonthReceivedCallsCount(String queueName) {
+		String strFrom = getStartOfMonthStr(0);
+		String strTo = getEndOfMonthStr(0);
+		
+		return getCustomReceivedCallsCount(queueName, strFrom, strTo);
+	}
+
+	@Override
+	public int getCurMonthAverageWaitTime(String queueName) {
+		String strFrom = getStartOfMonthStr(0);
+		String strTo = getEndOfMonthStr(0);
+		
+		return getCustomAverageWaitTime(queueName, strFrom, strTo);
+	}
+
+	@Override
+	public long getCurMonthSumCallTime(String queueName) {
+		String strFrom = getStartOfMonthStr(0);
+		String strTo = getEndOfMonthStr(0);
+		
+		return getCustomSumCallTime(queueName, strFrom, strTo);
 	}
 }
