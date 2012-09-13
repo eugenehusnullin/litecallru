@@ -42,7 +42,11 @@
 							<td>${call.callerid}</td>
 							<td>${call.waittime}</td>
 							<td>${call.calltime}</td>
-							<td><a href="http://31.31.23.219:11983/monitor/${call.uniqueid}.wav">Запись</a></td>
+							<td>
+								<c:if test="${call.call==1}">
+									<a href="http://31.31.23.219:11983/monitor/${call.uniqueid}.wav">Запись</a>
+								</c:if>
+							</td>
 						</tr>
 					</c:forEach>
 				</table>
