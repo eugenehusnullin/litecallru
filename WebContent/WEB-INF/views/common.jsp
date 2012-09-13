@@ -9,7 +9,7 @@
 </head>
 <body>
 	<div>Здравствуйте, <c:out value="${username}"/>
-	<a href="/logout">Выход</a> </div>
+	<a href="logout">Выход</a> </div>
 	<br />
 	
 	<div>Общая статистика</div>
@@ -19,21 +19,23 @@
 		<%@ include file="searchform.jsp" %>
 	</form>
 	
-	<c:choose>	
-		<c:when test="${callsCount!=0}">
-			<table>
-				<tr><td>Количество звонков на номер</td><td>${callsCount}</td></tr>
-				<tr><td>Количество обработанных звонков</td><td>${receivedCallsCount}</td></tr>
-				<tr><td>Количество не обработанных звонков</td><td>${unreceivedCallsCount}</td></tr>
-				<tr><td>Среднее время ожидания ответа в сек.</td><td>${averageWaitTime}</td></tr>
-				<tr><td><b>Общее обработанное количество минут</b></td><td><b>${sumCallTime}</b></td></tr>
-			</table>
-		</c:when>
-		
-		<c:otherwise>
-			<div>По вашему запросу ничего не найдено.</div>
-		</c:otherwise>
-	</c:choose>
+	<c:if test="${callsCount != null}">
+		<c:choose>	
+			<c:when test="${callsCount!=0}">
+				<table>
+					<tr><td>Количество звонков на номер</td><td>${callsCount}</td></tr>
+					<tr><td>Количество обработанных звонков</td><td>${receivedCallsCount}</td></tr>
+					<tr><td>Количество не обработанных звонков</td><td>${unreceivedCallsCount}</td></tr>
+					<tr><td>Среднее время ожидания ответа в сек.</td><td>${averageWaitTime}</td></tr>
+					<tr><td><b>Общее обработанное количество минут</b></td><td><b>${sumCallTime}</b></td></tr>
+				</table>
+			</c:when>
+			
+			<c:otherwise>
+				<div>По вашему запросу ничего не найдено.</div>
+			</c:otherwise>
+		</c:choose>
+	</c:if>
 
 	
 		
