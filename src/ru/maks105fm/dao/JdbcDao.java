@@ -75,7 +75,7 @@ public class JdbcDao implements Dao {
 
 	private Date getEndOfMonth(int add) {
 		Calendar c = Calendar.getInstance();
-		c.add(Calendar.MONTH, -1);
+		c.add(Calendar.MONTH, add);
 		c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
 		c.set(Calendar.HOUR_OF_DAY, c.getActualMaximum(Calendar.HOUR_OF_DAY));
 		c.set(Calendar.MINUTE, c.getActualMaximum(Calendar.MINUTE));
