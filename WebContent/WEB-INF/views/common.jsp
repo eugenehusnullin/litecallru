@@ -6,33 +6,66 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Общая статистика</title>
+
+<link href="images/favicon.png" rel="shortcut icon" type="image/png" />
+<link rel="stylesheet" type="text/css" href="css/styles.css" />   
+<script type="text/javascript" src="js/jquery.js"></script>
+ 
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#selectDate').change(function(){ 			
+			var myform = $('#selectDate :selected').val(); 
+			if (myform == 'custom') 
+				{ $(this).parent().find('#hideID').css('display', 'inline');} 
+			else 
+				{$(this).parent().find('#hideID').css('display', 'none');}
+			
+		});
+    });
+</script>
 </head>
 <body>
-	<%@ include file="top.jsp" %>
+	<div id="wrapper">
+		<%@ include file="header.jsp" %>
+		
+		<div id="main-container" class="center">
+			<div id="cont-block">
+				<div class="main-title ">
+					<div class="rImg">Общая статистика<span><a href="detailedLog?queue=${queue}&period=${period}&from=${from}&to=${to}&page=1"
+						>Перейти в детализированную статистику</a></span></div>
+				</div>
+				<div class="clear"></div>
+				<div class="gray-round">
+					<div class="gray-roundRight">
+						<form id="filtre" action="commonLog" method="get">
+							<%@ include file="searchform.jsp" %>
+						</form>
+						<c:if test="${callsCount != null}">
+							<c:choose>	
+								<c:when test="${callsCount!=0}">
+									<table id="statInfo">
+										<tr><td>Кол-во звонков на номер</td><td>${callsCount}</td></tr>
+										<tr><td>Кол-во обработанных звонков</td><td>${receivedCallsCount}</td></tr>
+										<tr><td>Кол-во не обработанных звонков</td><td>${unreceivedCallsCount}</td></tr>
+										<tr><td>Среднее время ожидания ответа в сек.</td><td>${averageWaitTime}</td></tr>
+										<tr id="footTBL"><td><b>Общее обработанное количество минут</b></td><td><b>${sumCallTime}</b></td></tr>
+									</table>
+								</c:when>
+								
+								<c:otherwise>
+									<div>По вашему запросу ничего не найдено.</div>
+								</c:otherwise>
+							</c:choose>
+						</c:if>
+					</div>
+				</div>
+				<div class="roundBottom"><div class="roundBottomRight"></div></div>  
+
+				<div class="clear"></div>
+			</div>
+		</div>
+    </div>
 	
-	<div>Общая статистика</div>
-	<a href="detailedLog?queue=${queue}&period=${period}&from=${from}&to=${to}&page=1">Перейти в детализированную статистику</a>
-	
-	<form action="commonLog" method="get">
-		<%@ include file="searchform.jsp" %>
-	</form>
-	
-	<c:if test="${callsCount != null}">
-		<c:choose>	
-			<c:when test="${callsCount!=0}">
-				<table>
-					<tr><td>Количество звонков на номер</td><td>${callsCount}</td></tr>
-					<tr><td>Количество обработанных звонков</td><td>${receivedCallsCount}</td></tr>
-					<tr><td>Количество не обработанных звонков</td><td>${unreceivedCallsCount}</td></tr>
-					<tr><td>Среднее время ожидания ответа в сек.</td><td>${averageWaitTime}</td></tr>
-					<tr><td><b>Общее обработанное количество минут</b></td><td><b>${sumCallTime}</b></td></tr>
-				</table>
-			</c:when>
-			
-			<c:otherwise>
-				<div>По вашему запросу ничего не найдено.</div>
-			</c:otherwise>
-		</c:choose>
-	</c:if>
+	<%@ include file="footer.html" %>
 </body>
 </html>

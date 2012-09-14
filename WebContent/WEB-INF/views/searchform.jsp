@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<label>Выберите номер:</label>
-<select name="queue" title="QQwww">
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<div class="fieldBold" style="width:150px">Выберите номер:</div>
+<select name="queue" class="selForm">
 	<c:forEach items="${queues}" var="qi">
 		<c:choose>
 			<c:when test="${qi.name==queue}">
@@ -13,9 +15,12 @@
 	</c:forEach>
 </select>
 <br />
+<br />
 
-<label>Выберите период:</label>
-<select name="period">
+<div class="clear"></div>
+<div class="fieldBold" style="width:150px">Выберите период:</div> 
+<select name="period" id="selectDate" class="selForm">
+	
 	<c:forEach items="${periods}" var="pi">
 		<c:choose>
 			<c:when test="${pi.name==period}">
@@ -27,12 +32,12 @@
 		</c:choose>
 	</c:forEach>
 </select>
-
-<label>С</label>
-<input name="from" value="${from}" />
-<label>По</label>
-<input name="to" value="${to}" />
-<br />
-<input type="submit" value="Сделать отчет" />
-
+<div id="hideID" style="display:none;">
+	<span class="fieldBold">c</span>
+	<input name="from" value="${from}" type="text" class="txtForm" />
+	<span class="fieldBold">по</span>
+	<input name="to" value="${to}" type="text" class="txtForm" />
+</div>
+<div class="clear"></div>
+<input type="submit" id="subBTN" value="Применить фильтр"  />
 <input type="hidden" name="page" value="1" />

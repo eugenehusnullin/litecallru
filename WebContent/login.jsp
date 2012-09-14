@@ -8,8 +8,7 @@
 <title>Вход</title>
 </head>
 <body onload='document.f.username.focus();'>
-	<h3><a href="login.jsp">Вход в систему с помощью имени пользователя и пароля</a></h3>
-	<h4>user1 12345</h4>
+	<h3>Для входа введите имя пользователя (логин) и пароль</h3>	
 	<form name='f' action="login" method="post">
 		<table>
     		<tr><td>Имя пользователя:</td><td><input type='text' name='username' value=''/></td></tr>
