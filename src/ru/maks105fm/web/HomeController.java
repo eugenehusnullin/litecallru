@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,9 @@ public class HomeController {
 
 	@Autowired
 	private Dao dao;
+	
+	@Value("#{mainProps['main.monitorhost']}")
+	private String monitorHost;
 
 	@RequestMapping(value = "/")
 	public String home(Model model) {
@@ -143,6 +147,8 @@ public class HomeController {
 		
 		String humanname = dao.getHumannameByUsername(user.getUsername());
 		model.addAttribute("humanname", humanname);
+		
+		model.addAttribute("monitorhost", monitorHost);
 
 		List<Map<String, Object>> queues = dao.getQueues("user1");
 		model.addAttribute("queues", queues);

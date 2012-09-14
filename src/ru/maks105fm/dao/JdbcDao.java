@@ -48,7 +48,7 @@ public class JdbcDao implements Dao {
 		int limit = pagesize;
 
 		String sql = "SELECT to_char(eventdate, 'DD.MM.YY HH24:MI') eventdate, eventdate eventdate_utc, uniqueid, queuename, "
-				+ " agent, event, waittime, ((calltime / 60) + 1) calltime, call, callerid, "
+				+ " agent, event, waittime, (((calltime / 60) + 1))*call calltime, call, callerid, "
 				+ " row_number() over(order by a.eventdate DESC) rownum FROM cdr_queue_view a"
 				+ " WHERE a.queuename = ? AND"
 				+ " a.eventdate >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND"
