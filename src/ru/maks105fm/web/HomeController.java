@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +24,7 @@ public class HomeController {
 	public static String PERIOD_CUSTOM = "custom";
 
 	@Autowired
-	Dao dao;
+	private Dao dao;
 
 	@RequestMapping(value = "/")
 	public String home(Model model) {
@@ -136,7 +138,11 @@ public class HomeController {
 	}
 
 	private void initDefaultData(Model model) {
-		model.addAttribute("username", "user1");
+		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		model.addAttribute("username", user.getUsername());
+		
+		String humanname = dao.getHumannameByUsername(user.getUsername());
+		model.addAttribute("humanname", humanname);
 
 		List<Map<String, Object>> queues = dao.getQueues("user1");
 		model.addAttribute("queues", queues);

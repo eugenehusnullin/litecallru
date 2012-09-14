@@ -34,12 +34,17 @@
 	
 <!-- 	Spring security -->
 	<security:authentication-manager>
-		<security:authentication-provider>
-			<security:user-service>
-				<security:user name="user1" authorities="ROLE_USER" password="12345"/>
-			</security:user-service>
+		<security:authentication-provider user-service-ref="customUserDetailsService">
+			<security:password-encoder hash="md5"></security:password-encoder>
+<!-- 			<security:user-service> -->
+<!-- 				<security:user name="user1" authorities="ROLE_USER" password="12345"/> -->
+<!-- 			</security:user-service> -->
 		</security:authentication-provider>
 	</security:authentication-manager>
+	
+	<bean id="customUserDetailsService" class="ru.maks105fm.web.security.CustomUserDetailsService">
+		<property name="dao" ref="dao"></property>
+	</bean>
 	
 	<security:http pattern="/css/**" security="none"></security:http>
 	<security:http pattern="/login.jsp*" security="none"></security:http>

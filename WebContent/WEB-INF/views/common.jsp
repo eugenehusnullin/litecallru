@@ -8,9 +8,7 @@
 <title>Общая статистика</title>
 </head>
 <body>
-	<div>Здравствуйте, <c:out value="${username}"/>
-	<a href="logout">Выход</a> </div>
-	<br />
+	<%@ include file="top.jsp" %>
 	
 	<div>Общая статистика</div>
 	<a href="detailedLog?queue=${queue}&period=${period}&from=${from}&to=${to}&page=1">Перейти в детализированную статистику</a>
@@ -36,8 +34,5 @@
 			</c:otherwise>
 		</c:choose>
 	</c:if>
-
-	
-		
 </body>
 </html>

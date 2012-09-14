@@ -35,4 +35,8 @@ public interface Dao {
 	int getCurMonthAverageWaitTime(String queueName);
 
 	long getCurMonthSumCallTime(String queueName);
+	
+	Map<String, Object> getUserByUsername(String username);
+	
+	String getHumannameByUsername(String username);
 }

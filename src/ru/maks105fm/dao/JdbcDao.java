@@ -47,7 +47,7 @@ public class JdbcDao implements Dao {
 		int offset = (page - 1) * pagesize;
 		int limit = pagesize;
 
-		String sql = "SELECT to_char(eventdate, 'DD.MM.YY HH24:MI') eventdate, uniqueid, queuename, "
+		String sql = "SELECT to_char(eventdate, 'DD.MM.YY HH24:MI') eventdate, eventdate eventdate_utc, uniqueid, queuename, "
 				+ " agent, event, waittime, ((calltime / 60) + 1) calltime, call, callerid, "
 				+ " row_number() over(order by a.eventdate DESC) rownum FROM cdr_queue_view a"
 				+ " WHERE a.queuename = ? AND"
@@ -218,5 +218,19 @@ public class JdbcDao implements Dao {
 		String strTo = getEndOfMonthStr(0);
 		
 		return getCustomSumCallTime(queueName, strFrom, strTo);
+	}
+
+	@Override
+	public Map<String, Object> getUserByUsername(String username) {
+		String sql = "select username, password, enabled from \"user\" where username = ?";
+		
+		return jdbcTemplate.queryForMap(sql, username);		
+	}
+
+	@Override
+	public String getHumannameByUsername(String username) {
+		String sql = "select humanname from \"user\" where username = ?";
+		
+		return jdbcTemplate.queryForObject(sql, String.class, username);
 	}
 }
