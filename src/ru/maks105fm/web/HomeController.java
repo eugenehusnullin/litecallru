@@ -150,7 +150,7 @@ public class HomeController {
 		
 		model.addAttribute("monitorhost", monitorHost);
 
-		List<Map<String, Object>> queues = dao.getQueues("user1");
+		List<Map<String, Object>> queues = dao.getQueues(user.getUsername());
 		model.addAttribute("queues", queues);
 
 		// periods
