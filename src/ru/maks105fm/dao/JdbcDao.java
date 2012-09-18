@@ -224,7 +224,7 @@ public class JdbcDao implements Dao {
 	public Map<String, Object> getUserByUsername(String username) {
 		String sql = "select username, password, enabled from \"user\" where username = ?";
 		
-		return jdbcTemplate.queryForMap(sql, username);		
+		return jdbcTemplate.queryForMap(sql, username);
 	}
 
 	@Override
@@ -232,5 +232,12 @@ public class JdbcDao implements Dao {
 		String sql = "select humanname from \"user\" where username = ?";
 		
 		return jdbcTemplate.queryForObject(sql, String.class, username);
+	}
+
+	@Override
+	public Map<String, Object> getPartnerByUsername(String username) {
+		String sql = "select username, password, enabled from \"partner\" where username = ?";
+		
+		return jdbcTemplate.queryForMap(sql, username);
 	}
 }

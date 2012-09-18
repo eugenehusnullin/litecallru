@@ -39,4 +39,6 @@ public interface Dao {
 	Map<String, Object> getUserByUsername(String username);
 	
 	String getHumannameByUsername(String username);
+	
+	Map<String, Object> getPartnerByUsername(String username);
 }

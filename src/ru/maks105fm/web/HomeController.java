@@ -159,16 +159,16 @@ public class HomeController {
 		Map<String, Object> pi = new HashMap<String, Object>();
 		periods.add(pi);
 		pi.put("name", PERIOD_PRVMONTH);
-		pi.put("description", "За предыдущий месяц");
+		pi.put("description", "Р—Р° РїСЂРµРґС‹РґСѓС‰РёР№ РјРµСЃСЏС†");
 
 		pi = new HashMap<String, Object>();
 		periods.add(pi);
 		pi.put("name", PERIOD_CURMONTH);
-		pi.put("description", "За текущий месяц");
+		pi.put("description", "Р—Р° С‚РµРєСѓС‰РёР№ РјРµСЃСЏС†");
 
 		pi = new HashMap<String, Object>();
 		periods.add(pi);
 		pi.put("name", PERIOD_CUSTOM);
-		pi.put("description", "За произвольный период");
+		pi.put("description", "Р—Р° РїСЂРѕРёР·РІРѕР»СЊРЅС‹Р№ РїРµСЂРёРѕРґ");
 	}
 }
