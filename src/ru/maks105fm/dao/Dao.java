@@ -41,4 +41,13 @@ public interface Dao {
 	String getHumannameByUsername(String username);
 	
 	Map<String, Object> getPartnerByUsername(String username);
+
+	List<Map<String, Object>> getPartnerByDayCustom(String partnerUsername,
+			String strFrom, String strTo);
+
+	List<Map<String, Object>> getPartnerByDayPrvMonth(String partnerUsername);
+
+	List<Map<String, Object>> getPartnerByDayCurMonth(String partnerUsername);
+
+	List<Map<String, Object>> getPartnerByClient(String partnerUsername, String strDate);
 }

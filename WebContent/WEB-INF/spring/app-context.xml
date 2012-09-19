@@ -40,13 +40,17 @@
 	<security:authentication-manager>
 		<security:authentication-provider user-service-ref="customUserDetailsService">
 			<security:password-encoder hash="md5"></security:password-encoder>
-<!-- 			<security:user-service> -->
-<!-- 				<security:user name="user1" authorities="ROLE_USER" password="12345"/> -->
-<!-- 			</security:user-service> -->
+		</security:authentication-provider>
+		<security:authentication-provider user-service-ref="customPartnerService">
+			<security:password-encoder hash="md5"></security:password-encoder>
 		</security:authentication-provider>
 	</security:authentication-manager>
 	
 	<bean id="customUserDetailsService" class="ru.maks105fm.web.security.CustomUserDetailsService">
+		<property name="dao" ref="dao"></property>
+	</bean>
+	
+	<bean id="customPartnerService" class="ru.maks105fm.web.security.CustomPartnerService">
 		<property name="dao" ref="dao"></property>
 	</bean>
 	
@@ -55,6 +59,7 @@
 	
 	<security:http auto-config="true">		
 		<security:intercept-url pattern="/**" access="ROLE_USER"/>
+		<security:intercept-url pattern="/partner/**" access="ROLE_PARTNER"/>
 		<security:form-login login-page="/login.jsp" login-processing-url="/login" 
 			username-parameter="username" password-parameter="password" authentication-failure-url="/login.jsp?auth=0" />
 		<security:logout logout-url="/logout"/>

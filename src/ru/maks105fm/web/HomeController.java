@@ -27,8 +27,28 @@ public class HomeController {
 	@Autowired
 	private Dao dao;
 	
+	private List<Map<String, Object>> periods;
+	
 	@Value("#{mainProps['main.monitorhost']}")
 	private String monitorHost;
+	
+	public HomeController() {
+		periods = new ArrayList<Map<String, Object>>();
+		Map<String, Object> pi = new HashMap<String, Object>();
+		periods.add(pi);
+		pi.put("name", PERIOD_PRVMONTH);
+		pi.put("description", "За предыдущий месяц");
+
+		pi = new HashMap<String, Object>();
+		periods.add(pi);
+		pi.put("name", PERIOD_CURMONTH);
+		pi.put("description", "За текущий месяц");
+
+		pi = new HashMap<String, Object>();
+		periods.add(pi);
+		pi.put("name", PERIOD_CUSTOM);
+		pi.put("description", "За произвольный период");
+	}
 
 	@RequestMapping(value = "/")
 	public String home(Model model) {
@@ -154,21 +174,6 @@ public class HomeController {
 		model.addAttribute("queues", queues);
 
 		// periods
-		List<Map<String, Object>> periods = new ArrayList<Map<String, Object>>();
 		model.addAttribute("periods", periods);
-		Map<String, Object> pi = new HashMap<String, Object>();
-		periods.add(pi);
-		pi.put("name", PERIOD_PRVMONTH);
-		pi.put("description", "За предыдущий месяц");
-
-		pi = new HashMap<String, Object>();
-		periods.add(pi);
-		pi.put("name", PERIOD_CURMONTH);
-		pi.put("description", "За текущий месяц");
-
-		pi = new HashMap<String, Object>();
-		periods.add(pi);
-		pi.put("name", PERIOD_CUSTOM);
-		pi.put("description", "За произвольный период");
 	}
 }

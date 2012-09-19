@@ -27,18 +27,20 @@ public class JdbcDao implements Dao {
 	@Override
 	public List<Map<String, Object>> getQueues(String username) {
 		long clientid = jdbcTemplate.queryForLong(
-				"select a.clientid from \"user\" a where a.username = ?", username);
+				"select a.clientid from \"user\" a where a.username = ?",
+				username);
 		if (clientid == 0) {
 			return null;
 		}
 
 		return jdbcTemplate.queryForList("select a.name, a.description"
-				+ " from queue a where a.clientid = ?" + " order by a.name", clientid);
+				+ " from queue a where a.clientid = ?" + " order by a.name",
+				clientid);
 	}
 
 	@Override
-	public List<Map<String, Object>> getQueueLogCustom(String queueName, String from, String to,
-			int pagesize, int page) {
+	public List<Map<String, Object>> getQueueLogCustom(String queueName,
+			String from, String to, int pagesize, int page) {
 
 		String strFrom = from + " 00:00:00";
 		String strTo = to + " 23:59:59";
@@ -55,7 +57,8 @@ public class JdbcDao implements Dao {
 				+ " a.eventdate <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS')"
 				+ " ORDER BY a.eventdate DESC LIMIT ? OFFSET ?";
 
-		return jdbcTemplate.queryForList(sql, queueName, strFrom, strTo, limit, offset);
+		return jdbcTemplate.queryForList(sql, queueName, strFrom, strTo, limit,
+				offset);
 	}
 
 	private Date getStartOfMonth(int add) {
@@ -67,7 +70,7 @@ public class JdbcDao implements Dao {
 		c.set(Calendar.SECOND, c.getActualMinimum(Calendar.SECOND));
 		return c.getTime();
 	}
-	
+
 	private String getStartOfMonthStr(int add) {
 		DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
 		return df.format(getStartOfMonth(add));
@@ -82,14 +85,15 @@ public class JdbcDao implements Dao {
 		c.set(Calendar.SECOND, c.getActualMaximum(Calendar.SECOND));
 		return c.getTime();
 	}
-	
+
 	private String getEndOfMonthStr(int add) {
 		DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
 		return df.format(getEndOfMonth(add));
 	}
 
 	@Override
-	public List<Map<String, Object>> getQueueLogPrvMonth(String queueName, int pagesize, int page) {
+	public List<Map<String, Object>> getQueueLogPrvMonth(String queueName,
+			int pagesize, int page) {
 		// DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 		// String strFrom = df.format(from);
 		// String strTo = df.format(to);
@@ -101,7 +105,8 @@ public class JdbcDao implements Dao {
 	}
 
 	@Override
-	public List<Map<String, Object>> getQueueLogCurMonth(String queueName, int pagesize, int page) {
+	public List<Map<String, Object>> getQueueLogCurMonth(String queueName,
+			int pagesize, int page) {
 		String strFrom = getStartOfMonthStr(0);
 		String strTo = getEndOfMonthStr(0);
 
@@ -137,7 +142,8 @@ public class JdbcDao implements Dao {
 	}
 
 	@Override
-	public int getCustomReceivedCallsCount(String queueName, String from, String to) {
+	public int getCustomReceivedCallsCount(String queueName, String from,
+			String to) {
 		String strFrom = from + " 00:00:00";
 		String strTo = to + " 23:59:59";
 
@@ -176,7 +182,7 @@ public class JdbcDao implements Dao {
 	public int getPrvMonthReceivedCallsCount(String queueName) {
 		String strFrom = getStartOfMonthStr(-1);
 		String strTo = getEndOfMonthStr(-1);
-		
+
 		return getCustomReceivedCallsCount(queueName, strFrom, strTo);
 	}
 
@@ -184,7 +190,7 @@ public class JdbcDao implements Dao {
 	public int getPrvMonthAverageWaitTime(String queueName) {
 		String strFrom = getStartOfMonthStr(-1);
 		String strTo = getEndOfMonthStr(-1);
-		
+
 		return getCustomAverageWaitTime(queueName, strFrom, strTo);
 	}
 
@@ -192,7 +198,7 @@ public class JdbcDao implements Dao {
 	public long getPrvMonthSumCallTime(String queueName) {
 		String strFrom = getStartOfMonthStr(-1);
 		String strTo = getEndOfMonthStr(-1);
-		
+
 		return getCustomSumCallTime(queueName, strFrom, strTo);
 	}
 
@@ -200,7 +206,7 @@ public class JdbcDao implements Dao {
 	public int getCurMonthReceivedCallsCount(String queueName) {
 		String strFrom = getStartOfMonthStr(0);
 		String strTo = getEndOfMonthStr(0);
-		
+
 		return getCustomReceivedCallsCount(queueName, strFrom, strTo);
 	}
 
@@ -208,7 +214,7 @@ public class JdbcDao implements Dao {
 	public int getCurMonthAverageWaitTime(String queueName) {
 		String strFrom = getStartOfMonthStr(0);
 		String strTo = getEndOfMonthStr(0);
-		
+
 		return getCustomAverageWaitTime(queueName, strFrom, strTo);
 	}
 
@@ -216,28 +222,85 @@ public class JdbcDao implements Dao {
 	public long getCurMonthSumCallTime(String queueName) {
 		String strFrom = getStartOfMonthStr(0);
 		String strTo = getEndOfMonthStr(0);
-		
+
 		return getCustomSumCallTime(queueName, strFrom, strTo);
 	}
 
 	@Override
 	public Map<String, Object> getUserByUsername(String username) {
 		String sql = "select username, password, enabled from \"user\" where username = ?";
-		
+
 		return jdbcTemplate.queryForMap(sql, username);
 	}
 
 	@Override
 	public String getHumannameByUsername(String username) {
 		String sql = "select humanname from \"user\" where username = ?";
-		
+
 		return jdbcTemplate.queryForObject(sql, String.class, username);
 	}
 
 	@Override
 	public Map<String, Object> getPartnerByUsername(String username) {
 		String sql = "select username, password, enabled from \"partner\" where username = ?";
-		
+
 		return jdbcTemplate.queryForMap(sql, username);
+	}
+	
+	private int getPartneridByName(String name) {
+		String sql = "select a.id from partner a where a.username = ?";
+		return jdbcTemplate.queryForInt(sql, name);
+	}
+
+	@Override
+	public List<Map<String, Object>> getPartnerByDayCustom(String partnerUsername, String from, String to) {
+		int partnerId = getPartneridByName(partnerUsername);
+		
+		String strFrom = from + " 00:00:00";
+		String strTo = to + " 23:59:59";
+		
+		String sql = "select date_trunc('day', a.eventdate_utc ) day, sum(a.calltime) calltime, sum(a.calltime) moneysum " +
+				"from cdr_partner_view a " +
+				"where a.partnerid = ? and " +
+					"a.eventdate_utc >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') and " +
+					"a.eventdate_utc <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') " +
+				"group by date_trunc('day', a.eventdate_utc ) " +
+				"order by date_trunc('day', a.eventdate_utc )";
+		
+		return jdbcTemplate.queryForList(sql, partnerId, strFrom, strTo);
+	}
+
+	@Override
+	public List<Map<String, Object>> getPartnerByDayPrvMonth(String partnerUsername) {
+		String strFrom = getStartOfMonthStr(-1);
+		String strTo = getEndOfMonthStr(-1);
+		
+		return getPartnerByDayCustom(partnerUsername, strFrom, strTo);
+	}
+
+	@Override
+	public List<Map<String, Object>> getPartnerByDayCurMonth(
+			String partnerUsername) {
+		String strFrom = getStartOfMonthStr(0);
+		String strTo = getEndOfMonthStr(0);
+		
+		return getPartnerByDayCustom(partnerUsername, strFrom, strTo);
+	}
+
+	@Override
+	public List<Map<String, Object>> getPartnerByClient(String partnerUsername,
+			String date) {
+		int partnerId = getPartneridByName(partnerUsername);
+		
+		String strDate = date + " 00:00:00";
+		
+		String sql = "select a.clientname, sum(a.calltime) calltime, sum(a.calltime) moneysum " +
+				"from cdr_partner_view a " +
+				"where a.partnerid = ? and " +
+					"date_trunc('day', a.eventdate_utc) = to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') " +
+				"group by a.clientid " +
+				"order by a.clientname";
+		
+		return jdbcTemplate.queryForList(sql, partnerId, strDate);
 	}
 }
