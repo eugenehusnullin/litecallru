@@ -8,6 +8,8 @@
 <title>Вход</title>
 </head>
 <body onload='document.f.username.focus();'>
+	<a href="partner">Вход в партнерку (пользователь partner1 пароль partner1)</a><br/>
+	<a href=".">Вход клиента (пользователь user1 пароль 12345)</a>
 	<h3>Для входа введите имя пользователя (логин) и пароль</h3>	
 	<form name='f' action="login" method="post">
 		<table>

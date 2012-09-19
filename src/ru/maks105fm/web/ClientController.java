@@ -8,7 +8,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,9 +15,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import ru.maks105fm.dao.Dao;
+import ru.maks105fm.web.security.UserWithName;
 
 @Controller
-public class HomeController {
+public class ClientController {
 
 	public static String PERIOD_CURMONTH = "curmonth";
 	public static String PERIOD_PRVMONTH = "prvmonth";
@@ -32,7 +32,7 @@ public class HomeController {
 	@Value("#{mainProps['main.monitorhost']}")
 	private String monitorHost;
 	
-	public HomeController() {
+	public ClientController() {
 		periods = new ArrayList<Map<String, Object>>();
 		Map<String, Object> pi = new HashMap<String, Object>();
 		periods.add(pi);
@@ -162,11 +162,10 @@ public class HomeController {
 	}
 
 	private void initDefaultData(Model model) {
-		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserWithName user = (UserWithName)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		model.addAttribute("username", user.getUsername());
 		
-		String humanname = dao.getHumannameByUsername(user.getUsername());
-		model.addAttribute("humanname", humanname);
+		model.addAttribute("humanname", user.getHumanname());
 		
 		model.addAttribute("monitorhost", monitorHost);
 

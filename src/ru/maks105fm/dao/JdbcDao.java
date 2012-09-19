@@ -228,21 +228,14 @@ public class JdbcDao implements Dao {
 
 	@Override
 	public Map<String, Object> getUserByUsername(String username) {
-		String sql = "select username, password, enabled from \"user\" where username = ?";
+		String sql = "select username, password, enabled, name from \"user\" where username = ?";
 
 		return jdbcTemplate.queryForMap(sql, username);
 	}
 
 	@Override
-	public String getHumannameByUsername(String username) {
-		String sql = "select humanname from \"user\" where username = ?";
-
-		return jdbcTemplate.queryForObject(sql, String.class, username);
-	}
-
-	@Override
 	public Map<String, Object> getPartnerByUsername(String username) {
-		String sql = "select username, password, enabled from \"partner\" where username = ?";
+		String sql = "select username, password, enabled, name from \"partner\" where username = ?";
 
 		return jdbcTemplate.queryForMap(sql, username);
 	}
@@ -259,7 +252,8 @@ public class JdbcDao implements Dao {
 		String strFrom = from + " 00:00:00";
 		String strTo = to + " 23:59:59";
 		
-		String sql = "select date_trunc('day', a.eventdate_utc ) day, sum(a.calltime) calltime, sum(a.calltime) moneysum " +
+		String sql = "select date_trunc('day', a.eventdate_utc) date, " +
+					"sum(a.calltime) calltime, sum(a.calltime) moneysum " +
 				"from cdr_partner_view a " +
 				"where a.partnerid = ? and " +
 					"a.eventdate_utc >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') and " +
@@ -294,12 +288,16 @@ public class JdbcDao implements Dao {
 		
 		String strDate = date + " 00:00:00";
 		
-		String sql = "select a.clientname, sum(a.calltime) calltime, sum(a.calltime) moneysum " +
+		String sql = "select b.name clientname, a.calltime, a.moneysum " +
+				"from ( " +
+				"select a.clientid, sum(a.calltime) calltime, sum(a.calltime) moneysum " +
 				"from cdr_partner_view a " +
-				"where a.partnerid = ? and " +
-					"date_trunc('day', a.eventdate_utc) = to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') " +
+				"where a.partnerid = ? " +
+				"and date_trunc('day', a.eventdate_utc) = to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') " +
 				"group by a.clientid " +
-				"order by a.clientname";
+				") a, client b " +
+				"where a.clientid = b.id " +
+				"order by b.name";
 		
 		return jdbcTemplate.queryForList(sql, partnerId, strDate);
 	}

@@ -7,13 +7,13 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import ru.maks105fm.dao.Dao;
+import ru.maks105fm.web.security.UserWithName;
 
 @Controller
 @RequestMapping("/partner")
@@ -30,13 +30,13 @@ public class PartnerController {
 	
 	@RequestMapping(value = "/")
 	public String home(Model model) {
-		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserWithName partner = (UserWithName)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		
-		model.addAttribute("username", user.getUsername());
-		model.addAttribute("humanname", user.getUsername());
+		model.addAttribute("username", partner.getUsername());
+		model.addAttribute("humanname", partner.getHumanname());
 		model.addAttribute("periods", periods);
 
-		return "partner_byday";
+		return "byday";
 	}
 	
 	public PartnerController() {
@@ -60,10 +60,10 @@ public class PartnerController {
 	@RequestMapping(value = "/byDay")
 	public String logByDay(@RequestParam("from") String strFrom, @RequestParam("to") String strTo,
 			@RequestParam("period") String period, Model model) {
-		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserWithName partner = (UserWithName)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		
-		model.addAttribute("username", user.getUsername());
-		model.addAttribute("humanname", user.getUsername());
+		model.addAttribute("username", partner.getUsername());
+		model.addAttribute("humanname", partner.getHumanname());
 		model.addAttribute("periods", periods);
 		model.addAttribute("from", strFrom);
 		model.addAttribute("to", strTo);
@@ -73,13 +73,13 @@ public class PartnerController {
 			List<Map<String, Object>> days = null;
 
 			if (period.equals(PERIOD_CUSTOM)) {
-				days = dao.getPartnerByDayCustom(user.getUsername(), strFrom, strTo);
+				days = dao.getPartnerByDayCustom(partner.getUsername(), strFrom, strTo);
 
 			} else if (period.equals(PERIOD_PRVMONTH)) {
-				days = dao.getPartnerByDayPrvMonth(user.getUsername());
+				days = dao.getPartnerByDayPrvMonth(partner.getUsername());
 
 			} else if (period.equals(PERIOD_CURMONTH)) {
-				days = dao.getPartnerByDayCurMonth(user.getUsername());
+				days = dao.getPartnerByDayCurMonth(partner.getUsername());
 
 			} else {
 				// error
@@ -88,22 +88,22 @@ public class PartnerController {
 			model.addAttribute("days", days);
 		}
 		
-		return "partner_byday";
+		return "byday";
 	}
 	
 	@RequestMapping(value = "/byClient")
 	public String logByClient(@RequestParam("date") String strDate, Model model) {
-		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserWithName partner = (UserWithName)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		
-		model.addAttribute("username", user.getUsername());
-		model.addAttribute("humanname", user.getUsername());
+		model.addAttribute("username", partner.getUsername());
+		model.addAttribute("humanname", partner.getHumanname());
 		model.addAttribute("periods", periods);
 		model.addAttribute("date", strDate);
 		
-		List<Map<String, Object>> clients = dao.getPartnerByClient(user.getUsername(), strDate);
+		List<Map<String, Object>> clients = dao.getPartnerByClient(partner.getUsername(), strDate);
 		
 		model.addAttribute("clients", clients);
 		
-		return "partner_byclient";
+		return "byclient";
 	}
 }

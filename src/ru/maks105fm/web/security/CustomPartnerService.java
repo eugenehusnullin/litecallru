@@ -7,7 +7,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -34,8 +33,9 @@ public class CustomPartnerService implements UserDetailsService {
 			SimpleGrantedAuthority sga = new SimpleGrantedAuthority("ROLE_PARTNER");
 			authorities.add(sga);
 			
-			user = new User(username, (String) partnerMap.get("password"), 
-					(Integer) partnerMap.get("enabled") == 1, true, true, true, authorities);
+			user = new UserWithName(username, (String) partnerMap.get("password"), 
+					(Integer) partnerMap.get("enabled") == 1, true, true, true, authorities,
+					(String) partnerMap.get("name"));
 		} else {
 			throw new UsernameNotFoundException("Error in retrieving user");
 		}

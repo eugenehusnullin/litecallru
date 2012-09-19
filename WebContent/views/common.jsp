@@ -7,8 +7,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Общая статистика</title>
 
-<link href="images/favicon.png" rel="shortcut icon" type="image/png" />
-<link rel="stylesheet" type="text/css" href="css/styles.css" />   
+<link href="images/favicon.png" rel="shortcut icon" type="image/png" ></link>
+<link rel="stylesheet" type="text/css" href="css/styles.css" ></link>
 <script type="text/javascript" src="js/jquery.js"></script>
  
 <script type="text/javascript">

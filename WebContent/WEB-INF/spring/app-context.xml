@@ -55,11 +55,13 @@
 	</bean>
 	
 	<security:http pattern="/css/**" security="none"></security:http>
+	<security:http pattern="/js/**" security="none"></security:http>
+	<security:http pattern="/images/**" security="none"></security:http>
 	<security:http pattern="/login.jsp*" security="none"></security:http>
 	
-	<security:http auto-config="true">		
+	<security:http auto-config="true">
+		<security:intercept-url pattern="/partner/**" access="ROLE_PARTNER"/>		
 		<security:intercept-url pattern="/**" access="ROLE_USER"/>
-		<security:intercept-url pattern="/partner/**" access="ROLE_PARTNER"/>
 		<security:form-login login-page="/login.jsp" login-processing-url="/login" 
 			username-parameter="username" password-parameter="password" authentication-failure-url="/login.jsp?auth=0" />
 		<security:logout logout-url="/logout"/>
