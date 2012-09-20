@@ -38,7 +38,7 @@
 	
 <!-- 	Spring security -->
 	<security:authentication-manager>
-		<security:authentication-provider user-service-ref="customUserDetailsService">
+		<security:authentication-provider user-service-ref="customClientService">
 			<security:password-encoder hash="md5"></security:password-encoder>
 		</security:authentication-provider>
 		<security:authentication-provider user-service-ref="customPartnerService">
@@ -46,7 +46,7 @@
 		</security:authentication-provider>
 	</security:authentication-manager>
 	
-	<bean id="customUserDetailsService" class="ru.maks105fm.web.security.CustomUserDetailsService">
+	<bean id="customClientService" class="ru.maks105fm.web.security.CustomClientService">
 		<property name="dao" ref="dao"></property>
 	</bean>
 	
@@ -63,8 +63,11 @@
 		<security:intercept-url pattern="/partner/**" access="ROLE_PARTNER"/>		
 		<security:intercept-url pattern="/**" access="ROLE_USER"/>
 		<security:form-login login-page="/login.jsp" login-processing-url="/login" 
+			authentication-success-handler-ref="successAuthHandler"
 			username-parameter="username" password-parameter="password" authentication-failure-url="/login.jsp?auth=0" />
 		<security:logout logout-url="/logout"/>
 	</security:http>
+	
+	<bean id="successAuthHandler" class="ru.maks105fm.web.security.SuccessAuthHandler"></bean>
 	
 </beans>

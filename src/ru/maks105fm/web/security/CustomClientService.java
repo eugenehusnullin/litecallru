@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import ru.maks105fm.dao.Dao;
 
-public class CustomUserDetailsService implements UserDetailsService {
+public class CustomClientService implements UserDetailsService {
 	
 	private Dao dao;
 	
