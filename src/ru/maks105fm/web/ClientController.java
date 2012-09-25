@@ -56,13 +56,21 @@ public class ClientController {
 
 		return "common";
 	}
+	
+	private boolean checkAccessToQueue(String queueName) {
+		UserWithName user = (UserWithName)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+		return dao.hasUserRights(user.getUsername(), queueName);
+	}
 
 	@RequestMapping(value = "/detailedLog", method = RequestMethod.GET)
 	public String detailedLog(@RequestParam("queue") String queueName,
 			@RequestParam("from") String strFrom, @RequestParam("to") String strTo,
 			@RequestParam("period") String period, @RequestParam("page") Integer page, Model model) {
 		
-		// TODO: check access to queue
+		if (!checkAccessToQueue(queueName)) {
+			return "";
+		}
 
 		initDefaultData(model);
 		model.addAttribute("queue", queueName);
@@ -115,7 +123,9 @@ public class ClientController {
 			@RequestParam("from") String strFrom, @RequestParam("to") String strTo,
 			@RequestParam("period") String period, Model model) {
 		
-		// TODO: check access to queue
+		if (!checkAccessToQueue(queueName)) {
+			return "";
+		}
 		
 		initDefaultData(model);
 		model.addAttribute("queue", queueName);

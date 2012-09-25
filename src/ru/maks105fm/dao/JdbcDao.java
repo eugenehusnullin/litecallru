@@ -23,12 +23,16 @@ public class JdbcDao implements Dao {
 
 		jdbcTemplate = new JdbcTemplate(this.dataSource);
 	}
+	
+	private long getClientidByUsername(String username) {
+		return jdbcTemplate.queryForLong(
+				"select a.clientid from \"user\" a where a.username = ?",
+				username);
+	}
 
 	@Override
 	public List<Map<String, Object>> getQueues(String username) {
-		long clientid = jdbcTemplate.queryForLong(
-				"select a.clientid from \"user\" a where a.username = ?",
-				username);
+		long clientid = getClientidByUsername(username);
 		if (clientid == 0) {
 			return null;
 		}
@@ -300,5 +304,18 @@ public class JdbcDao implements Dao {
 				"order by b.name";
 		
 		return jdbcTemplate.queryForList(sql, partnerId, strDate);
+	}
+
+	@Override
+	public boolean hasUserRights(String username, String queuename) {
+		long clientid = getClientidByUsername(username);
+		if (clientid == 0) {
+			return false;
+		}
+		
+		String sql = "select count(1) from queue a where a.clientid = ? and a.name = ?";
+		long cnt = jdbcTemplate.queryForLong(sql, clientid, queuename);
+		
+		return cnt != 0;
 	}
 }

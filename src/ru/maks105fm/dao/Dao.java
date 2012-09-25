@@ -48,4 +48,6 @@ public interface Dao {
 	List<Map<String, Object>> getPartnerByDayCurMonth(String partnerUsername);
 
 	List<Map<String, Object>> getPartnerByClient(String partnerUsername, String strDate);
+	
+	boolean hasUserRights(String username, String queuename);
 }
