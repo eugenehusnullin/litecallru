@@ -29,7 +29,7 @@ public class CustomUserDetailService implements UserDetailsService {
 
 		Map<String, Object> userMap = dao.getUser(username);
 		if (userMap != null && userMap.size() >= 3) {
-			long userId = (long) userMap.get("id");
+			long userId = (Long) userMap.get("id");
 			
 			List<Map<String, Object>> userRoles = dao.getUserRoles(userId);
 			List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();

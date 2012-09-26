@@ -322,18 +322,12 @@ public class JdbcDao implements Dao {
 		String normalname = "";
 		String sql = "";
 		
-		switch (usertype) {
-		case "client":
+		if (usertype == "client") {
 			sql = "select a.name from client a, clientuser b where a.id = b.clientid and b.userid = ?";
-			break;
-
-		case "partner":
+		} else if (usertype == "partner") {
 			sql = "select a.name from partner a, partneruser b where a.id = b.partnerid and b.userid = ?";
-			break;
-
-		case "admin":
+		} else if (usertype == "admin") {
 			sql = "select a.name from admin a, adminuser b where a.id = b.adminid and b.userid = ?";
-			break;
 		}
 		
 		if (sql != "") {
