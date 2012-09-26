@@ -60,7 +60,7 @@ public class ClientController {
 	private boolean checkAccessToQueue(String queueName) {
 		UserWithName user = (UserWithName)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		
-		return dao.hasUserRights(user.getUsername(), queueName);
+		return dao.hasUserRights(user.getId(), queueName);
 	}
 
 	@RequestMapping(value = "/detailedLog", method = RequestMethod.GET)
@@ -179,7 +179,7 @@ public class ClientController {
 		
 		model.addAttribute("monitorhost", monitorHost);
 
-		List<Map<String, Object>> queues = dao.getQueues(user.getUsername());
+		List<Map<String, Object>> queues = dao.getQueues(user.getId());
 		model.addAttribute("queues", queues);
 
 		// periods

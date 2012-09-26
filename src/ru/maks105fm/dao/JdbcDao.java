@@ -24,15 +24,15 @@ public class JdbcDao implements Dao {
 		jdbcTemplate = new JdbcTemplate(this.dataSource);
 	}
 	
-	private long getClientidByUsername(String username) {
+	private long getClientId(long userId) {
 		return jdbcTemplate.queryForLong(
-				"select a.clientid from \"user\" a where a.username = ?",
-				username);
+				"select a.clientid from \"clientuser\" a where a.userid = ?",
+				userId);
 	}
 
 	@Override
-	public List<Map<String, Object>> getQueues(String username) {
-		long clientid = getClientidByUsername(username);
+	public List<Map<String, Object>> getQueues(long userId) {
+		long clientid = getClientId(userId);
 		if (clientid == 0) {
 			return null;
 		}
@@ -231,27 +231,20 @@ public class JdbcDao implements Dao {
 	}
 
 	@Override
-	public Map<String, Object> getUserByUsername(String username) {
-		String sql = "select username, password, enabled, name from \"user\" where username = ?";
+	public Map<String, Object> getUser(String username) {
+		String sql = "select id, username, password, enabled, usertype from \"user\" where username = ?";
 
 		return jdbcTemplate.queryForMap(sql, username);
 	}
 
-	@Override
-	public Map<String, Object> getPartnerByUsername(String username) {
-		String sql = "select username, password, enabled, name from \"partner\" where username = ?";
-
-		return jdbcTemplate.queryForMap(sql, username);
-	}
-	
-	private int getPartneridByName(String name) {
-		String sql = "select a.id from partner a where a.username = ?";
-		return jdbcTemplate.queryForInt(sql, name);
+	private int getPartnerId(long userId) {
+		String sql = "select a.partnerid from partneruser a where a.userid = ?";
+		return jdbcTemplate.queryForInt(sql, userId);
 	}
 
 	@Override
-	public List<Map<String, Object>> getPartnerByDayCustom(String partnerUsername, String from, String to) {
-		int partnerId = getPartneridByName(partnerUsername);
+	public List<Map<String, Object>> getPartnerByDayCustom(long userId, String from, String to) {
+		int partnerId = getPartnerId(userId);
 		
 		String strFrom = from + " 00:00:00";
 		String strTo = to + " 23:59:59";
@@ -269,26 +262,24 @@ public class JdbcDao implements Dao {
 	}
 
 	@Override
-	public List<Map<String, Object>> getPartnerByDayPrvMonth(String partnerUsername) {
+	public List<Map<String, Object>> getPartnerByDayPrvMonth(long userId) {
 		String strFrom = getStartOfMonthStr(-1);
 		String strTo = getEndOfMonthStr(-1);
 		
-		return getPartnerByDayCustom(partnerUsername, strFrom, strTo);
+		return getPartnerByDayCustom(userId, strFrom, strTo);
 	}
 
 	@Override
-	public List<Map<String, Object>> getPartnerByDayCurMonth(
-			String partnerUsername) {
+	public List<Map<String, Object>> getPartnerByDayCurMonth(long userId) {
 		String strFrom = getStartOfMonthStr(0);
 		String strTo = getEndOfMonthStr(0);
 		
-		return getPartnerByDayCustom(partnerUsername, strFrom, strTo);
+		return getPartnerByDayCustom(userId, strFrom, strTo);
 	}
 
 	@Override
-	public List<Map<String, Object>> getPartnerByClient(String partnerUsername,
-			String date) {
-		int partnerId = getPartneridByName(partnerUsername);
+	public List<Map<String, Object>> getPartnerByClient(long userId, String date) {
+		int partnerId = getPartnerId(userId);
 		
 		String strDate = date + " 00:00:00";
 		
@@ -307,8 +298,8 @@ public class JdbcDao implements Dao {
 	}
 
 	@Override
-	public boolean hasUserRights(String username, String queuename) {
-		long clientid = getClientidByUsername(username);
+	public boolean hasUserRights(long userId, String queuename) {
+		long clientid = getClientId(userId);
 		if (clientid == 0) {
 			return false;
 		}
@@ -317,5 +308,38 @@ public class JdbcDao implements Dao {
 		long cnt = jdbcTemplate.queryForLong(sql, clientid, queuename);
 		
 		return cnt != 0;
+	}
+
+	@Override
+	public List<Map<String, Object>> getUserRoles(long userId) {
+		String sql = "select a.role from userrole a where a.userid = ?";
+
+		return jdbcTemplate.queryForList(sql, userId);
+	}
+
+	@Override
+	public String getNormalname(long userId, String usertype) {
+		String normalname = "";
+		String sql = "";
+		
+		switch (usertype) {
+		case "client":
+			sql = "select a.name from client a, clientuser b where a.id = b.clientid and b.userid = ?";
+			break;
+
+		case "partner":
+			sql = "select a.name from partner a, partneruser b where a.id = b.partnerid and b.userid = ?";
+			break;
+
+		case "admin":
+			sql = "select a.name from admin a, adminuser b where a.id = b.adminid and b.userid = ?";
+			break;
+		}
+		
+		if (sql != "") {
+			normalname = (String) jdbcTemplate.queryForObject(sql, String.class, userId);
+		}
+		
+		return normalname;
 	}
 }

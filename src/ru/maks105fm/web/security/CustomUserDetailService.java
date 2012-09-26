@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import ru.maks105fm.dao.Dao;
 
-public class CustomPartnerService implements UserDetailsService {
+public class CustomUserDetailService implements UserDetailsService {
 
 	private Dao dao;
 
@@ -26,19 +26,31 @@ public class CustomPartnerService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {
 		UserDetails user = null;
-		
-		Map<String, Object> partnerMap = dao.getPartnerByUsername(username);
-		if (partnerMap != null && partnerMap.size() >= 3) {
-			List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-			SimpleGrantedAuthority sga = new SimpleGrantedAuthority("ROLE_PARTNER");
-			authorities.add(sga);
+
+		Map<String, Object> userMap = dao.getUser(username);
+		if (userMap != null && userMap.size() >= 3) {
+			long userId = (long) userMap.get("id");
 			
-			user = new UserWithName(username, (String) partnerMap.get("password"), 
-					(Integer) partnerMap.get("enabled") == 1, true, true, true, authorities,
-					(String) partnerMap.get("name"));
+			List<Map<String, Object>> userRoles = dao.getUserRoles(userId);
+			List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+
+			for (Map<String, Object> role : userRoles) {
+				SimpleGrantedAuthority sga = new SimpleGrantedAuthority(
+						(String) role.get("role"));
+				authorities.add(sga);
+			}
+
+			String usertype = (String) userMap.get("usertype");
+			String normalname = dao.getNormalname(userId, usertype);
+
+			user = new UserWithName(username, (String) userMap.get("password"),
+					(Integer) userMap.get("enabled") == 1, true, true, true,
+					authorities, normalname, userId, usertype);
 		} else {
 			throw new UsernameNotFoundException("Error in retrieving user");
 		}
+
 		return user;
 	}
+
 }

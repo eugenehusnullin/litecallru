@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface Dao {
-	List<Map<String, Object>> getQueues(String username);
+	List<Map<String, Object>> getQueues(long userId);
 
 	List<Map<String, Object>> getQueueLogCustom(String queuename, String from, String to, int pagesize, int page);
 
@@ -36,18 +36,20 @@ public interface Dao {
 
 	long getCurMonthSumCallTime(String queueName);
 	
-	Map<String, Object> getUserByUsername(String username);
+	Map<String, Object> getUser(String username);
 	
-	Map<String, Object> getPartnerByUsername(String username);
-
-	List<Map<String, Object>> getPartnerByDayCustom(String partnerUsername,
+	List<Map<String, Object>> getPartnerByDayCustom(long userId,
 			String strFrom, String strTo);
 
-	List<Map<String, Object>> getPartnerByDayPrvMonth(String partnerUsername);
+	List<Map<String, Object>> getPartnerByDayPrvMonth(long userId);
 
-	List<Map<String, Object>> getPartnerByDayCurMonth(String partnerUsername);
+	List<Map<String, Object>> getPartnerByDayCurMonth(long userId);
 
-	List<Map<String, Object>> getPartnerByClient(String partnerUsername, String strDate);
+	List<Map<String, Object>> getPartnerByClient(long userId, String strDate);
 	
-	boolean hasUserRights(String username, String queuename);
+	boolean hasUserRights(long userId, String queuename);
+	
+	List<Map<String, Object>> getUserRoles(long userId);
+	
+	String getNormalname(long userId, String usertype);
 }

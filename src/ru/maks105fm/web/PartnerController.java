@@ -60,10 +60,10 @@ public class PartnerController {
 	@RequestMapping(value = "/byDay")
 	public String logByDay(@RequestParam("from") String strFrom, @RequestParam("to") String strTo,
 			@RequestParam("period") String period, Model model) {
-		UserWithName partner = (UserWithName)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserWithName user = (UserWithName)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		
-		model.addAttribute("username", partner.getUsername());
-		model.addAttribute("humanname", partner.getHumanname());
+		model.addAttribute("username", user.getUsername());
+		model.addAttribute("humanname", user.getHumanname());
 		model.addAttribute("periods", periods);
 		model.addAttribute("from", strFrom);
 		model.addAttribute("to", strTo);
@@ -73,13 +73,13 @@ public class PartnerController {
 			List<Map<String, Object>> days = null;
 
 			if (period.equals(PERIOD_CUSTOM)) {
-				days = dao.getPartnerByDayCustom(partner.getUsername(), strFrom, strTo);
+				days = dao.getPartnerByDayCustom(user.getId(), strFrom, strTo);
 
 			} else if (period.equals(PERIOD_PRVMONTH)) {
-				days = dao.getPartnerByDayPrvMonth(partner.getUsername());
+				days = dao.getPartnerByDayPrvMonth(user.getId());
 
 			} else if (period.equals(PERIOD_CURMONTH)) {
-				days = dao.getPartnerByDayCurMonth(partner.getUsername());
+				days = dao.getPartnerByDayCurMonth(user.getId());
 
 			} else {
 				// error
@@ -93,14 +93,14 @@ public class PartnerController {
 	
 	@RequestMapping(value = "/byClient")
 	public String logByClient(@RequestParam("date") String strDate, Model model) {
-		UserWithName partner = (UserWithName)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserWithName user = (UserWithName)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		
-		model.addAttribute("username", partner.getUsername());
-		model.addAttribute("humanname", partner.getHumanname());
+		model.addAttribute("username", user.getUsername());
+		model.addAttribute("humanname", user.getHumanname());
 		model.addAttribute("periods", periods);
 		model.addAttribute("date", strDate);
 		
-		List<Map<String, Object>> clients = dao.getPartnerByClient(partner.getUsername(), strDate);
+		List<Map<String, Object>> clients = dao.getPartnerByClient(user.getId(), strDate);
 		
 		model.addAttribute("clients", clients);
 		

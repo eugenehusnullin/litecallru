@@ -38,19 +38,12 @@
 	
 <!-- 	Spring security -->
 	<security:authentication-manager>
-		<security:authentication-provider user-service-ref="customClientService">
-			<security:password-encoder hash="md5"></security:password-encoder>
-		</security:authentication-provider>
-		<security:authentication-provider user-service-ref="customPartnerService">
+		<security:authentication-provider user-service-ref="customUserDetailService">
 			<security:password-encoder hash="md5"></security:password-encoder>
 		</security:authentication-provider>
 	</security:authentication-manager>
 	
-	<bean id="customClientService" class="ru.maks105fm.web.security.CustomClientService">
-		<property name="dao" ref="dao"></property>
-	</bean>
-	
-	<bean id="customPartnerService" class="ru.maks105fm.web.security.CustomPartnerService">
+	<bean id="customUserDetailService" class="ru.maks105fm.web.security.CustomUserDetailService">
 		<property name="dao" ref="dao"></property>
 	</bean>
 	
