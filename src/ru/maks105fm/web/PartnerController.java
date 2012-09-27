@@ -12,7 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import ru.maks105fm.dao.Dao;
+import ru.maks105fm.dao.PartnerDao;
 import ru.maks105fm.web.security.UserWithName;
 
 @Controller
@@ -24,7 +24,7 @@ public class PartnerController {
 	public static String PERIOD_CUSTOM = "custom";
 
 	@Autowired
-	private Dao dao;
+	private PartnerDao partnerDao;
 	
 	private List<Map<String, Object>> periods;
 	
@@ -58,7 +58,7 @@ public class PartnerController {
 	}
 	
 	@RequestMapping(value = "/byDay")
-	public String logByDay(@RequestParam("from") String strFrom, @RequestParam("to") String strTo,
+	public String logForPeriod(@RequestParam("from") String strFrom, @RequestParam("to") String strTo,
 			@RequestParam("period") String period, Model model) {
 		UserWithName user = (UserWithName)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		
@@ -73,13 +73,13 @@ public class PartnerController {
 			List<Map<String, Object>> days = null;
 
 			if (period.equals(PERIOD_CUSTOM)) {
-				days = dao.getPartnerByDayCustom(user.getId(), strFrom, strTo);
+				days = partnerDao.getPartnerByDayCustom(user.getId(), strFrom, strTo);
 
 			} else if (period.equals(PERIOD_PRVMONTH)) {
-				days = dao.getPartnerByDayPrvMonth(user.getId());
+				days = partnerDao.getPartnerByDayPrvMonth(user.getId());
 
 			} else if (period.equals(PERIOD_CURMONTH)) {
-				days = dao.getPartnerByDayCurMonth(user.getId());
+				days = partnerDao.getPartnerByDayCurMonth(user.getId());
 
 			} else {
 				// error
@@ -92,7 +92,7 @@ public class PartnerController {
 	}
 	
 	@RequestMapping(value = "/byClient")
-	public String logByClient(@RequestParam("date") String strDate, Model model) {
+	public String logForDate(@RequestParam("date") String strDate, Model model) {
 		UserWithName user = (UserWithName)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		
 		model.addAttribute("username", user.getUsername());
@@ -100,7 +100,7 @@ public class PartnerController {
 		model.addAttribute("periods", periods);
 		model.addAttribute("date", strDate);
 		
-		List<Map<String, Object>> clients = dao.getPartnerByClient(user.getId(), strDate);
+		List<Map<String, Object>> clients = partnerDao.getClientsForDate(user.getId(), strDate);
 		
 		model.addAttribute("clients", clients);
 		

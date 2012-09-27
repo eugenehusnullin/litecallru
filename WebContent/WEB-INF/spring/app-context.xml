@@ -26,7 +26,19 @@
 	
 	<util:properties id="mainProps" location="main.properties"></util:properties>	
 	
-	<bean id="dao" class="ru.maks105fm.dao.JdbcDao">
+	<bean id="clientDao" class="ru.maks105fm.dao.ClientJdbcDao">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<bean id="partnerDao" class="ru.maks105fm.dao.PartnerJdbcDao">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<bean id="adminDao" class="ru.maks105fm.dao.AdminJdbcDao">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<bean id="securityDao" class="ru.maks105fm.dao.SecurityJdbcDao">
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
 	
@@ -44,7 +56,7 @@
 	</security:authentication-manager>
 	
 	<bean id="customUserDetailService" class="ru.maks105fm.web.security.CustomUserDetailService">
-		<property name="dao" ref="dao"></property>
+		<property name="securityDao" ref="securityDao"></property>
 	</bean>
 	
 	<security:http pattern="/css/**" security="none"></security:http>
@@ -53,8 +65,9 @@
 	<security:http pattern="/login.jsp*" security="none"></security:http>
 	
 	<security:http auto-config="true">
-		<security:intercept-url pattern="/partner/**" access="ROLE_PARTNER"/>		
-		<security:intercept-url pattern="/**" access="ROLE_USER"/>
+		<security:intercept-url pattern="/partner/**" access="ROLE_PARTNER"/>
+		<security:intercept-url pattern="/admin/**" access="ROLE_ADMIN"/>
+		<security:intercept-url pattern="/client/**" access="ROLE_USER"/>
 		<security:form-login login-page="/login.jsp" login-processing-url="/login" 
 			authentication-success-handler-ref="successAuthHandler"
 			username-parameter="username" password-parameter="password" authentication-failure-url="/login.jsp?auth=0" />

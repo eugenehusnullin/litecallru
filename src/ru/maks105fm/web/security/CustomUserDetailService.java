@@ -11,15 +11,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import ru.maks105fm.dao.Dao;
+import ru.maks105fm.dao.SecurityDao;
 
 public class CustomUserDetailService implements UserDetailsService {
 
-	private Dao dao;
+	private SecurityDao securityDao;
 
 	@Required
-	public void setDao(Dao dao) {
-		this.dao = dao;
+	public void setSecurityDao(SecurityDao securityDao) {
+		this.securityDao = securityDao;
 	}
 
 	@Override
@@ -27,11 +27,11 @@ public class CustomUserDetailService implements UserDetailsService {
 			throws UsernameNotFoundException {
 		UserDetails user = null;
 
-		Map<String, Object> userMap = dao.getUser(username);
+		Map<String, Object> userMap = securityDao.getUser(username);
 		if (userMap != null && userMap.size() >= 3) {
 			long userId = (Long) userMap.get("id");
 			
-			List<Map<String, Object>> userRoles = dao.getUserRoles(userId);
+			List<Map<String, Object>> userRoles = securityDao.getUserRoles(userId);
 			List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 
 			for (Map<String, Object> role : userRoles) {
@@ -41,7 +41,7 @@ public class CustomUserDetailService implements UserDetailsService {
 			}
 
 			String usertype = (String) userMap.get("usertype");
-			String normalname = dao.getNormalname(userId, usertype);
+			String normalname = securityDao.getNormalname(userId, usertype);
 
 			user = new UserWithName(username, (String) userMap.get("password"),
 					(Integer) userMap.get("enabled") == 1, true, true, true,

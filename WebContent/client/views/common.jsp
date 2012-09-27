@@ -7,9 +7,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Общая статистика</title>
 
-<link href="images/favicon.png" rel="shortcut icon" type="image/png" ></link>
-<link rel="stylesheet" type="text/css" href="css/styles.css" ></link>
-<script type="text/javascript" src="js/jquery.js"></script>
+<link href="<c:url value="/images/favicon.png"/>" rel="shortcut icon" type="image/png" ></link>
+<link href="<c:url value="/css/styles.css"/>" rel="stylesheet" type="text/css" ></link>
+<script src="<c:url value="/js/jquery.js"/>" type="text/javascript" ></script>
  
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -26,7 +26,7 @@
 </head>
 <body>
 	<div id="wrapper">
-		<%@ include file="header.jsp" %>
+		<%@ include file="../../views/header.jsp" %>
 		
 		<div id="main-container" class="center">
 			<div id="cont-block">
@@ -66,6 +66,6 @@
 		</div>
     </div>
 	
-	<%@ include file="footer.html" %>
+	<%@ include file="../../views/footer.html" %>
 </body>
 </html>
