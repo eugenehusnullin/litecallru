@@ -73,13 +73,13 @@ public class PartnerController {
 			List<Map<String, Object>> days = null;
 
 			if (period.equals(PERIOD_CUSTOM)) {
-				days = partnerDao.getPartnerByDayCustom(user.getId(), strFrom, strTo);
+				days = partnerDao.getDaylyCustom(user.getId(), strFrom, strTo);
 
 			} else if (period.equals(PERIOD_PRVMONTH)) {
-				days = partnerDao.getPartnerByDayPrvMonth(user.getId());
+				days = partnerDao.getDaylyPrvMonth(user.getId());
 
 			} else if (period.equals(PERIOD_CURMONTH)) {
-				days = partnerDao.getPartnerByDayCurMonth(user.getId());
+				days = partnerDao.getDaylyCurMonth(user.getId());
 
 			} else {
 				// error
@@ -100,7 +100,7 @@ public class PartnerController {
 		model.addAttribute("periods", periods);
 		model.addAttribute("date", strDate);
 		
-		List<Map<String, Object>> clients = partnerDao.getClientsForDate(user.getId(), strDate);
+		List<Map<String, Object>> clients = partnerDao.getForDateDetailed(user.getId(), strDate);
 		
 		model.addAttribute("clients", clients);
 		

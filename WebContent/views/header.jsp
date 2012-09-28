@@ -4,7 +4,7 @@
 <div id="header" class="center">
 	<div id="welcome">Здравствуйте, <c:out value="${humanname}"/>. Ваш логин <c:out value="${username}"/></div>
 	<a href="<c:url value="/logout"/>" id="out-for-client">Выход</a>
-	<div id="logo"><a href="."><img src="images/logotype.png" alt=""></a></div>
+	<div id="logo"><a href="."><img src="<c:url value="/images/logotype.png"/>" alt=""></a></div>
 	<div id="head-pic"></div>
 	<div id="head-phone">
 		<a href="">Ваш менеджер, Татьяна</a><br />

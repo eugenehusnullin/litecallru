@@ -25,6 +25,10 @@
     <mvc:resources location="/js/" mapping="/js/**"/>
     <mvc:resources location="/images/" mapping="/images/**"/>
     
+    <mvc:resources location="/admin/css/" mapping="/admin/css/**"/>
+    <mvc:resources location="/admin/js/" mapping="/admin/js/**"/>
+    <mvc:resources location="/admin/images/" mapping="/admin/images/**"/>
+    
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
     	<property name="prefix" value="views/"></property>
     	<property name="suffix" value=".jsp"></property>

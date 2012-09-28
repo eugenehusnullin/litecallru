@@ -38,4 +38,23 @@ public class SecurityJdbcDao extends JdbcDao implements SecurityDao {
 		return normalname;
 	}
 
+	@Override
+	public boolean isUserOwnerDeleted(long userId, String usertype) {
+		String sql = "";
+		
+		if (usertype.equals("client")) {
+			sql = "select a.deleted from client a, clientuser b where a.id = b.clientid and b.userid = ?";
+		} else if (usertype.equals("partner")) {
+			sql = "select a.deleted from partner a, partneruser b where a.id = b.partnerid and b.userid = ?";
+		} else if (usertype.equals("admin")) {
+			sql = "select a.deleted from admin a, adminuser b where a.id = b.adminid and b.userid = ?";
+		}
+		
+		if (sql != "") {
+			return jdbcTemplate.queryForInt(sql, userId) == 1;
+		} else {
+			return true;
+		}
+	}
+
 }

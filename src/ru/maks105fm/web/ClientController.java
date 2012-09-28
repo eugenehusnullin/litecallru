@@ -69,8 +69,10 @@ public class ClientController {
 			@RequestParam("from") String strFrom, @RequestParam("to") String strTo,
 			@RequestParam("period") String period, @RequestParam("page") Integer page, Model model) {
 		
-		if (!checkAccessToQueue(queueName)) {
-			return "";
+		if (queueName != null && queueName != "") {
+			if (!checkAccessToQueue(queueName)) {
+				return "";
+			}
 		}
 
 		initDefaultData(model);
@@ -124,8 +126,10 @@ public class ClientController {
 			@RequestParam("from") String strFrom, @RequestParam("to") String strTo,
 			@RequestParam("period") String period, Model model) {
 		
-		if (!checkAccessToQueue(queueName)) {
-			return "";
+		if (queueName != null && queueName != "") {
+			if (!checkAccessToQueue(queueName)) {
+				return "";
+			}
 		}
 		
 		initDefaultData(model);

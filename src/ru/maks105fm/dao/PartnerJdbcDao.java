@@ -12,7 +12,7 @@ public class PartnerJdbcDao extends JdbcDao implements PartnerDao {
 	}
 	
 	@Override
-	public List<Map<String, Object>> getPartnerByDayCustom(long userId, String from, String to) {
+	public List<Map<String, Object>> getDaylyCustom(long userId, String from, String to) {
 		int partnerId = getPartnerId(userId);
 		
 		String strFrom = from + " 00:00:00";
@@ -31,23 +31,23 @@ public class PartnerJdbcDao extends JdbcDao implements PartnerDao {
 	}
 
 	@Override
-	public List<Map<String, Object>> getPartnerByDayPrvMonth(long userId) {
+	public List<Map<String, Object>> getDaylyPrvMonth(long userId) {
 		String strFrom = DateUtils.getStartOfMonthStr(-1);
 		String strTo = DateUtils.getEndOfMonthStr(-1);
 		
-		return getPartnerByDayCustom(userId, strFrom, strTo);
+		return getDaylyCustom(userId, strFrom, strTo);
 	}
 
 	@Override
-	public List<Map<String, Object>> getPartnerByDayCurMonth(long userId) {
+	public List<Map<String, Object>> getDaylyCurMonth(long userId) {
 		String strFrom = DateUtils.getStartOfMonthStr(0);
 		String strTo = DateUtils.getEndOfMonthStr(0);
 		
-		return getPartnerByDayCustom(userId, strFrom, strTo);
+		return getDaylyCustom(userId, strFrom, strTo);
 	}
 
 	@Override
-	public List<Map<String, Object>> getClientsForDate(long userId, String date) {
+	public List<Map<String, Object>> getForDateDetailed(long userId, String date) {
 		int partnerId = getPartnerId(userId);
 		
 		String strDate = date + " 00:00:00";

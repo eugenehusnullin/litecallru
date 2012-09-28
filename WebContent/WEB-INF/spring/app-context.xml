@@ -67,7 +67,7 @@
 	<security:http auto-config="true">
 		<security:intercept-url pattern="/partner/**" access="ROLE_PARTNER"/>
 		<security:intercept-url pattern="/admin/**" access="ROLE_ADMIN"/>
-		<security:intercept-url pattern="/client/**" access="ROLE_USER"/>
+		<security:intercept-url pattern="/client/**" access="ROLE_CLIENT"/>
 		<security:form-login login-page="/login.jsp" login-processing-url="/login" 
 			authentication-success-handler-ref="successAuthHandler"
 			username-parameter="username" password-parameter="password" authentication-failure-url="/login.jsp?auth=0" />

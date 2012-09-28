@@ -30,7 +30,13 @@ public class CustomUserDetailService implements UserDetailsService {
 		Map<String, Object> userMap = securityDao.getUser(username);
 		if (userMap != null && userMap.size() >= 3) {
 			long userId = (Long) userMap.get("id");
+			String usertype = (String) userMap.get("usertype");
 			
+			if (securityDao.isUserOwnerDeleted(userId, usertype)) {
+				throw new UsernameNotFoundException("Error: user owner deleted.");
+			}
+			
+			String normalname = securityDao.getNormalname(userId, usertype);			
 			List<Map<String, Object>> userRoles = securityDao.getUserRoles(userId);
 			List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 
@@ -39,9 +45,6 @@ public class CustomUserDetailService implements UserDetailsService {
 						(String) role.get("role"));
 				authorities.add(sga);
 			}
-
-			String usertype = (String) userMap.get("usertype");
-			String normalname = securityDao.getNormalname(userId, usertype);
 
 			user = new UserWithName(username, (String) userMap.get("password"),
 					(Integer) userMap.get("enabled") == 1, true, true, true,

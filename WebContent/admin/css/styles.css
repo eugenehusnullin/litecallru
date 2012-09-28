@@ -1,0 +1,161 @@
+﻿html {height:100%;background: url("../images/bg-rep.jpg") repeat;}
+body {background: url("../images/background.jpg") repeat-x;color:#1e1e1e;font-size:13px;font-family: "Trebuchet MS", "Open Sans", "lucida grande", "Segoe UI", arial, verdana, "lucida sans unicode", tahoma, sans-serif;margin:0px;padding:0px;height:100%;}
+div.clear {clear: both;font-size: 0px;height: 0px;line-height: 0px;}
+img {border: none;padding:0;margin:0}
+p, h1, h2, h3, h4, h5, h6, form {margin: 0px;}
+a {color:#232323;text-decoration: none;}
+a:hover {color:#232323;text-decoration:none;}
+ul {margin:0;padding:0;list-style:none}
+
+input::-webkit-input-placeholder  { font-style:italic;color:#999 }
+input::-moz-placeholder { font-style:italic;color:#999}
+textarea::-webkit-input-placeholder  { font-style:italic;color:#999 }
+textarea::-moz-placeholder { font-style:italic;color:#999}
+
+.fright {float:right}
+.fleft {float:left}
+
+div#wrapper {height: auto!important;height: 100%;min-height: 100%;}
+
+div.center {margin: 0 auto;width: 990px;}
+div.center-rel {margin: 0 auto;width: 990px;position:relative;display:block}
+
+/* +++Header+++ */
+#header {background:#fff url(../images/cont-top.png) left top no-repeat ;padding:6px 0 0 0;position:relative;top:40px;height:115px;display:block}
+#logo {position:absolute;top:13px;left:30px;width:254px;height:99px;display:block;}
+#welcome {position:absolute;top:-25px;left:30px;display:block;font-style:italic;font-size:14px;font-weight:bold;color:#454545}
+#out-for-client {position:absolute;top:-25px;right:30px;display:block;padding-left:30px;background:url(../images/out-for-client.png) no-repeat;color:#666}
+#out-for-client:hover {text-decoration:underline	}
+#head-pic {position:absolute;top:-38px;right:80px;background:url(../images/head-pic.png) no-repeat;width:396px;height:159px}
+
+.selForm {width:150px;float:left;margin-right:10px}
+.txtForm {float:left;margin:0 10px 0 5px}
+.fieldBold {line-height:25px;font-style:italic;font-size:14px;font-weight:bold;color:#454545;float:left}
+#subBTN {margin-top:20px;color: #fff;background: url(../images/main-menu-li-bg.png) repeat-x;border-radius:20px;-moz-border-radius:20px;-webkit-border-radius:20px;behavior: url(ie-css3.htc);border:0;padding:12px 27px;font-size:14px;font-style:italic;cursor: pointer; } 
+
+
+#statInfo {width:930px;margin:20px -20px;border-collapse:collapse;}
+#statInfo td {border:1px #eeeeee solid;padding:10px 0px 10px 10px;font-size:14px;font-style:italic;}
+#statInfo tr {background:#fff}
+#statInfo td a{color:#80aa30;text-decoration:underline}
+#statInfo #headTBL {background:url(../images/headTable.png) repeat-x}
+#statInfo #footTBL {background:url(../images/footTable.png) repeat-x}
+
+
+
+#contCall{font-size:14px;font-style:italic;display:block;float:left;height:35px}
+#pagination{float:right;font-size:14px;font-style:italic;}
+#pagination a{color:#7ea72f;margin:0 5px}
+#pagination span{border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;behavior: url(ie-css3.htc);color:#fff;background: url(../images/main-menu-li-bg.png) repeat-x;padding:1px 5px}
+#pagination input {width:30px}
+
+/* ---Header--- */
+
+#main-container {padding-bottom: 40px;min-height:300px;margin-top:20px}
+#block-container {width:1024px;padding:28px 0 10px 0;font-size:13px;line-height:20px;overflow:hidden}
+#block-conteiner p {display:block;overflow:hidden;width:100%;height:24px;line-height:24px;}
+#cont-block {padding:20px 30px 34px 30px;background:#fff url(../images/cont-bottom.png) left bottom no-repeat ;}
+
+
+
+
+#sitetitle {color:#4a4a4a;font-size:18px;font-weight:bold;font-style:italic;height:35px;}
+#sitetitle span{color:#F99D00;}
+
+.main-title {color:#4a4a4a;font-size:18px;font-weight:bold;font-style:italic;height:49px;line-height:49px;padding-left:10px;display:block;background:url(../images/titlePage.png) no-repeat;overflow:hidden}
+.main-title.orangeTit {color:#F99D00;}
+.main-title .rImg{background:url(../images/titlePage.png) right bottom no-repeat;width:920px;overflow:hidden}
+.main-title .rImg span a{font-size:14px;font-weight:bold;font-style:italic;border-bottom:1px #7da62e dotted;color:#7da62e;float:right;line-height:20px;margin:13px 13px 0 0}
+
+
+span.tab-select {background:url(../images/tab-select.png) no-repeat;height:49px;display:block;float:left}
+a.tab-select {padding:0 53px;display:block;float:left}
+span.tab-select i {background:url(../images/tab-select.png) right bottom no-repeat;padding:13px 53px;height:49px}
+
+#filtre {float:left;margin-right:60px}
+#filtre select {width:180px}
+#filtre input {width:200px}
+#search {float:left;border-left:1px #888 dashed;padding-left:20px}
+#onlySearch{border-left:none;padding-left:0px}
+#search input {width:200px}
+#onlySearch input {width:200px}
+
+
+.mLeft{float:left;width:460px}
+.mRight{float:right;width:460px}
+
+.gray-round {margin:0 0 0 0;overflow:hidden;background:url(../images/grayLeft.png) repeat-y}
+.gray-roundRight {padding:20px 20px 5px 20px;overflow:hidden;background:url(../images/grayRight.png) right top repeat-y}
+.roundBottom {background:url(../images/roundBottom.png)  no-repeat;margin-bottom:15px}
+.roundBottomRight {background: url(../images/roundBottom.png) right bottom no-repeat;height:13px}
+
+
+.gray-round p{margin-bottom:10px;font-size:13px;color:4a4a4a}
+.gray-round .fullInfo {text-align:right;float:right;color:#2C8D0D;text-decoration:underline;font-style:italic}
+.gray-round ul {margin:10px 0 20px 5px;}
+.gray-round ul.inMain {margin:0px 0 0 5px;float:left;width:276px}
+.gray-round li {margin:0 0 10px 0px;background:url(../images/pero.png) no-repeat;padding-left:20px;font-style:italic}
+.gray-round img {float:left;margin:0 15px 10px 0;}
+.gray-round img.inMain {float:left;margin:0 10px 0 0;}
+
+
+
+#cont-block-760 {width:760px;background:#f5f5f5;margin-top:16px;-moz-box-shadow: 1px 1px 1px rgba(150,150,150,0.5);-webkit-box-shadow: 1px 1px 1px rgba(150,150,150,0.5);box-shadow: 1px 1px 1px rgba(150,150,150,0.5);border-radius:8px;-moz-border-radius:8px;-webkit-border-radius:8px;behavior: url(ie-css3.htc);}
+#cont-block-900 {width:900px;background:#f5f5f5;margin-top:16px;-moz-box-shadow: 1px 1px 1px rgba(150,150,150,0.5);-webkit-box-shadow: 1px 1px 1px rgba(150,150,150,0.5);box-shadow: 1px 1px 1px rgba(150,150,150,0.5);border-radius:8px;-moz-border-radius:8px;-webkit-border-radius:8px;behavior: url(ie-css3.htc);}
+#zag-cont-block {background:#fff url(../images/zag-cont-block-back.png) 0 100% repeat-x;border-bottom:1px #dadada solid;height:40px;line-height:37px;color:#a3bb5b;font-size:20px;text-align:center;border-radius:8px 8px 0 0 ;-moz-border-radius:8px 8px 0 0 ;-webkit-border-radius:8px 8px 0 0 ;behavior: url(ie-css3.htc);}
+
+#foot-cont-block {border-top:1px #dadada solid;height:48px;}
+#foot-cont-block span.dop-txt {font-size:16px;line-height:48px;margin-left:15px;color:#666}
+#foot-cont-block .r-btn-30 {margin:9px 30px 0 0;float:right}
+#foot-cont-block .btn-30 {margin:9px 15px 0 15px;float:right}
+#foot-cont-block select, #foot-cont-block .selectBox {margin:9px 0 0 15px;width:160px}
+#card-foot {height:60px;}
+#card-foot .btn-30 {margin:15px 15px 0 15px;float:right}
+
+
+
+/* +++Footer+++ */
+div#footer {width:990px;position:relative;margin: 0 auto;margin-top: -40px;font-size:13px;height:40px;background:url(../images/footer-back.png) repeat-x}
+div#footer #foot-copyright{font-size:14px;color:#666666;line-height:38px;position:absolute;left:30px}
+div#footer #foot-copyright a{color:#2C8D0D;}
+
+/* ---Footer--- */
+
+
+
+
+.modal-window {position: absolute;z-index: 1500;background:#fff;padding:0;top:100px;border-radius:10px;-moz-border-radius:10px;-webkit-border-radius:10px; behavior: url(ie-css3.htc);}
+.modal-close {display: block;width: 19px;height: 19px;background: url('../images/close.png') 0 0 no-repeat;position: absolute;right: 10px;top: 10px;cursor:pointer;}
+.modal-content {}
+#title-pop {font-style:italic;font-size:18px;font-weight:bold;color:#F99D00;margin:10px 0 0 10px;display:block } 
+#cont-pop {margin:15px 15px 15px 15px;color: #797979;font-size:16px} 
+#cont-pop .greenBtn{float:right;margin-top:10px} 
+.popTable {}
+.popTable td {vertical-align:top}
+.popTable td .field {font-style:italic;font-size:14px;font-weight:bold;color:#555}
+.popTable td .red {color:#F99D00}
+.popTable td input {margin:0 0 10px 0}
+.inputTXT {border:1px #c5c5c5 solid;height:28px;width:312px;background:url(../images/inputBg.png) repeat-x;border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px; behavior: url(ie-css3.htc);}
+.inputArea {border:1px #c5c5c5 solid;height:155px;width:424px;background:url(../images/inputBg.png) repeat-x;border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px; behavior: url(ie-css3.htc);}
+.gray-round .popTable a.pop-zakaz  {font-style:italic;font-size:14px;font-weight:bold;color:#F99D00;border-bottom:1px #F99D00 dotted}
+
+
+.SelTarif {border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px; behavior: url(ie-css3.htc);height:31px;border:1px #ccc solid;width:315px}
+
+#dopDan{font-style:italic;font-size:18px;font-weight:bold;margin-top:10px;color:#666;border:2px #d4d4d4 solid;background:#ebebeb;border-radius:25px;-moz-border-radius:25px;-webkit-border-radius:25px; behavior: url(ie-css3.htc);overflow:hidden;padding:15px}
+#dopDan #openDiv span {float:right;color:#5e8db8;font-style:normal;font-size:14px;font-weight:normal;cursor:pointer;border-bottom:1px #5e8db8 dotted}
+#dopDan .listService {float:left;width:32%;font-style:italic;font-size:14px;font-weight:bold;color:#555;margin-top:12px}
+#dopDan .listService ul {margin-top:7px}
+#dopDan .listService li {font-style:normal;font-size:13px;font-weight:normal;color:#555;padding:4px 0}
+#dopDan .listService li input {margin:3px 7px 0 0}
+
+.greenBtn {height:41px;background:url(../images/main-menu-li-bg.png) 0 0 repeat-x;padding:0 40px;line-height:41px;color:#fff;border:none;font-style:italic;font-size:14px;font-weight:bold;cursor:pointer;
+border-radius:20px;-moz-border-radius:20px;-webkit-border-radius:20px; behavior: url(ie-css3.htc);}
+
+#cont-pop .txt-form {background:url(../images/form/text-form.png) 0 0 no-repeat;height:35px;position:relative;margin:10px 12px 0 0;width:272px}
+#cont-pop .txt-form-cl {background:url(../images/form/text-form.png) 100% -35px no-repeat;width:100%;height:35px;position:absolute;right:-12px}
+#cont-pop .txt-form-cl input {border:0;background:transparent;height:33px;line-height:30px;outline: none;font-size:14px;color:#585858;}
+#cont-pop span.dop-txt {font-size:15px;line-height:22px;float:right;color:#797979}
+
+
+

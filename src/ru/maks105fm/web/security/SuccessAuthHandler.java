@@ -13,7 +13,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 public class SuccessAuthHandler implements AuthenticationSuccessHandler {
 	
 	private SimpleGrantedAuthority authPartner = new SimpleGrantedAuthority("ROLE_PARTNER");
-	private SimpleGrantedAuthority authUser = new SimpleGrantedAuthority("ROLE_USER");
+	private SimpleGrantedAuthority authUser = new SimpleGrantedAuthority("ROLE_CLIENT");
 	private SimpleGrantedAuthority authAdmin = new SimpleGrantedAuthority("ROLE_ADMIN");
 
 	@Override
