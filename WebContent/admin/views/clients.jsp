@@ -48,23 +48,23 @@
 						</form>						
 						
 						<div class="clear"></div>
-						<form name="editusers">
+						<form name="editusers" action="rePartner" method="post">
 							<table id="statInfo">
 								<tr id="headTBL">
+									<td><input type="checkbox" name="master_box" onclick="javascript:ckeck_uncheck_all()" /></td>
 									<td>ID</td>
 									<td>Клиенты</td>
 									<td>ID партнера</td>
-									<td>Сумма в руб. РФ</td>
-									<td>Изменение</td>
+									<td>Сумма в руб. РФ</td>									
 									<td>Удаление</td>
 								</tr>
 								<c:forEach items="${clients}" var="client">
 									<tr>
+										<td><input type="checkbox" name="${client.id}" /></td>
 										<td>${client.id}</td>
-										<td>${client.name}</td>
+										<td><a href="phones?clientId=${client.id}&page=1">${client.name}</a></td>
 										<td>${client.partnerid}</td>
-										<td>${client.calltime}</td>
-										<td>Изменить</td>
+										<td>${client.calltime}</td>										
 										<td><a href="deleteClient?id=${client.id}">Удалить</a></td>
 									</tr>
 								</c:forEach>
@@ -84,6 +84,7 @@
 								</c:forEach>
 							</div>
 							<div class="clear"></div>
+							<input type="submit" class="greenBtn openReParner" value="Изменить партнера" />
 						</form>
 					</div>
 				</div>
@@ -143,9 +144,9 @@
 		    // регулярное вырожение, для проверки отправителя
 		    var reg_sender = /[a-z]+/i;
 		    // заносим значение поля почтовый ящик в переменную mail
-		    var mail = obj.YMail.value;
+		    var mail = obj.email.value;
 		    // заносим значение поля отправитель в переменную sender
-		    var sender = obj.YName.value;
+		    var sender = obj.name.value;
 		    // заносим значение поля сообщение в переменную msg
 		    var error_msg = "Не корректно заполнины поля:  \n";
 		   
@@ -165,6 +166,59 @@
 		        alert(error_msg);
 		       
 		    return return_value;
+		}
+	</script>
+	
+	<div id="reParner" style="display:none;">
+		<span id="title-pop">Изменение партнера</span>
+	    <div id="cont-pop">
+	        <form name="rePartnerFrm" action="rePartnerClients" method="post"  >
+				<table class="popTable" cellspacing="0" cellpadding="0">
+					<tr><td><span class="field">ID партнера:</span>
+							<span class="red">*</span><br />
+							<input type="text" name="partnerid" class="inputTXT" /></td>
+					</tr>
+				</table>
+				<input type="submit" name="send"  class="greenBtn" value="Изменить" />
+				<input type="hidden" name="ids" />
+				<div class="clear"></div>
+	        </form>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+	    $(document).ready(function() {
+		
+			$('.openReParner').click(function(){
+				var frm = document.editusers;
+		        var ids = "";
+			    for (var i=0;i<frm.elements.length;i++) {
+			        var elmnt = frm.elements[i];
+			        if (elmnt.type=='checkbox') {
+			            if(elmnt.checked == true){
+			            	ids = ids + elmnt.name + ";";
+			            }
+			        }
+			    }			    
+			    document.rePartnerFrm.ids.value = ids;
+			    
+		        mw = new ModalWindowClass();
+		        mw.show($('#reParner').html());
+				return false;
+		    });
+		
+		});
+	</script>
+	
+	<script>
+		function ckeck_uncheck_all() {
+		    var frm = document.editusers;
+		    for (var i=0;i<frm.elements.length;i++) {
+		        var elmnt = frm.elements[i];
+		        if (elmnt.type=='checkbox') {
+		        	elmnt.checked = frm.master_box.checked;
+		        }
+		    }
 		}
 	</script>
 </body>
