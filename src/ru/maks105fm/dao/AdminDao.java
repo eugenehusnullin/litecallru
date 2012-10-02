@@ -22,4 +22,16 @@ public interface AdminDao {
 	void addPhone(int clientId, String description, String typedescr, BigDecimal tariff);
 
 	void deletePhone(int phoneId);
+
+	List<Map<String, Object>> getPartners(int pagesize, int page, int sortType, boolean sortOrder);
+
+	int getPartnersCount();
+
+	void deletePartner(int partnerId);
+
+	void addPartner(String name, String email);
+
+	List<Map<String, Object>> getPartnerClients(int partnerId, int pagesize, int page, boolean sortOrder);
+
+	int getPartnerClientsCount(int partnerId);
 }

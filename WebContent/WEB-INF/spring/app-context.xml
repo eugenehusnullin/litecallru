@@ -65,6 +65,7 @@
 	<security:http pattern="/login.jsp*" security="none"></security:http>
 	
 	<security:http auto-config="true">
+		<security:intercept-url pattern="/" access="ROLE_PARTNER,ROLE_ADMIN,ROLE_CLIENT"/>
 		<security:intercept-url pattern="/partner/**" access="ROLE_PARTNER"/>
 		<security:intercept-url pattern="/admin/**" access="ROLE_ADMIN"/>
 		<security:intercept-url pattern="/client/**" access="ROLE_CLIENT"/>

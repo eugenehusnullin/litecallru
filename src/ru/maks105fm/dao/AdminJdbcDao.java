@@ -9,14 +9,13 @@ import ru.maks105fm.utils.DateUtils;
 public class AdminJdbcDao extends JdbcDao implements AdminDao {
 
 	@Override
-	public List<Map<String, Object>> getClients(int pagesize,
-			int page, boolean sortOrder) {
+	public List<Map<String, Object>> getClients(int pagesize, int page, boolean sortOrder) {
 		String sort = sortOrder ? "asc" : "desc";
 		
 		String sql = "select a.id, a.name, a.partnerid, (select sum(a1.calltime) from cdr_partner_view a1 where a1.clientid = a.id) calltime " +
 						"from client a " +
 						"where a.deleted = 0 " +
-						"order by calltime " + sort + ", id " +
+						"order by calltime " + sort + " NULLS LAST, id " +
 						" LIMIT ? OFFSET ?";
 		
 		
@@ -62,7 +61,7 @@ public class AdminJdbcDao extends JdbcDao implements AdminDao {
 				") calltime " +
 				"from queue a " +
 				"where a.clientid = ? And a.deleted = 0 " +
-				"order by calltime desc, a.description " +
+				"order by calltime desc NULLS LAST, a.description " +
 				"LIMIT ? OFFSET ?";
 		
 		// calculate pagination
@@ -92,5 +91,70 @@ public class AdminJdbcDao extends JdbcDao implements AdminDao {
 	public void deletePhone(int phoneId) {
 		String sql = "update queue set deleted = 1 where id = ?";
 		jdbcTemplate.update(sql, phoneId);
+	}
+
+	@Override
+	public List<Map<String, Object>> getPartners(int pagesize, int page, int sortType, boolean sortOrder) {
+		String strSortOrder = sortOrder ? "asc " : "desc ";
+		String strSortType = sortType == 1 ? "clientscount " : "calltime ";
+		
+		String sql = "select a.id, a.name, a.email, " +
+						"(select sum(a1.calltime) from cdr_partner_view a1 where a1.partnerid = a.id) calltime, " +
+						"(select count(1) from client b1 where b1.partnerid = a.id and b1.deleted = 0) clientscount " +
+						"from partner a " +
+						"where a.deleted = 0 " +
+						"order by " + strSortType + strSortOrder + " NULLS LAST, id " +
+						" LIMIT ? OFFSET ?";
+		
+		// calculate pagination
+		int offset = (page - 1) * pagesize;
+		int limit = pagesize;
+				
+		return jdbcTemplate.queryForList(sql, limit, offset);
+	}
+
+	@Override
+	public int getPartnersCount() {
+		String sql = "select count(1) from partner a where a.deleted = 0";
+		return jdbcTemplate.queryForInt(sql);
+	}
+
+	@Override
+	public void deletePartner(int partnerId) {
+		String sql = "update partner set deleted = 1 where id = ?";
+		jdbcTemplate.update(sql, partnerId);
+	}
+
+	@Override
+	public void addPartner(String name, String email) {
+		String sql = "insert into partner (name, email) values (?, ?)";
+		jdbcTemplate.update(sql, name, email);
+	}
+
+	@Override
+	public List<Map<String, Object>> getPartnerClients(int partnerId, int pagesize, int page, boolean sortOrder) {
+		String sort = sortOrder ? "asc" : "desc";
+		
+		String sql = "select a.id, a.name, a.partnerid, " +
+							"(select sum(a1.calltime) from cdr_partner_view a1 where a1.clientid = a.id) calltime " +
+						"from client a " +
+						"where a.deleted = 0 " +
+						"and a.partnerId = ?" +
+						"order by calltime " + sort + " NULLS LAST, id " +
+						" LIMIT ? OFFSET ?";
+		
+		
+		
+		// calculate pagination
+		int offset = (page - 1) * pagesize;
+		int limit = pagesize;
+				
+		return jdbcTemplate.queryForList(sql, partnerId, limit, offset);
+	}
+
+	@Override
+	public int getPartnerClientsCount(int partnerId) {
+		String sql = "select count(1) from client a where a.deleted = 0 and a.partnerId = ?";
+		return jdbcTemplate.queryForInt(sql, partnerId);
 	}
 }

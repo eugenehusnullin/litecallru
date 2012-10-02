@@ -18,28 +18,21 @@
 			<div id="cont-block">
 				<div class="main-title ">
 					<div class="rImg">
-						<a href="" class="tab-select">Партнеры</a><span class="tab-select"><i>Клиенты</i></span>
+						<a href="defaultPartners" class="tab-select">Партнеры</a><span class="tab-select"><i>Клиенты</i></span>
 						<span><a href="" class="openAddClient">Добавить клиента</a></span>
 					</div>					
 				</div>
 				<div class="gray-round">
 					<div class="gray-roundRight">
-						<form id="filtre" action="changeSortClient" method="get">
+						<form id="filtre" action="changeSortClients" method="get">
 							<span class="fieldBold" style="width:200px">Сортировать по сумме:</span>
 							<select id="selectDate" name="selectedSort" class="selForm">
-								<c:choose>
-									<c:when test="${sortOrder==1}">
-										<option selected="selected" value="1">по возрастанию</option>
-										<option value="-1">по убыванию</option>
-									</c:when>
-									<c:otherwise>
-										<option value="1">по возрастанию</option>
-										<option selected="selected" value="-1">по убыванию</option>
-									</c:otherwise>
-								</c:choose>
+								<option <c:if test="${sortOrder==1}">selected="selected"</c:if> value="1">по возрастанию</option>
+								<option <c:if test="${sortOrder==-1}">selected="selected"</c:if> value="-1">по убыванию</option>
 							</select>
 							<div class="clear"></div>
 							<input type="submit" id="subBTN" value="Сортировать" />
+							<input type="hidden" name="partnerId" value="${partnerId}" />
 						</form>
 						<form id="search">
 							<input type="text" placeholder="поиск по ID" />							
@@ -52,11 +45,11 @@
 							<table id="statInfo">
 								<tr id="headTBL">
 									<td><input type="checkbox" name="master_box" onclick="javascript:ckeck_uncheck_all()" /></td>
-									<td>ID</td>
-									<td>Клиенты</td>
-									<td>ID партнера</td>
-									<td>Сумма в руб. РФ</td>									
-									<td>Удаление</td>
+									<td><b>ID</b></td>
+									<td style="width:40%"><b>Клиенты</b></td>
+									<td><b>ID партнера</b></td>
+									<td><b>Сумма в руб. РФ</b></td>
+									<td><b>Удаление</b></td>
 								</tr>
 								<c:forEach items="${clients}" var="client">
 									<tr>
@@ -65,7 +58,7 @@
 										<td><a href="phones?clientId=${client.id}&page=1">${client.name}</a></td>
 										<td>${client.partnerid}</td>
 										<td>${client.calltime}</td>										
-										<td><a href="deleteClient?id=${client.id}">Удалить</a></td>
+										<td><a href="deleteClient?partnerId=${partnerId}&id=${client.id}">Удалить</a></td>
 									</tr>
 								</c:forEach>
 							</table>
@@ -78,7 +71,7 @@
 											<span><c:out value="${i}"></c:out></span>
 										</c:when>
 										<c:otherwise>
-											<a href="clients?page=${i}&sortOrder=${sortOrder}">${i}</a>
+											<a href="clients?partnerId=${partnerId}&page=${i}&sortOrder=${sortOrder}">${i}</a>
 										</c:otherwise>
 									</c:choose>
 								</c:forEach>
@@ -114,10 +107,11 @@
 					</tr>		
 					<tr>					
 						<td><span class="field">ID партнера:</span><br />
-							<input type="text" name="partnerid" class="inputTXT" /></td>					
+							<input type="text" name="assPartnerid" class="inputTXT" value="${partnerId}" /></td>					
 					</tr>				
 				</table>
 				<input type="submit" name="send"  class="greenBtn" value="Добавить" />
+				<input type="hidden" name="partnerId" value="${partnerId}" />
 				<div class="clear"></div>
 	        </form>
 		</div>
@@ -152,12 +146,12 @@
 		   
 		    //проверка поля отправитель
 		    if(reg_sender.exec(sender) == null && sender ==""){
-		        error_msg += "- ФИО партнера  \n";
+		        error_msg += "- Наименование \n";
 		        return_value = false;
 		    }
 		    //проверка поля почтовый ящик
 		    if(reg_mail.exec(mail) == null){
-		        error_msg += "- e-mail партнера \n";
+		        error_msg += "- e-mail \n";
 		        return_value = false;
 		    }
 		
@@ -176,11 +170,12 @@
 				<table class="popTable" cellspacing="0" cellpadding="0">
 					<tr><td><span class="field">ID партнера:</span>
 							<span class="red">*</span><br />
-							<input type="text" name="partnerid" class="inputTXT" /></td>
+							<input type="text" name="rePartnerid" class="inputTXT" /></td>
 					</tr>
 				</table>
 				<input type="submit" name="send"  class="greenBtn" value="Изменить" />
 				<input type="hidden" name="ids" />
+				<input type="hidden" name="partnerId" value="${partnerId}" />
 				<div class="clear"></div>
 	        </form>
 		</div>

@@ -21,6 +21,7 @@ public class AdminController {
 	
 	private static int PAGESIZE_CLIENTS = 5;
 	private static int PAGESIZE_PHONES = 5;
+	private static int PAGESIZE_PARTNERS = 5;
 
 	@Autowired
 	private AdminDao adminDao;
@@ -33,20 +34,37 @@ public class AdminController {
 	
 	@RequestMapping(value = "/")
 	public String home(Model model) {
-		return listClients(1, -1, model);
+		return defaultListClients(model);
+	}
+	
+	@RequestMapping(value = "/defaultClients")
+	public String defaultListClients(Model model) {
+		return listClients(null, 1, -1, model);
 	}
 	
 	@RequestMapping(value = "/clients")
-	public String listClients(@RequestParam("page") Integer page, @RequestParam("sortOrder") Integer sortOrder, Model model) {
+	public String listClients(@RequestParam("partnerId") Integer partnerId,
+			@RequestParam("page") Integer page,			
+			@RequestParam("sortOrder") Integer sortOrder, Model model) {
+		
 		initDefaultData(model);
+		model.addAttribute("partnerId", partnerId);
 		
 		if (page == null) {
 			page = 1;
 		}
 		
-		Object clients = adminDao.getClients(PAGESIZE_CLIENTS, page, sortOrder > 0);
+		Object clients = null;
+		int clientsCount = 0;
 		
-		int clientsCount = adminDao.getClientsCount();
+		if (partnerId == null) {
+			clients = adminDao.getClients(PAGESIZE_CLIENTS, page, sortOrder > 0);
+			clientsCount = adminDao.getClientsCount();
+		} else {
+			clients = adminDao.getPartnerClients(partnerId, PAGESIZE_CLIENTS, page, sortOrder > 0);		
+			clientsCount = adminDao.getPartnerClientsCount(partnerId);
+		}
+		
 		int pagesCount = clientsCount / PAGESIZE_CLIENTS;
 		if (clientsCount % PAGESIZE_CLIENTS != 0) {
 			pagesCount++;
@@ -63,37 +81,41 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value = "/deleteClient")
-	public String deleteClient(@RequestParam("id") Integer clientId, Model model) {
+	public String deleteClient(@RequestParam("partnerId") Integer partnerId,
+			@RequestParam("id") Integer clientId, Model model) {
 		adminDao.deleteClient(clientId);
-		return listClients(1, 1, model);
+		return listClients(partnerId, 1, 1, model);
 	}
 	
-	@RequestMapping(value = "/changeSortClient", method = RequestMethod.GET)
-	public String changeSortClient(@RequestParam("selectedSort") Integer selectedSort, Model model) {		
-		return listClients(1, selectedSort, model);
+	@RequestMapping(value = "/changeSortClients", method = RequestMethod.GET)
+	public String changeSortClients(@RequestParam("partnerId") Integer partnerId,
+			@RequestParam("selectedSort") Integer selectedSort, Model model) {		
+		return listClients(partnerId, 1, selectedSort, model);
 	}
 	
 	@RequestMapping(value = "/addClient", method = RequestMethod.POST)
-	public String addClient(@RequestParam("name") String name, @RequestParam("email") String email, 
-			@RequestParam("partnerid") Integer partnerId, Model model) {
-		adminDao.addClient(name, email, partnerId);
-		return listClients(1, -1, model);
+	public String addClient(@RequestParam("partnerId") Integer partnerId,
+			@RequestParam("name") String name, @RequestParam("email") String email, 
+			@RequestParam("assPartnerid") Integer assPartnerid, Model model) {
+		adminDao.addClient(name, email, assPartnerid);
+		return listClients(partnerId, 1, -1, model);
 	}
 	
 	@RequestMapping(value = "/rePartnerClients", method = RequestMethod.POST)
-	public String rePartner(HttpServletRequest request, Model model) {		
-		int partnerId = Integer.parseInt(request.getParameter("partnerid"));		
+	public String rePartner(HttpServletRequest request, Model model) {
+		Integer partnerId = Integer.parseInt(request.getParameter("partnerid"));
+		int rePartnerId = Integer.parseInt(request.getParameter("rePartnerid"));
 		String paramIds = request.getParameter("ids");
 		String[] arrayIds = paramIds.split(";");
 		
 		for (int i = 0; i < arrayIds.length; i++) {
 			if (arrayIds[i] != null && arrayIds[i].length() > 0) {
 				int clientId = Integer.parseInt(arrayIds[i]);
-				adminDao.rePartner(partnerId, clientId);
+				adminDao.rePartner(rePartnerId, clientId);
 			}
 		}
 		
-		return listClients(1, -1, model);
+		return listClients(partnerId, 1, -1, model);
 	}
 	
 	@RequestMapping(value = "/phones" )
@@ -106,8 +128,8 @@ public class AdminController {
 		}
 		
 		Object phones = adminDao.getPhonesCurMonth(clientId, PAGESIZE_PHONES, page);
-		
 		int phonesCount = adminDao.getPhonesCount(clientId);
+		
 		int pagesCount = phonesCount / PAGESIZE_PHONES;
 		if (phonesCount % PAGESIZE_PHONES != 0) {
 			pagesCount++;
@@ -153,4 +175,63 @@ public class AdminController {
 		
 		return listPhones(clientId, 1, model);
 	}
+	
+	@RequestMapping(value = "/defaultPartners")
+	public String defaultListPartners(Model model) {
+		return listPartners(1, 1, -1, model);
+	}
+	
+	@RequestMapping(value = "/partners")
+	public String listPartners(@RequestParam("page") Integer page, 
+			@RequestParam("sortType") Integer sortType, 
+			@RequestParam("sortOrder") Integer sortOrder, Model model) {
+		initDefaultData(model);
+		
+		if (page == null) {
+			page = 1;
+		}
+		
+		Object partners = adminDao.getPartners(PAGESIZE_PARTNERS, page, sortType, sortOrder > 0);
+		int partnersCount = adminDao.getPartnersCount();
+		
+		int pagesCount = partnersCount / PAGESIZE_PARTNERS;
+		if (partnersCount % PAGESIZE_PARTNERS != 0) {
+			pagesCount++;
+		}
+		
+		model.addAttribute("partners", partners);
+		model.addAttribute("partnersCount", partnersCount);
+		model.addAttribute("curPage", page);
+		model.addAttribute("pagesCount", pagesCount);
+		model.addAttribute("sortType", sortType);
+		model.addAttribute("sortOrder", sortOrder);
+
+		return "partners";
+	}
+	
+	@RequestMapping(value = "/changeSortPartners", method = RequestMethod.GET)
+	public String changeSortPartners(@RequestParam("sortType") Integer sortType,
+			@RequestParam("sortOrder") Integer sortOrder,
+			Model model) {		
+		return listPartners(1, sortType, sortOrder, model);
+	}
+	
+	@RequestMapping(value = "/deletePartner")
+	public String deletePartner(@RequestParam("id") Integer partnerId,
+			@RequestParam("sortType") Integer sortType, 
+			@RequestParam("sortOrder") Integer sortOrder,
+			Model model) {
+		adminDao.deletePartner(partnerId);
+		return listPartners(1, sortType, sortOrder, model);
+	}
+	
+	@RequestMapping(value = "/addPartner", method = RequestMethod.POST)
+	public String addPartner(@RequestParam("name") String name,
+			@RequestParam("email") String email,
+			@RequestParam("sortType") Integer sortType, 
+			@RequestParam("sortOrder") Integer sortOrder,
+			Model model) {
+		adminDao.addPartner(name, email);
+		return listPartners(1, sortType, sortOrder, model);
+	}	
 }

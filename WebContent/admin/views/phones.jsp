@@ -18,7 +18,7 @@
 			<div id="cont-block">
 				<div class="main-title ">
 					<div class="rImg">
-						<a href="partners?page=1" class="tab-select">Партнеры</a><span class="tab-select"><i>Клиенты</i></span>
+						<a href="defaultPartners" class="tab-select">Партнеры</a><span class="tab-select"><i>Клиенты</i></span>
 						<span><a href="" class="openAddPhone">Добавить номер</a></span>
 					</div>					
 				</div>
@@ -29,11 +29,11 @@
 							<table id="statInfo">
 								<tr id="headTBL">
 									<td><input type="checkbox" name="master_box" onclick="javascript:ckeck_uncheck_all()" /></td>
-									<td>Номер</td>
-									<td>Тип номера</td>
-									<td>Тарификация</td>
-									<td>Сумма в руб. РФ за текущий месяц</td>									
-									<td>Удаление</td>
+									<td><b>Номер</b></td>
+									<td><b>Тип номера</b></td>
+									<td><b>Тарификация</b></td>
+									<td><b>Сумма в руб. РФ за текущий месяц</b></td>
+									<td><b>Удаление</b></td>
 								</tr>
 								<c:forEach items="${phones}" var="phone">
 									<tr>
