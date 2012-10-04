@@ -18,7 +18,7 @@
 			<div id="cont-block">
 				<div class="main-title ">
 					<div class="rImg">
-						<a href="defaultPartners" class="tab-select">Партнеры</a><span class="tab-select"><i>Клиенты</i></span>
+						<a href="defaultPartners" class="tab-select">Партнеры</a><a href="defaultClients" class="tab-select">Клиенты</a>
 						<span><a href="" class="openAddPhone">Добавить номер</a></span>
 					</div>					
 				</div>
@@ -42,7 +42,8 @@
 										<td>${phone.typedescr}</td>
 										<td>${phone.tariff}</td>
 										<td>${phone.calltime}</td>
-										<td><a href="deletePhone?id=${phone.id}&clientId=${clientId}">удалить</a></td>
+										<td><a onclick="return confirm('Вы точно хотите удалить телефон?')" 
+											href="deletePhone?id=${phone.id}&clientId=${clientId}">удалить</a></td>
 									</tr>
 								</c:forEach>
 							</table>
@@ -61,7 +62,8 @@
 								</c:forEach>
 							</div>
 							<div class="clear"></div>
-							<input type="submit" class="greenBtn" value="Удалить" />
+							<input type="submit" id="btnDelete" disabled="disabled" class="greenBtn" value="Удалить"
+								onclick="return confirm('Вы точно хотите удалить телефон?')" />
 							<input type="hidden" name="ids"/>
 							<input type="hidden" name="clientId" value="${clientId}"/>
 						</form>
@@ -102,6 +104,7 @@
 				</table>
 				<input type="submit" name="send"  class="greenBtn" value="Добавить" />
 				<input type="hidden" name="clientId" value="${clientId}"/>
+				<input type="hidden" name="page" value="${curPage}"/>
 				<div class="clear"></div>
 	        </form>
 		</div>
@@ -155,6 +158,8 @@
 		        	elmnt.checked=frm.master_box.checked;
 		        }
 		    }
+		    
+		    document.editphones.btnDelete.disabled = !frm.master_box.checked;
 		}
 	</script>
 	
@@ -171,6 +176,15 @@
 			        }
 			    }			    
 			    frm.ids.value = ids;
+			    
+			    var enabled = false;
+			    for (var i=0;i<frm.elements.length;i++) {
+			        var elmnt = frm.elements[i];
+			        if (elmnt.type=='checkbox') {
+			        	enabled = enabled || elmnt.checked;
+			        }
+			    }
+			    document.editphones.btnDelete.disabled = !enabled;
 		}
 	</script>
 </body>

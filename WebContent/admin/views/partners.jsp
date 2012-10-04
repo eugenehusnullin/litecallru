@@ -58,7 +58,8 @@
 									<td><a href="clients?partnerId=${partner.id}&page=1&sortOrder=1">${partner.name}</a></td>
 									<td>${partner.clientsCount}</td>
 									<td>${partner.calltime}</td>										
-									<td><a href="deletePartner?id=${partner.id}&sortType=${sortType}&sortOrder=${sortOrder}">удалить</a></td>
+									<td><a href="deletePartner?id=${partner.id}&sortType=${sortType}&sortOrder=${sortOrder}"
+											onclick="return confirm('Вы точно хотите удалить партнера?')" >удалить</a></td>
 								</tr>
 							</c:forEach>
 						</table>
@@ -161,6 +162,5 @@
 		    return return_value;
 		}
 	</script>
-	
 </body>
 </html>

@@ -30,13 +30,7 @@ public class PartnerController {
 	
 	@RequestMapping(value = "/")
 	public String home(Model model) {
-		UserWithName partner = (UserWithName)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		
-		model.addAttribute("username", partner.getUsername());
-		model.addAttribute("humanname", partner.getHumanname());
-		model.addAttribute("periods", periods);
-
-		return "byday";
+		return logForPeriod(null, null, PERIOD_CURMONTH, model);
 	}
 	
 	public PartnerController() {

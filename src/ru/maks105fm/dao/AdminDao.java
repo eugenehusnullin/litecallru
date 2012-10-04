@@ -34,4 +34,6 @@ public interface AdminDao {
 	List<Map<String, Object>> getPartnerClients(int partnerId, int pagesize, int page, boolean sortOrder);
 
 	int getPartnerClientsCount(int partnerId);
+
+	boolean existsPartner(int partnerId);
 }

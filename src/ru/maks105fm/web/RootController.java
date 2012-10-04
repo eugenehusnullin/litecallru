@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class RootController {
 	
 	@RequestMapping(value = "/")
-	public String rote(Model model) {
+	public String root(Model model) {
 		return "";
 	}
 }

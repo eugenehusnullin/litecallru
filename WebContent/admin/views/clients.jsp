@@ -12,7 +12,7 @@
 <script src="<c:url value="js/jquery.js"/>" type="text/javascript" ></script>
 </head>
 <body>
-		<div id="wrapper">
+	<div id="wrapper">
 		<%@ include file="header.jsp" %>
 		<div id="main-container" class="center">
 			<div id="cont-block">
@@ -53,12 +53,13 @@
 								</tr>
 								<c:forEach items="${clients}" var="client">
 									<tr>
-										<td><input type="checkbox" name="${client.id}" /></td>
+										<td><input type="checkbox" name="${client.id}" onclick="javascript:disable_enable_repartner()" /></td>
 										<td>${client.id}</td>
 										<td><a href="phones?clientId=${client.id}&page=1">${client.name}</a></td>
 										<td>${client.partnerid}</td>
 										<td>${client.calltime}</td>										
-										<td><a href="deleteClient?partnerId=${partnerId}&id=${client.id}">Удалить</a></td>
+										<td><a href="deleteClient?partnerId=${partnerId}&id=${client.id}"
+												onclick="return confirm('Вы точно хотите удалить клиента?')" >Удалить</a></td>
 									</tr>
 								</c:forEach>
 							</table>
@@ -77,7 +78,7 @@
 								</c:forEach>
 							</div>
 							<div class="clear"></div>
-							<input type="submit" class="greenBtn openReParner" value="Изменить партнера" />
+							<input type="submit" id="btnRePartner" disabled="disabled" class="greenBtn openReParner" value="Изменить партнера" />
 						</form>
 					</div>
 				</div>
@@ -112,6 +113,8 @@
 				</table>
 				<input type="submit" name="send"  class="greenBtn" value="Добавить" />
 				<input type="hidden" name="partnerId" value="${partnerId}" />
+				<input type="hidden" name="page" value="${curPage}" />
+				<input type="hidden" name="sortOrder" value="${sortOrder}" />
 				<div class="clear"></div>
 	        </form>
 		</div>
@@ -176,6 +179,8 @@
 				<input type="submit" name="send"  class="greenBtn" value="Изменить" />
 				<input type="hidden" name="ids" />
 				<input type="hidden" name="partnerId" value="${partnerId}" />
+				<input type="hidden" name="page" value="${curPage}" />
+				<input type="hidden" name="sortOrder" value="${sortOrder}" />
 				<div class="clear"></div>
 	        </form>
 		</div>
@@ -214,7 +219,37 @@
 		        	elmnt.checked = frm.master_box.checked;
 		        }
 		    }
+		    document.editusers.btnRePartner.disabled = !frm.master_box.checked;
 		}
+		
+		function disable_enable_repartner() {
+		    var frm = document.editusers;
+		    var enabled = false;
+		    for (var i=0;i<frm.elements.length;i++) {
+		        var elmnt = frm.elements[i];
+		        if (elmnt.type=='checkbox') {
+		        	enabled = enabled || elmnt.checked;
+		        }
+		    }
+		    document.editusers.btnRePartner.disabled = !enabled;
+		}
+	</script>
+	
+	<div id="message" style="display:none;">
+		<label id="lblMessage" title="${message}" style="display:none;"></label>
+		<span id="title-pop">Внимание</span>
+	    <div id="cont-pop">${message}</div>
+	</div>
+	
+	<script type="text/javascript">
+	    $(document).ready(function() {
+	    	if ($('#lblMessage').attr('title') != "") {
+	    		mw = new ModalWindowClass();
+		        mw.show($('#message').html());
+		        $('#lblMessage').prop('title', "");
+		        return false;
+	    	}			
+		});
 	</script>
 </body>
 </html>

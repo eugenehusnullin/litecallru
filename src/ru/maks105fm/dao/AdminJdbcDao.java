@@ -12,7 +12,7 @@ public class AdminJdbcDao extends JdbcDao implements AdminDao {
 	public List<Map<String, Object>> getClients(int pagesize, int page, boolean sortOrder) {
 		String sort = sortOrder ? "asc" : "desc";
 		
-		String sql = "select a.id, a.name, a.partnerid, (select sum(a1.calltime) from cdr_partner_view a1 where a1.clientid = a.id) calltime " +
+		String sql = "select a.id, a.name, a.partnerid, (select coalesce(sum(a1.calltime),0) from cdr_partner_view a1 where a1.clientid = a.id) calltime " +
 						"from client a " +
 						"where a.deleted = 0 " +
 						"order by calltime " + sort + " NULLS LAST, id " +
@@ -55,7 +55,7 @@ public class AdminJdbcDao extends JdbcDao implements AdminDao {
 	public List<Map<String, Object>> getPhonesCurMonth(int clientId, int pagesize,
 			int page) {
 		String sql = "select a.id, a.description, a.typedescr, a.tariff, " +
-				"(select sum(a1.calltime) from cdr_partner_view a1 where a1.queueid = a.id " +
+				"(select coalesce(sum(a1.calltime),0) from cdr_partner_view a1 where a1.queueid = a.id " +
 				"and a1.eventdate_utc >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') " +
 				"and a1.eventdate_utc <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') " +
 				") calltime " +
@@ -99,7 +99,7 @@ public class AdminJdbcDao extends JdbcDao implements AdminDao {
 		String strSortType = sortType == 1 ? "clientscount " : "calltime ";
 		
 		String sql = "select a.id, a.name, a.email, " +
-						"(select sum(a1.calltime) from cdr_partner_view a1 where a1.partnerid = a.id) calltime, " +
+						"(select coalesce(sum(a1.calltime),0) from cdr_partner_view a1 where a1.partnerid = a.id) calltime, " +
 						"(select count(1) from client b1 where b1.partnerid = a.id and b1.deleted = 0) clientscount " +
 						"from partner a " +
 						"where a.deleted = 0 " +
@@ -136,7 +136,7 @@ public class AdminJdbcDao extends JdbcDao implements AdminDao {
 		String sort = sortOrder ? "asc" : "desc";
 		
 		String sql = "select a.id, a.name, a.partnerid, " +
-							"(select sum(a1.calltime) from cdr_partner_view a1 where a1.clientid = a.id) calltime " +
+							"(select coalesce(sum(a1.calltime),0) from cdr_partner_view a1 where a1.clientid = a.id) calltime " +
 						"from client a " +
 						"where a.deleted = 0 " +
 						"and a.partnerId = ?" +
@@ -156,5 +156,11 @@ public class AdminJdbcDao extends JdbcDao implements AdminDao {
 	public int getPartnerClientsCount(int partnerId) {
 		String sql = "select count(1) from client a where a.deleted = 0 and a.partnerId = ?";
 		return jdbcTemplate.queryForInt(sql, partnerId);
+	}
+
+	@Override
+	public boolean existsPartner(int partnerId) {
+		String sql = "select count(1) from partner a where a.deleted = 0 and a.id = ?";
+		return jdbcTemplate.queryForInt(sql, partnerId) == 1;
 	}
 }

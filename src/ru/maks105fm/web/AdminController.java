@@ -34,7 +34,7 @@ public class AdminController {
 	
 	@RequestMapping(value = "/")
 	public String home(Model model) {
-		return defaultListClients(model);
+		return defaultListPartners(model);
 	}
 	
 	@RequestMapping(value = "/defaultClients")
@@ -96,26 +96,42 @@ public class AdminController {
 	@RequestMapping(value = "/addClient", method = RequestMethod.POST)
 	public String addClient(@RequestParam("partnerId") Integer partnerId,
 			@RequestParam("name") String name, @RequestParam("email") String email, 
-			@RequestParam("assPartnerid") Integer assPartnerid, Model model) {
-		adminDao.addClient(name, email, assPartnerid);
-		return listClients(partnerId, 1, -1, model);
+			@RequestParam("assPartnerid") Integer assPartnerid,
+			@RequestParam("page") Integer page,			
+			@RequestParam("sortOrder") Integer sortOrder, Model model) {
+		
+		if (!adminDao.existsPartner(assPartnerid)) {
+			model.addAttribute("message", "Партнера с таким ID нет.");
+		} else {
+			adminDao.addClient(name, email, assPartnerid);
+			model.addAttribute("message", "Успешно добавлен клиент.");
+		}
+		
+		return listClients(partnerId, page, sortOrder, model);
 	}
 	
 	@RequestMapping(value = "/rePartnerClients", method = RequestMethod.POST)
 	public String rePartner(HttpServletRequest request, Model model) {
-		Integer partnerId = Integer.parseInt(request.getParameter("partnerid"));
+		Integer partnerId = request.getParameter("partnerid")== null ? null : Integer.parseInt(request.getParameter("partnerid"));
 		int rePartnerId = Integer.parseInt(request.getParameter("rePartnerid"));
 		String paramIds = request.getParameter("ids");
 		String[] arrayIds = paramIds.split(";");
+		Integer page = Integer.parseInt(request.getParameter("page"));
+		Integer sortOrder = Integer.parseInt(request.getParameter("sortOrder"));
 		
-		for (int i = 0; i < arrayIds.length; i++) {
-			if (arrayIds[i] != null && arrayIds[i].length() > 0) {
-				int clientId = Integer.parseInt(arrayIds[i]);
-				adminDao.rePartner(rePartnerId, clientId);
+		if (!adminDao.existsPartner(rePartnerId)) {
+			model.addAttribute("message", "Партнера с таким ID нет.");
+		} else {
+			for (int i = 0; i < arrayIds.length; i++) {
+				if (arrayIds[i] != null && arrayIds[i].length() > 0) {
+					int clientId = Integer.parseInt(arrayIds[i]);
+					adminDao.rePartner(rePartnerId, clientId);
+				}
 			}
+			model.addAttribute("message", "Успешно изменен партнер.");
 		}
 		
-		return listClients(partnerId, 1, -1, model);
+		return listClients(partnerId, page, sortOrder, model);
 	}
 	
 	@RequestMapping(value = "/phones" )
@@ -147,7 +163,8 @@ public class AdminController {
 	public String addPhone(@RequestParam("clientId") Integer clientId, 
 			@RequestParam("description") String description, 
 			@RequestParam("typedescr") String typedescr, 
-			@RequestParam("tariff") String strTariff, Model model) {
+			@RequestParam("tariff") String strTariff,
+			@RequestParam("page") Integer page, Model model) {
 		
 		BigDecimal tariff = new BigDecimal(strTariff);
 		adminDao.addPhone(clientId, description, typedescr, tariff);

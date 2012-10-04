@@ -8,8 +8,8 @@
 <title>Вход</title>
 </head>
 <body onload='document.f.username.focus();'>
-	<div>Вход в партнерку (пользователь partner1 пароль partner1)</div>
-	<div>Вход клиента (пользователь user1 пароль 12345)</div>
+	<div>Вход в партнерку (пользователь 700001 пароль partner1)</div>
+	<div>Вход клиента (пользователь 100001 пароль 12345)</div>
 	<h3>Для входа введите имя пользователя (логин) и пароль</h3>	
 	<form name='f' action="login" method="post">
 		<table>
