@@ -18,13 +18,14 @@
 			<div id="cont-block">
 				<div class="main-title ">
 					<div class="rImg">
-						<a href="defaultPartners" class="tab-select">Партнеры</a><a href="defaultClients" class="tab-select">Клиенты</a>
+						<a href="defaultPartners" class="tab-select">Партнеры</a><span class="tab-select"><i>Клиенты</i></span>
 						<span><a href="" class="openAddPhone">Добавить номер</a></span>
 					</div>					
 				</div>
 				<div class="gray-round">
 					<div class="gray-roundRight">
 						<div class="clear"></div>
+						<b>Номера клиента: ${clientName} [${clientId}]</b>
 						<form name="editphones" action="deletePhones" method="post">
 							<table id="statInfo">
 								<tr id="headTBL">

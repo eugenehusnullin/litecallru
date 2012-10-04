@@ -36,4 +36,12 @@ public interface AdminDao {
 	int getPartnerClientsCount(int partnerId);
 
 	boolean existsPartner(int partnerId);
+
+	List<Map<String, Object>> getPartner(int id);
+
+	List<Map<String, Object>> getClient(int id);
+
+	String getClientName(int clientId);
+
+	String getPartnerName(int partnerId);
 }

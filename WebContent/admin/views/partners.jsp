@@ -37,10 +37,12 @@
 							<div class="clear"></div>
 							<input type="submit" id="subBTN" value="Сортировать" />
 						</form>
-						<form id="search">
-							<input type="text" placeholder="поиск по ID" />							
+						<form id="search" action="searchPartner" method="get">
+							<input type="text" placeholder="поиск по ID" name="id" />							
 							<div class="clear"></div>
 							<input type="submit" id="subBTN" value="Искать" />
+							<input type="hidden" name="sortType" value="${sortType}" />
+							<input type="hidden" name="sortOrder" value="${sortOrder}" />
 						</form>						
 						
 						<div class="clear"></div>

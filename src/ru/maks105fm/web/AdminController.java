@@ -1,6 +1,8 @@
 package ru.maks105fm.web;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -63,6 +65,9 @@ public class AdminController {
 		} else {
 			clients = adminDao.getPartnerClients(partnerId, PAGESIZE_CLIENTS, page, sortOrder > 0);		
 			clientsCount = adminDao.getPartnerClientsCount(partnerId);
+			
+			String partnerName = adminDao.getPartnerName(partnerId);
+			model.addAttribute("partnerName", partnerName);
 		}
 		
 		int pagesCount = clientsCount / PAGESIZE_CLIENTS;
@@ -75,7 +80,27 @@ public class AdminController {
 		model.addAttribute("curPage", page);
 		model.addAttribute("pagesCount", pagesCount);
 		model.addAttribute("sortOrder", sortOrder);
+
+		return "clients";
+	}
+	
+	@RequestMapping(value = "/searchClient")
+	public String searchClients(@RequestParam("id") Integer id,			
+			@RequestParam("sortOrder") Integer sortOrder, Model model) {
 		
+		initDefaultData(model);
+		
+		List<Map<String, Object>> clients = adminDao.getClient(id);
+		int clientsCount = clients.size();
+		int page = clients.size();
+		int pagesCount = clients.size();
+		
+		
+		model.addAttribute("clients", clients);
+		model.addAttribute("clientsCount", clientsCount);
+		model.addAttribute("curPage", page);
+		model.addAttribute("pagesCount", pagesCount);
+		model.addAttribute("sortOrder", sortOrder);
 
 		return "clients";
 	}
@@ -155,6 +180,9 @@ public class AdminController {
 		model.addAttribute("phonesCount", phonesCount);
 		model.addAttribute("curPage", page);
 		model.addAttribute("pagesCount", pagesCount);
+		
+		String clientName = adminDao.getClientName(clientId);
+		model.addAttribute("clientName", clientName);
 
 		return "phones";
 	}
@@ -215,6 +243,28 @@ public class AdminController {
 		if (partnersCount % PAGESIZE_PARTNERS != 0) {
 			pagesCount++;
 		}
+		
+		model.addAttribute("partners", partners);
+		model.addAttribute("partnersCount", partnersCount);
+		model.addAttribute("curPage", page);
+		model.addAttribute("pagesCount", pagesCount);
+		model.addAttribute("sortType", sortType);
+		model.addAttribute("sortOrder", sortOrder);
+
+		return "partners";
+	}
+	
+	@RequestMapping(value = "/searchPartner")
+	public String searchPartner(@RequestParam("id") Integer id,
+			@RequestParam("sortType") Integer sortType, 
+			@RequestParam("sortOrder") Integer sortOrder, Model model) {
+		
+		initDefaultData(model);
+		
+		List<Map<String, Object>> partners = adminDao.getPartner(id);
+		int partnersCount = partners.size();		
+		int page = partners.size();
+		int pagesCount = partners.size();
 		
 		model.addAttribute("partners", partners);
 		model.addAttribute("partnersCount", partnersCount);

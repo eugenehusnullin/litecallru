@@ -18,9 +18,17 @@
 			<div id="cont-block">
 				<div class="main-title ">
 					<div class="rImg">
-						<a href="defaultPartners" class="tab-select">Партнеры</a><span class="tab-select"><i>Клиенты</i></span>
+						<c:choose>
+							<c:when test="${partnerId != null}">											
+								<span class="tab-select"><i>Партнеры</i></span><a href="defaultClients" class="tab-select">Клиенты</a>
+							</c:when>
+							<c:otherwise>
+								<a href="defaultPartners" class="tab-select">Партнеры</a><span class="tab-select"><i>Клиенты</i></span>
+							</c:otherwise>
+						</c:choose>
+						
 						<span><a href="" class="openAddClient">Добавить клиента</a></span>
-					</div>					
+					</div>
 				</div>
 				<div class="gray-round">
 					<div class="gray-roundRight">
@@ -34,13 +42,17 @@
 							<input type="submit" id="subBTN" value="Сортировать" />
 							<input type="hidden" name="partnerId" value="${partnerId}" />
 						</form>
-						<form id="search">
-							<input type="text" placeholder="поиск по ID" />							
+						<form id="search" action="searchClient" method="get">
+							<input type="text" placeholder="поиск по ID" name="id" />							
 							<div class="clear"></div>
 							<input type="submit" id="subBTN" value="Искать" />
+							<input type="hidden" name="sortOrder" value="${sortOrder}" />
 						</form>						
 						
 						<div class="clear"></div>
+						<c:if test="${partnerId != null }">
+							<b>Клиенты партнера: ${partnerName} [${partnerId}]</b>
+						</c:if>
 						<form name="editusers" action="rePartner" method="post">
 							<table id="statInfo">
 								<tr id="headTBL">
