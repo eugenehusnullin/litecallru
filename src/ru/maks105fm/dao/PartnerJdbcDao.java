@@ -19,7 +19,7 @@ public class PartnerJdbcDao extends JdbcDao implements PartnerDao {
 		String strTo = to + " 23:59:59";
 		
 		String sql = "select date_trunc('day', a.eventdate_utc) date, " +
-					"sum(a.calltime) calltime, sum(a.calltime) moneysum " +
+					"sum(a.calltime) calltime, sum(a.calltime*a.tariff) moneysum " +
 				"from cdr_partner_view a " +
 				"where a.partnerid = ? and " +
 					"a.eventdate_utc >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') and " +
@@ -54,7 +54,7 @@ public class PartnerJdbcDao extends JdbcDao implements PartnerDao {
 		
 		String sql = "select b.name clientname, a.calltime, a.moneysum " +
 				"from ( " +
-				"select a.clientid, sum(a.calltime) calltime, sum(a.calltime) moneysum " +
+				"select a.clientid, sum(a.calltime) calltime, sum(a.calltime*a.tariff) moneysum " +
 				"from cdr_partner_view a " +
 				"where a.partnerid = ? " +
 				"and date_trunc('day', a.eventdate_utc) = to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') " +
