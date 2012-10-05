@@ -1,12 +1,27 @@
 package ru.maks105fm.web;
 
+import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.RandomStringUtils;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +42,33 @@ public class AdminController {
 
 	@Autowired
 	private AdminDao adminDao;
+	
+	@Value("#{mainProps['main.clientpasswordlength']}")
+	private String clientPasswordLength;
+	
+	@Value("#{mainProps['main.partnerpasswordlength']}")
+	private String partnerPasswordLength;
+	
+	@Value("#{mainProps['main.adminemails']}")
+	private String commaseparatedEmails;
+	
+	private String[] emails;
+	
+	@Value("#{mainProps['main.smtphost']}")
+	private String smtphost;
+	
+	@Value("#{mainProps['main.smtpport']}")
+    private String smtpport;
+	
+	@Value("#{mainProps['main.fromusername']}")
+    private String fromusername;
+	
+	@Value("#{mainProps['main.fromuserpassword']}")
+    private String fromuserpassword;
+	
+	public void init() {
+		emails = commaseparatedEmails.split(";");
+	}
 	
 	private void initDefaultData(Model model) {
 		UserWithName user = (UserWithName)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -128,11 +170,98 @@ public class AdminController {
 		if (!adminDao.existsPartner(assPartnerid)) {
 			model.addAttribute("message", "Партнера с таким ID нет.");
 		} else {
-			adminDao.addClient(name, email, assPartnerid);
+			int clientId = adminDao.addClient(name, email, assPartnerid);
+			addUser2Client(clientId);
+			
 			model.addAttribute("message", "Успешно добавлен клиент.");
 		}
 		
 		return listClients(partnerId, page, sortOrder, model);
+	}
+	
+	private void addUser2Client(int clientId) {
+		String password = RandomStringUtils.randomAscii(Integer.parseInt(clientPasswordLength));
+		String md5Password = DigestUtils.md5Hex(password);
+		adminDao.addClientUser(clientId, md5Password);
+		
+		createClientEmail(clientId, password);
+	}
+	
+	private void createClientEmail(int clientId, String password) {
+		String clientName = adminDao.getClientName(clientId);
+		String emailAddress = adminDao.getClientEmail(clientId);
+		
+		VelocityContext context = new VelocityContext();
+		context.put("ID", clientId);
+		context.put("password", password);
+		context.put("name", clientName);
+		
+		Properties vp = new Properties();
+		vp.put("resource.loader", "class");
+		vp.put("class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+		VelocityEngine ve = new VelocityEngine(vp);
+		
+		Template template = null;
+		template = ve.getTemplate("toclient.vm", "UTF-8");
+		
+		StringWriter sw = new StringWriter();
+		template.merge(context, sw);
+		String emailbody2client = sw.toString();
+		
+		sendEmail(emailAddress, emailbody2client, "Регистрация в LiteCall");
+		
+		// email to admins
+		context.put("type", "клиент,");
+		template = ve.getTemplate("toadmin.vm", "UTF-8");
+		sw = new StringWriter();
+		template.merge(context, sw);
+		String emailbody2admin = sw.toString();
+		
+		for (int i = 0; i < emails.length; i++) {
+			sendEmail(emails[i], emailbody2admin, "Регистрация клиента в LiteCall");
+		}
+	}
+	
+	private void sendEmail(String recipient, String body, String subject) {
+	    Properties props = System.getProperties();
+	    props.put("mail.smtp.starttls.enable", "true");
+	    props.put("mail.smtp.host", smtphost);
+	    props.put("mail.smtp.user", fromusername);
+	    props.put("mail.smtp.password", fromuserpassword);
+	    props.put("mail.smtp.port", smtpport);
+	    props.put("mail.smtp.auth", "true");
+
+	    String[] to = {recipient};
+
+	    Session session = Session.getDefaultInstance(props, null);
+	    MimeMessage message = new MimeMessage(session);
+	    try {
+			message.setFrom(new InternetAddress(fromusername));
+			InternetAddress[] toAddress = new InternetAddress[to.length];
+
+		    // To get the array of addresses
+		    for( int i=0; i < to.length; i++ ) { // changed from a while loop
+		        toAddress[i] = new InternetAddress(to[i]);
+		    }
+		    System.out.println(Message.RecipientType.TO);
+
+		    for( int i=0; i < toAddress.length; i++) { // changed from a while loop
+		        message.addRecipient(Message.RecipientType.TO, toAddress[i]);
+		    }
+		    message.setSubject(subject);
+		    message.setText(body);
+		    
+		    Transport transport = session.getTransport("smtp");
+		    transport.connect(smtphost, fromusername, fromuserpassword);
+		    transport.sendMessage(message, message.getAllRecipients());
+		    transport.close();
+		} catch (AddressException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@RequestMapping(value = "/rePartnerClients", method = RequestMethod.POST)
@@ -298,7 +427,52 @@ public class AdminController {
 			@RequestParam("sortType") Integer sortType, 
 			@RequestParam("sortOrder") Integer sortOrder,
 			Model model) {
-		adminDao.addPartner(name, email);
+		int partnerId = adminDao.addPartner(name, email);
+		addUser2Partner(partnerId);
+		
 		return listPartners(1, sortType, sortOrder, model);
-	}	
+	}
+	
+	private void addUser2Partner(int partnerId) {
+		String password = RandomStringUtils.randomAscii(Integer.parseInt(partnerPasswordLength));
+		String md5Password = new String(DigestUtils.md5(password));
+		adminDao.addPartnerUser(partnerId, md5Password);
+		
+		createPartnerEmail(partnerId, password);
+	}
+	
+	private void createPartnerEmail(int partnerId, String password) {
+		String partnerName = adminDao.getPartnerName(partnerId);
+		String emailAddress = adminDao.getPartnerEmail(partnerId);
+		
+		VelocityContext context = new VelocityContext();
+		context.put("ID", partnerId);
+		context.put("password", password);
+		context.put("name", partnerName);
+		
+		Properties vp = new Properties();
+		vp.put("resource.loader", "class");
+		vp.put("class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+		VelocityEngine ve = new VelocityEngine(vp);
+		
+		Template template = null;
+		template = ve.getTemplate("topartner.vm", "UTF-8");
+		
+		StringWriter sw = new StringWriter();
+		template.merge(context, sw);
+		String emailbody2partner = sw.toString();
+		
+		sendEmail(emailAddress, emailbody2partner, "Регистрация в LiteCall");
+		
+		// email to admins
+		context.put("type", "партнер,");
+		template = ve.getTemplate("toadmin.vm", "UTF-8");
+		sw = new StringWriter();
+		template.merge(context, sw);
+		String emailbody2admin = sw.toString();
+		
+		for (int i = 0; i < emails.length; i++) {
+			sendEmail(emails[i], emailbody2admin, "Регистрация партнера в LiteCall");
+		}
+	}
 }

@@ -11,7 +11,7 @@ public interface AdminDao {
 
 	void deleteClient(Integer clientId);
 
-	void addClient(String name, String email, Integer partnerId);
+	int addClient(String name, String email, Integer partnerId);
 
 	void rePartner(int partnerId, int clientId);
 
@@ -29,7 +29,7 @@ public interface AdminDao {
 
 	void deletePartner(int partnerId);
 
-	void addPartner(String name, String email);
+	int addPartner(String name, String email);
 
 	List<Map<String, Object>> getPartnerClients(int partnerId, int pagesize, int page, boolean sortOrder);
 
@@ -44,4 +44,12 @@ public interface AdminDao {
 	String getClientName(int clientId);
 
 	String getPartnerName(int partnerId);
+
+	void addClientUser(int clientId, String password);
+
+	void addPartnerUser(int partnerId, String password);
+
+	String getClientEmail(int clientId);
+
+	String getPartnerEmail(int partnerId);
 }

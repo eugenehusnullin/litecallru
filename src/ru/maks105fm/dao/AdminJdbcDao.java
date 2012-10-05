@@ -1,8 +1,15 @@
 package ru.maks105fm.dao;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
 import ru.maks105fm.utils.DateUtils;
 
@@ -40,9 +47,25 @@ public class AdminJdbcDao extends JdbcDao implements AdminDao {
 	}
 
 	@Override
-	public void addClient(String name, String email, Integer partnerId) {
-		String sql = "insert into client (name, email, partnerid) values (?, ?, ?)";
-		jdbcTemplate.update(sql, name, email, partnerId);
+	public int addClient(final String name, final String email, final Integer partnerId) {
+		final String sql = "insert into client (name, email, partnerid) values (?, ?, ?)";
+		
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		jdbcTemplate.update(
+				new PreparedStatementCreator() {
+					@Override
+					public PreparedStatement createPreparedStatement(Connection con)
+							throws SQLException {
+						PreparedStatement ps = con.prepareStatement(sql, new String[] {"id"});
+						ps.setString(1, name);
+						ps.setString(2, email);
+						ps.setInt(3, partnerId);
+						return ps;
+					}
+				},
+				keyHolder);
+		
+		return keyHolder.getKey().intValue();
 	}
 
 	@Override
@@ -126,9 +149,23 @@ public class AdminJdbcDao extends JdbcDao implements AdminDao {
 	}
 
 	@Override
-	public void addPartner(String name, String email) {
-		String sql = "insert into partner (name, email) values (?, ?)";
-		jdbcTemplate.update(sql, name, email);
+	public int addPartner(final String name, final String email) {
+		final String sql = "insert into partner (name, email) values (?, ?)";
+		
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		jdbcTemplate.update(
+				new PreparedStatementCreator() {
+					@Override
+					public PreparedStatement createPreparedStatement(Connection con)
+							throws SQLException {
+						PreparedStatement ps = con.prepareStatement(sql, new String[] {"id"});
+						ps.setString(1, name);
+						ps.setString(2, email);
+						return ps;
+					}
+				},
+				keyHolder);
+		return keyHolder.getKey().intValue();
 	}
 
 	@Override
@@ -193,6 +230,64 @@ public class AdminJdbcDao extends JdbcDao implements AdminDao {
 	@Override
 	public String getPartnerName(int partnerId) {
 		String sql = "select a.name from partner a where a.id = ?";
+		return jdbcTemplate.queryForObject(sql, String.class, partnerId);
+	}
+	
+	@Override
+	public void addClientUser(int clientId, String password) {
+		int userId = addUser(Integer.toString(clientId), password, "client");
+		
+		addUserrole(userId, "ROLE_CLIENT");
+		
+		String sql = "insert into clientuser (clientid, userid) values (?, ?)";
+		jdbcTemplate.update(sql, clientId, userId);
+	}
+	
+	@Override
+	public void addPartnerUser(int partnerId, String password) {
+		int userId = addUser(Integer.toString(partnerId), password, "partner");
+		
+		addUserrole(userId, "ROLE_PARTNER");
+		
+		String sql = "insert into partneruser (partnerid, userid) values (?, ?)";
+		jdbcTemplate.update(sql, partnerId, userId);
+	}
+	
+	private int addUser(final String username, final String password, final String usertype) {
+		final String sql = "insert into \"user\" (username, \"password\", usertype) values (?, ?, ?)";
+		
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		jdbcTemplate.update(
+				new PreparedStatementCreator() {
+					@Override
+					public PreparedStatement createPreparedStatement(Connection con)
+							throws SQLException {
+						PreparedStatement ps = con.prepareStatement(sql, new String[] {"id"});
+						ps.setString(1, username);
+						ps.setString(2, password);
+						ps.setString(3, usertype);
+						return ps;
+					}
+				},
+				keyHolder);
+		
+		return keyHolder.getKey().intValue();
+	}
+	
+	private void addUserrole(int userId, String roleName) {
+		String sql = "insert into userrole (userid, role) values (?, ?)";
+		jdbcTemplate.update(sql, userId, roleName);
+	}
+
+	@Override
+	public String getClientEmail(int clientId) {
+		String sql = "select a.email from client a where a.id = ?";
+		return jdbcTemplate.queryForObject(sql, String.class, clientId);
+	}
+
+	@Override
+	public String getPartnerEmail(int partnerId) {
+		String sql = "select a.email from partner a where a.id = ?";
 		return jdbcTemplate.queryForObject(sql, String.class, partnerId);
 	}
 }
