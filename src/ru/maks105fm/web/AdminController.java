@@ -167,7 +167,8 @@ public class AdminController {
 			@RequestParam("page") Integer page,			
 			@RequestParam("sortOrder") Integer sortOrder, Model model) {
 		
-		if (!adminDao.existsPartner(assPartnerid)) {
+
+		if (assPartnerid != null && !adminDao.existsPartner(assPartnerid)) {
 			model.addAttribute("message", "Партнера с таким ID нет.");
 		} else {
 			int clientId = adminDao.addClient(name, email, assPartnerid);
@@ -267,13 +268,13 @@ public class AdminController {
 	@RequestMapping(value = "/rePartnerClients", method = RequestMethod.POST)
 	public String rePartner(HttpServletRequest request, Model model) {
 		Integer partnerId = request.getParameter("partnerid")== null ? null : Integer.parseInt(request.getParameter("partnerid"));
-		int rePartnerId = Integer.parseInt(request.getParameter("rePartnerid"));
+		Integer rePartnerId = request.getParameter("rePartnerid")== null ? null : Integer.parseInt(request.getParameter("rePartnerid"));
 		String paramIds = request.getParameter("ids");
 		String[] arrayIds = paramIds.split(";");
 		Integer page = Integer.parseInt(request.getParameter("page"));
 		Integer sortOrder = Integer.parseInt(request.getParameter("sortOrder"));
 		
-		if (!adminDao.existsPartner(rePartnerId)) {
+		if (rePartnerId == null || !adminDao.existsPartner(rePartnerId)) {
 			model.addAttribute("message", "Партнера с таким ID нет.");
 		} else {
 			for (int i = 0; i < arrayIds.length; i++) {

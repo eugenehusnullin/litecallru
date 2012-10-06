@@ -60,7 +60,7 @@ public class AdminJdbcDao extends JdbcDao implements AdminDao {
 						PreparedStatement ps = con.prepareStatement(sql, new String[] {"id"});
 						ps.setString(1, name);
 						ps.setString(2, email);
-						ps.setInt(3, partnerId);
+						ps.setObject(3, partnerId);
 						return ps;
 					}
 				},
