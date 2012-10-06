@@ -123,7 +123,7 @@ public class AdminJdbcDao extends JdbcDao implements AdminDao {
 		String strSortType = sortType == 1 ? "clientscount " : "calltime ";
 		
 		String sql = "select a.id, a.name, a.email, " +
-						"(select coalesce(sum(a1.calltime*a1.tariff),0) from cdr_partner_view a1 where a1.partnerid = a.id) calltime, " +
+						"(select coalesce(sum(a1.calltime),0) from cdr_partner_view a1 where a1.partnerid = a.id) calltime, " +
 						"(select count(1) from client b1 where b1.partnerid = a.id and b1.deleted = 0) clientscount " +
 						"from partner a " +
 						"where a.deleted = 0 " +
@@ -205,7 +205,7 @@ public class AdminJdbcDao extends JdbcDao implements AdminDao {
 	@Override
 	public List<Map<String, Object>> getPartner(int id) {
 		String sql = "select a.id, a.name, a.email, " +
-						"(select coalesce(sum(a1.calltime*a1.tariff),0) from cdr_partner_view a1 where a1.partnerid = a.id) calltime, " +
+						"(select coalesce(sum(a1.calltime),0) from cdr_partner_view a1 where a1.partnerid = a.id) calltime, " +
 						"(select count(1) from client b1 where b1.partnerid = a.id and b1.deleted = 0) clientscount " +
 						"from partner a " +
 						"where a.deleted = 0 and a.id = ?";
