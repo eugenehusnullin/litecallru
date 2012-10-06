@@ -99,7 +99,15 @@
 					<tr>					
 						<td><span class="field">Тарификация:</span>
 							<span class="red">*</span><br />
-							<select class="SelTarif" name="tariff"><option>4.99</option><option>5.99</option></select>
+							<select class="SelTarif" name="tariff" >
+								<option>3.99</option>
+								<option>4.99</option>
+								<option>5.99</option>
+								<option>6.99</option>
+								<option>7.99</option>
+								<option>8.99</option>
+								<option>9.99</option>
+							</select>
 						</td>
 					</tr>				
 				</table>
