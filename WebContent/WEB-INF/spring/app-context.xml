@@ -72,7 +72,7 @@
 		<security:form-login login-page="/login.jsp" login-processing-url="/login" 
 			authentication-success-handler-ref="successAuthHandler"
 			username-parameter="username" password-parameter="password" authentication-failure-url="/login.jsp?auth=0" />
-		<security:logout logout-url="/logout"/>
+		<security:logout logout-url="/logout" logout-success-url="litecall.ru"/>
 	</security:http>
 	
 	<bean id="successAuthHandler" class="ru.maks105fm.web.security.SuccessAuthHandler"></bean>
