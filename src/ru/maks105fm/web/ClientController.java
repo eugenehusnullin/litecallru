@@ -103,7 +103,7 @@ public class ClientController {
 		model.addAttribute("to", strTo);
 		model.addAttribute("period", period);
 
-		int pagesize = 10;
+		int pagesize = 50;
 
 		if (page == null) {
 			page = 1;
