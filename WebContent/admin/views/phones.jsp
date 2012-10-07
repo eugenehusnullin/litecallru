@@ -94,7 +94,10 @@
 					<tr>					
 						<td><span class="field">Тип номера:</span>
 							<span class="red">*</span><br />
-							<input type="text" name="typedescr" class="inputTXT" />
+							<select class="SelTarif" name="typedescr" >
+								<option selected="selected">Городской</option>
+								<option>Федеральный</option>
+							</select>
 						</td>					
 					</tr>		
 					<tr>					
