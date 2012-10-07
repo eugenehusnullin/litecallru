@@ -116,9 +116,11 @@ public class ClientJdbcDao extends JdbcDao implements ClientDao {
 		String strFrom = from + " 00:00:00";
 		String strTo = to + " 23:59:59";
 
-		String sql = "SELECT round(avg(a.waittime)) FROM cdr_queue_view a WHERE a.queuename = ? AND"
-				+ " a.eventdate >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND"
-				+ " a.eventdate <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS')";
+		String sql = "SELECT round(avg(a.waittime)) FROM cdr_queue_view a " +
+				"WHERE a.queuename = ? AND " +
+				"a.eventdate >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND " +
+				"a.eventdate <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND " +
+				"a.call = 1";
 
 		return jdbcTemplate.queryForInt(sql, queueName, strFrom, strTo);
 	}
