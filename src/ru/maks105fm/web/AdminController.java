@@ -213,7 +213,7 @@ public class AdminController {
 		template.merge(context, sw);
 		String emailbody2client = sw.toString();
 		
-		sendEmail(emailAddress, emailbody2client, "Регистрация в LiteCall");
+		sendEmail(emailAddress, emailbody2client, "Регистрация клиента в LiteCall");
 		
 		// email to admins
 		context.put("type", "клиент,");
@@ -467,7 +467,7 @@ public class AdminController {
 		template.merge(context, sw);
 		String emailbody2partner = sw.toString();
 		
-		sendEmail(emailAddress, emailbody2partner, "Регистрация в LiteCall");
+		sendEmail(emailAddress, emailbody2partner, "Регистрация партнера в LiteCall");
 		
 		// email to admins
 		context.put("type", "партнер,");
