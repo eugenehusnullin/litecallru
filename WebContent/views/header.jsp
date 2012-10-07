@@ -7,7 +7,8 @@
 	<div id="logo"><a href="."><img src="<c:url value="/images/logotype.png"/>" alt=""></a></div>
 	<div id="head-pic"></div>
 	<div id="head-phone">
-		Связаться с Вашим менеджером<br />
+		Связаться<br />
+		с Вашим менеджером<br />
 		8 800 <span>555 93 90</span><br />		
 	</div>
 </div>

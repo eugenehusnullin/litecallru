@@ -37,7 +37,8 @@
 										</tr>
 										<c:forEach items="${days}" var="day">
 											<tr>
-												<td><a href="byClient?date=<fmt:formatDate value="${day.date}" pattern="dd.MM.yyyy"/>" id="adate">
+												<td><a href="byClient?date=<fmt:formatDate value="${day.date}" pattern="dd.MM.yyyy"/>&period=${period}&from=${from}&to=${to}"
+														id="adate">
 													<fmt:formatDate value="${day.date}" pattern="dd.MM.yy"/></a>
 												</td>
 												<td>${day.calltime}</td>

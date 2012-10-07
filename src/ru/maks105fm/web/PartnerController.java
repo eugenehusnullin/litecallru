@@ -86,13 +86,18 @@ public class PartnerController {
 	}
 	
 	@RequestMapping(value = "/byClient")
-	public String logForDate(@RequestParam("date") String strDate, Model model) {
+	public String logForDate(@RequestParam("date") String strDate,
+			@RequestParam("from") String strFrom, @RequestParam("to") String strTo,
+			@RequestParam("period") String period, Model model) {
 		UserWithName user = (UserWithName)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		
 		model.addAttribute("username", user.getUsername());
 		model.addAttribute("humanname", user.getHumanname());
 		model.addAttribute("periods", periods);
 		model.addAttribute("date", strDate);
+		model.addAttribute("from", strFrom);
+		model.addAttribute("to", strTo);
+		model.addAttribute("period", period);
 		
 		List<Map<String, Object>> clients = partnerDao.getForDateDetailed(user.getId(), strDate);
 		
