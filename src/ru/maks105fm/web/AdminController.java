@@ -271,8 +271,9 @@ public class AdminController {
 	
 	@RequestMapping(value = "/rePartnerClients", method = RequestMethod.POST)
 	public String rePartner(HttpServletRequest request, Model model) {
-		Integer partnerId = request.getParameter("partnerid")== null ? null : Integer.parseInt(request.getParameter("partnerid"));
-		Integer rePartnerId = request.getParameter("rePartnerid")== null ? null : Integer.parseInt(request.getParameter("rePartnerid"));
+		Integer partnerId = request.getParameter("partnerid") == null ? null : Integer.parseInt(request.getParameter("partnerid"));
+		Integer rePartnerId = request.getParameter("rePartnerid") == null || request.getParameter("rePartnerid") == "" 
+				? null : Integer.parseInt(request.getParameter("rePartnerid"));
 		String paramIds = request.getParameter("ids");
 		String[] arrayIds = paramIds.split(";");
 		Integer page = Integer.parseInt(request.getParameter("page"));
