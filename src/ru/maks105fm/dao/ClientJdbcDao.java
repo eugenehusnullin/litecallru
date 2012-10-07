@@ -36,13 +36,13 @@ public class ClientJdbcDao extends JdbcDao implements ClientDao {
 		int offset = (page - 1) * pagesize;
 		int limit = pagesize;
 
-		String sql = "SELECT to_char(eventdate, 'DD.MM.YY HH24:MI') eventdate, eventdate eventdate_utc, uniqueid, queuename, "
+		String sql = "SELECT to_char(eventdate_msk, 'DD.MM.YY HH24:MI') eventdate, uniqueid, queuename, "
 				+ " agent, event, waittime, (((calltime / 60) + 1))*call calltime, call, callerid, "
-				+ " row_number() over(order by a.eventdate DESC) rownum FROM cdr_queue_view a"
+				+ " row_number() over(order by a.eventdate_msk DESC) rownum FROM cdr_queue_view a"
 				+ " WHERE a.queuename = ? AND"
-				+ " a.eventdate >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND"
-				+ " a.eventdate <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS')"
-				+ " ORDER BY a.eventdate DESC LIMIT ? OFFSET ?";
+				+ " a.eventdate_msk >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND"
+				+ " a.eventdate_msk <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS')"
+				+ " ORDER BY a.eventdate_msk DESC LIMIT ? OFFSET ?";
 
 		return jdbcTemplate.queryForList(sql, queueName, strFrom, strTo, limit,
 				offset);
@@ -76,8 +76,8 @@ public class ClientJdbcDao extends JdbcDao implements ClientDao {
 		String strTo = to + " 23:59:59";
 
 		String sql = "SELECT count(1) FROM cdr_queue_view a WHERE a.queuename = ? AND"
-				+ " a.eventdate >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND"
-				+ " a.eventdate <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS')";
+				+ " a.eventdate_msk >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND"
+				+ " a.eventdate_msk <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS')";
 
 		return jdbcTemplate.queryForInt(sql, queueName, strFrom, strTo);
 	}
@@ -105,8 +105,8 @@ public class ClientJdbcDao extends JdbcDao implements ClientDao {
 		String strTo = to + " 23:59:59";
 
 		String sql = "SELECT count(1) FROM cdr_queue_view a WHERE a.queuename = ? AND"
-				+ " a.eventdate >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND"
-				+ " a.eventdate <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND a.call = 1";
+				+ " a.eventdate_msk >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND"
+				+ " a.eventdate_msk <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND a.call = 1";
 
 		return jdbcTemplate.queryForInt(sql, queueName, strFrom, strTo);
 	}
@@ -118,8 +118,8 @@ public class ClientJdbcDao extends JdbcDao implements ClientDao {
 
 		String sql = "SELECT round(avg(a.waittime)) FROM cdr_queue_view a " +
 				"WHERE a.queuename = ? AND " +
-				"a.eventdate >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND " +
-				"a.eventdate <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND " +
+				"a.eventdate_msk >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND " +
+				"a.eventdate_msk <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND " +
 				"a.call = 1";
 
 		return jdbcTemplate.queryForInt(sql, queueName, strFrom, strTo);
@@ -131,8 +131,8 @@ public class ClientJdbcDao extends JdbcDao implements ClientDao {
 		String strTo = to + " 23:59:59";
 
 		String sql = "SELECT sum(((calltime / 60) + 1)) FROM cdr_queue_view a WHERE a.queuename = ? AND " +
-				"a.eventdate >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND " +
-				"a.eventdate <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') " +
+				"a.eventdate_msk >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND " +
+				"a.eventdate_msk <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND " +
 				"a.call = 1";
 
 		return jdbcTemplate.queryForInt(sql, queueName, strFrom, strTo);
