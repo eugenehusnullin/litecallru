@@ -1,4 +1,5 @@
 ﻿Здравствуйте $name
 Вы зарегистрированы в http://litecall.ru
 Ваш ID: $ID
-Ваш логин: $ID и пароль: $password
+Ваш логин: $ID
+   пароль: $password
