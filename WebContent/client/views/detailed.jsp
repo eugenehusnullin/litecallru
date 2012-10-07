@@ -10,6 +10,7 @@
 <link href="<c:url value="/images/favicon.png"/>" rel="shortcut icon" type="image/png" ></link>
 <link href="<c:url value="/css/styles.css"/>" rel="stylesheet" type="text/css" ></link>
 <script src="<c:url value="/js/jquery-1.8.2.js"/>" type="text/javascript" ></script>
+<script src="<c:url value="/js/open-win.js"/>" type="text/javascript" ></script>
 </head>
 <body>
 	<div id="wrapper">
@@ -52,7 +53,8 @@
 											<td>
 <c:if test="${call.call==1}">
 	<div id="mon_${call.uniqueid}" style="height:16px;width:150px;">
-		<a href="http://${monitorhost}/monitor/${call.uniqueid}.wav">прослушать</a>
+<%-- 		<a href="http://${monitorhost}/monitor/${call.uniqueid}.wav">прослушать</a> --%>
+<a href="compare" target="_blank" onclick="ShowWin('http://${monitorhost}/monitor/${call.uniqueid}.wav', 600, 500); return false;">прослушать</a>
 	</div>
 <!--  	<script type="text/javascript"> -->
 <!-- //  		var rnumber = Math.floor(Math.random()*9999999); -->
