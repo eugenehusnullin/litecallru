@@ -24,7 +24,6 @@
 	$(function() {
 		$("#fromDatepicker").datepicker({
 			maxDate: "+1d",
-			defaultDate: "-1m",
 			onSelect: function( selectedDate ) {
 				$( "#toDatepicker" ).datepicker( "option", "minDate", selectedDate);
 			}
