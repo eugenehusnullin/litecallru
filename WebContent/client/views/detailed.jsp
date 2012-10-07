@@ -30,7 +30,7 @@
 					<c:if test="${callsCount != null}">
 						<c:choose>		
 							<c:when test="${callsCount!=0}">
-				
+								<script src="http://szenprogs.ru/scripts/swfobject.js" type="text/javascript"></script>
 								<table id="statInfo">
 									<thead>
 										<tr>
@@ -50,19 +50,22 @@
 											<td>${call.waittime}</td>
 											<td>${call.calltime}</td>
 											<td>
-												<c:if test="${call.call==1}">
-													<script type="text/javascript" src="http://szenprogs.ru/scripts/swfobject.js"></script>
-													<div id="music_box1" style="height:16px;">
-														<embed type="application/x-shockwave-flash" 
-															src="http://szenprogs.ru/flash/audio.swf?r=7909186" 
-															width="150" height="16" id="music_code" name="music_code" quality="high" 
-															wmode="transparent" allowscriptaccess="always" 
-															flashvars="song_url=http://${monitorhost}/monitor/${call.uniqueid}.wav&amp;show_copyright=0&amp;background_color=#7da62e&amp;autoplay=0&amp;textoff=1&amp;loop=0">
-													</div>
-													<script type="text/javascript">  var rnumber = Math.floor(Math.random()*9999999);  
-														var so = new SWFObject("http://szenprogs.ru/flash/audio.swf?r="+rnumber, "music_code", "150", "16", "9");  so.addParam("wmode", "transparent");  so.addParam("allowScriptAccess", "always");  
-														so.addVariable("song_url", "http://${monitorhost}/monitor/${call.uniqueid}.wav");  so.addVariable("show_copyright", "0");  so.addVariable("background_color", "#7da62e");  so.addVariable("autoplay", "0");  so.addVariable("textoff", "1");  so.addVariable("loop", "0");  so.write("music_box1");</script>																										
-												</c:if>
+<c:if test="${call.call==1}">
+	<div id="mon_${call.uniqueid}" style="height:16px;width:150px;"></div>
+	<script type="text/javascript">
+		var rnumber = Math.floor(Math.random()*9999999);
+		var so = new SWFObject("http://szenprogs.ru/flash/audio.swf?r="+rnumber, "music_code", "150", "16", "9");
+		so.addParam("wmode", "transparent");
+		so.addParam("allowScriptAccess", "always");
+		so.addVariable("song_url", "http://${monitorhost}/monitor/${call.uniqueid}.wav");
+		so.addVariable("show_copyright", "0");
+		so.addVariable("background_color", "#7da62e");
+		so.addVariable("autoplay", "0");
+		so.addVariable("textoff", "1");
+		so.addVariable("loop", "0");
+		so.write("mon_${call.uniqueid}");
+	</script>
+</c:if>
 											</td>
 										</tr>
 									</c:forEach>
