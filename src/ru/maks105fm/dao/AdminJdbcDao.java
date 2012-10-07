@@ -80,8 +80,8 @@ public class AdminJdbcDao extends JdbcDao implements AdminDao {
 			int page) {
 		String sql = "select a.id, a.description, a.typedescr, a.tariff, " +
 				"(select coalesce(sum(a1.calltime*a1.tariff),0) from cdr_partner_view a1 where a1.queueid = a.id " +
-				"and a1.eventdate_utc >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') " +
-				"and a1.eventdate_utc <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') " +
+				"and a1.eventdate_msk >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') " +
+				"and a1.eventdate_msk <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') " +
 				") calltime " +
 				"from queue a " +
 				"where a.clientid = ? And a.deleted = 0 " +

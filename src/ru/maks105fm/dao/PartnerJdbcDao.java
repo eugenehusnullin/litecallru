@@ -18,14 +18,14 @@ public class PartnerJdbcDao extends JdbcDao implements PartnerDao {
 		String strFrom = from + " 00:00:00";
 		String strTo = to + " 23:59:59";
 		
-		String sql = "select date_trunc('day', a.eventdate_utc) date, " +
+		String sql = "select date_trunc('day', a.eventdate_msk) date, " +
 					"sum(a.calltime) calltime, sum(a.calltime) moneysum " +
 				"from cdr_partner_view a " +
 				"where a.partnerid = ? and " +
-					"a.eventdate_utc >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') and " +
-					"a.eventdate_utc <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') " +
-				"group by date_trunc('day', a.eventdate_utc ) " +
-				"order by date_trunc('day', a.eventdate_utc )";
+					"a.eventdate_msk >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') and " +
+					"a.eventdate_msk <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') " +
+				"group by date_trunc('day', a.eventdate_msk ) " +
+				"order by date_trunc('day', a.eventdate_msk )";
 		
 		return jdbcTemplate.queryForList(sql, partnerId, strFrom, strTo);
 	}
@@ -57,7 +57,7 @@ public class PartnerJdbcDao extends JdbcDao implements PartnerDao {
 				"select a.clientid, sum(a.calltime) calltime, sum(a.calltime) moneysum " +
 				"from cdr_partner_view a " +
 				"where a.partnerid = ? " +
-				"and date_trunc('day', a.eventdate_utc) = to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') " +
+				"and date_trunc('day', a.eventdate_msk) = to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') " +
 				"group by a.clientid " +
 				") a, client b " +
 				"where a.clientid = b.id " +
