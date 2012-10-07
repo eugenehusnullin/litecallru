@@ -50,12 +50,34 @@ public class ClientController {
 		pi.put("name", PERIOD_CUSTOM);
 		pi.put("description", "За произвольный период");
 	}
+	
+	private void initDefaultData(Model model) {
+		UserWithName user = (UserWithName)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		model.addAttribute("username", user.getUsername());
+		
+		model.addAttribute("humanname", user.getHumanname());
+		
+		model.addAttribute("monitorhost", monitorHost);
+
+		List<Map<String, Object>> queues = clientDao.getQueues(user.getId());
+		model.addAttribute("queues", queues);
+
+		// periods
+		model.addAttribute("periods", periods);
+	}
 
 	@RequestMapping(value = "/")
 	public String home(Model model) {
 		initDefaultData(model);
-
-		return "common";
+		
+		@SuppressWarnings("unchecked")
+		List<Map<String, Object>> queues = (List<Map<String, Object>>) model.asMap().get("queues");
+		
+		if (queues != null && queues.size() > 0) {
+			return commonLog((String) queues.get(0).get("name"), null, null, PERIOD_CURMONTH, model);
+		} else {
+			return "common";
+		}
 	}
 	
 	private boolean checkAccessToQueue(String queueName) {
@@ -174,20 +196,5 @@ public class ClientController {
 		}
 
 		return "common";
-	}
-
-	private void initDefaultData(Model model) {
-		UserWithName user = (UserWithName)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		model.addAttribute("username", user.getUsername());
-		
-		model.addAttribute("humanname", user.getHumanname());
-		
-		model.addAttribute("monitorhost", monitorHost);
-
-		List<Map<String, Object>> queues = clientDao.getQueues(user.getId());
-		model.addAttribute("queues", queues);
-
-		// periods
-		model.addAttribute("periods", periods);
 	}
 }
