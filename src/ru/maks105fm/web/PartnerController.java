@@ -65,21 +65,26 @@ public class PartnerController {
 		
 		if (period != null && !period.isEmpty()) {
 			List<Map<String, Object>> days = null;
+			long moneyFullSum = 0;
 
 			if (period.equals(PERIOD_CUSTOM)) {
 				days = partnerDao.getDaylyCustom(user.getId(), strFrom, strTo);
+				moneyFullSum = partnerDao.getMoneyFullSumCustom(user.getId(), strFrom, strTo);
 
 			} else if (period.equals(PERIOD_PRVMONTH)) {
 				days = partnerDao.getDaylyPrvMonth(user.getId());
+				moneyFullSum = partnerDao.getMoneyFullSumPrvMonth(user.getId());
 
 			} else if (period.equals(PERIOD_CURMONTH)) {
 				days = partnerDao.getDaylyCurMonth(user.getId());
+				moneyFullSum = partnerDao.getMoneyFullSumCurMonth(user.getId());
 
 			} else {
 				// error
 			}
 
 			model.addAttribute("days", days);
+			model.addAttribute("moneyFullSum", moneyFullSum);
 		}
 		
 		return "byday";

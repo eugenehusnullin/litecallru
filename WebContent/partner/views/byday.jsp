@@ -42,10 +42,11 @@
 													<fmt:formatDate value="${day.date}" pattern="dd.MM.yy"/></a>
 												</td>
 												<td>${day.calltime}</td>
-												<td>${day.moneysum} руб.</td>
+												<td><fmt:formatNumber maxFractionDigits="2" minFractionDigits="2" value="${day.moneysum}"></fmt:formatNumber> руб.</td>
 											</tr>
 										</c:forEach>
 									</table>
+									<span id="contCall">Итого сумма за выбранный период:  <b><fmt:formatNumber maxFractionDigits="2" minFractionDigits="2" value="${moneyFullSum}"></fmt:formatNumber> руб.</b></span>
 								</c:when>
 								<c:otherwise>
 									<div class="fieldBold">Нет данных.</div>

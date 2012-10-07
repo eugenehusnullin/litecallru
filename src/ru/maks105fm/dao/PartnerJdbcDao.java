@@ -66,5 +66,37 @@ public class PartnerJdbcDao extends JdbcDao implements PartnerDao {
 		return jdbcTemplate.queryForList(sql, partnerId, strDate);
 	}
 
+	@Override
+	public long getMoneyFullSumCustom(long userId, String from, String to) {
+		int partnerId = getPartnerId(userId);
+		
+		String strFrom = from + " 00:00:00";
+		String strTo = to + " 23:59:59";
+		
+		String sql = "select sum(a.calltime) " +
+				"from cdr_partner_view a " +
+				"where a.partnerid = ? and " +
+					"a.eventdate_msk >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') and " +
+					"a.eventdate_msk <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS')";
+		
+		return jdbcTemplate.queryForLong(sql, partnerId, strFrom, strTo);
+	}
+
+	@Override
+	public long getMoneyFullSumPrvMonth(long userId) {
+		String strFrom = DateUtils.getStartOfMonthStr(-1);
+		String strTo = DateUtils.getEndOfMonthStr(-1);
+		
+		return getMoneyFullSumCustom(userId, strFrom, strTo);
+	}
+
+	@Override
+	public long getMoneyFullSumCurMonth(long userId) {
+		String strFrom = DateUtils.getStartOfMonthStr(0);
+		String strTo = DateUtils.getEndOfMonthStr(0);
+		
+		return getMoneyFullSumCustom(userId, strFrom, strTo);
+	}
+
 	
 }

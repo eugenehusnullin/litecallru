@@ -54,19 +54,19 @@
 	<div id="mon_${call.uniqueid}" style="height:16px;width:150px;">
 		<a href="http://${monitorhost}/monitor/${call.uniqueid}.wav">прослушать</a>
 	</div>
-<!-- 	<script type="text/javascript"> -->
-// 		var rnumber = Math.floor(Math.random()*9999999);
-// 		var so = new SWFObject("http://szenprogs.ru/flash/audio.swf?r="+rnumber, "music_code", "150", "16", "9");
-// 		so.addParam("wmode", "transparent");
-// 		so.addParam("allowScriptAccess", "always");
-// 		so.addVariable("song_url", "http://${monitorhost}/monitor/${call.uniqueid}.wav");
-// 		so.addVariable("show_copyright", "0");
-// 		so.addVariable("background_color", "#7da62e");
-// 		so.addVariable("autoplay", "0");
-// 		so.addVariable("textoff", "1");
-// 		so.addVariable("loop", "0");
-// 		so.write("mon_${call.uniqueid}");
-<!-- 	</script> -->
+<!--  	<script type="text/javascript"> -->
+<!-- //  		var rnumber = Math.floor(Math.random()*9999999); -->
+<!-- //  		var so = new SWFObject("http://szenprogs.ru/flash/audio.swf?r="+rnumber, "music_code", "150", "16", "9"); -->
+<!-- //  		so.addParam("wmode", "transparent"); -->
+<!-- //  		so.addParam("allowScriptAccess", "always"); -->
+<%-- //  		so.addVariable("song_url", "http://${monitorhost}/monitor/${call.uniqueid}.wav"); --%>
+<!-- //  		so.addVariable("show_copyright", "0"); -->
+<!-- //  		so.addVariable("background_color", "#7da62e"); -->
+<!-- //  		so.addVariable("autoplay", "0"); -->
+<!-- //  		so.addVariable("textoff", "1"); -->
+<!-- //  		so.addVariable("loop", "0"); -->
+<%-- //  		so.write("mon_${call.uniqueid}"); --%>
+<!--  	</script> -->
 </c:if>
 											</td>
 										</tr>
