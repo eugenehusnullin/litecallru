@@ -8,7 +8,6 @@
 	<div id="head-pic"></div>
 	<div id="head-phone">
 		<a href="">Ваш менеджер, Татьяна</a><br />
-		8 800 <span>555 93 90</span><br />
-		+7 495 <span>555 93 90</span>
+		8 800 <span>555 93 90</span><br />		
 	</div>
 </div>
