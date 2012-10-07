@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
  
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -69,7 +70,7 @@
 										<td>${client.id}</td>
 										<td><a href="phones?clientId=${client.id}&page=1">${client.name}</a></td>
 										<td>${client.partnerid}</td>
-										<td>${client.calltime}</td>										
+										<td><fmt:formatNumber maxFractionDigits="2" minFractionDigits="2" value="${client.calltime}"></fmt:formatNumber></td>
 										<td><a href="deleteClient?partnerId=${partnerId}&id=${client.id}"
 												onclick="return confirm('Вы точно хотите удалить клиента?')" >Удалить</a></td>
 									</tr>

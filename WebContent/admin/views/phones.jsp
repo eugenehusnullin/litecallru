@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
  
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -41,8 +42,8 @@
 										<td><input type="checkbox" name="${phone.id}" onclick="javascript:editIds()"/></td>
 										<td>${phone.description}</td>
 										<td>${phone.typedescr}</td>
-										<td>${phone.tariff}</td>
-										<td>${phone.calltime}</td>
+										<td><fmt:formatNumber maxFractionDigits="2" minFractionDigits="2" value="${phone.tariff}"></fmt:formatNumber></td>
+										<td><fmt:formatNumber maxFractionDigits="2" minFractionDigits="2" value="${phone.calltime}"></fmt:formatNumber></td>
 										<td><a onclick="return confirm('Вы точно хотите удалить телефон?')" 
 											href="deletePhone?id=${phone.id}&clientId=${clientId}">удалить</a></td>
 									</tr>
