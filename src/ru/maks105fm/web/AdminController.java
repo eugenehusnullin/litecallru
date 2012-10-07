@@ -181,11 +181,15 @@ public class AdminController {
 	}
 	
 	private void addUser2Client(int clientId) {
-		String password = RandomStringUtils.randomAscii(Integer.parseInt(clientPasswordLength));
+		String password = generatePassword(Integer.parseInt(clientPasswordLength));
 		String md5Password = DigestUtils.md5Hex(password);
 		adminDao.addClientUser(clientId, md5Password);
 		
 		createClientEmail(clientId, password);
+	}
+	
+	private String generatePassword(int length) {
+		return RandomStringUtils.randomAlphanumeric(length);
 	}
 	
 	private void createClientEmail(int clientId, String password) {
@@ -435,7 +439,7 @@ public class AdminController {
 	}
 	
 	private void addUser2Partner(int partnerId) {
-		String password = RandomStringUtils.randomAscii(Integer.parseInt(partnerPasswordLength));
+		String password = generatePassword(Integer.parseInt(partnerPasswordLength));
 		String md5Password = new String(DigestUtils.md5(password));
 		adminDao.addPartnerUser(partnerId, md5Password);
 		
