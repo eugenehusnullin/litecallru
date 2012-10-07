@@ -54,7 +54,7 @@
 <c:if test="${call.call==1}">
 	<div id="mon_${call.uniqueid}" style="height:16px;width:150px;">
 <%-- 		<a href="http://${monitorhost}/monitor/${call.uniqueid}.wav">прослушать</a> --%>
-<a href="compare" target="_blank" onclick="ShowWin('http://${monitorhost}/monitor/${call.uniqueid}.wav', 600, 500); return false;">прослушать</a>
+<a href="compare" target="_blank" onclick="ShowWin('http://${monitorhost}/monitor/${call.uniqueid}.wav', 350, 150); return false;">прослушать</a>
 	</div>
 <!--  	<script type="text/javascript"> -->
 <!-- //  		var rnumber = Math.floor(Math.random()*9999999); -->
