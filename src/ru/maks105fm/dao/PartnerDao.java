@@ -17,4 +17,8 @@ public interface PartnerDao {
 	long getMoneyFullSumPrvMonth(long userId);
 
 	long getMoneyFullSumCurMonth(long userId);
+
+	void setAgree(long userId);
+	
+	boolean getAgree(long userId);
 }

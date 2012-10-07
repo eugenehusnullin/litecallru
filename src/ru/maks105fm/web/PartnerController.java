@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -28,11 +30,6 @@ public class PartnerController {
 	
 	private List<Map<String, Object>> periods;
 	
-	@RequestMapping(value = "/")
-	public String home(Model model) {
-		return logForPeriod(null, null, PERIOD_CURMONTH, model);
-	}
-	
 	public PartnerController() {
 		periods = new ArrayList<Map<String, Object>>();
 		Map<String, Object> pi = new HashMap<String, Object>();
@@ -49,6 +46,38 @@ public class PartnerController {
 		periods.add(pi);
 		pi.put("name", PERIOD_CUSTOM);
 		pi.put("description", "За произвольный период");
+	}
+	
+	private boolean isAgree(long partnerId) {
+		return partnerDao.getAgree(partnerId);
+	}
+	
+	@RequestMapping(value = "/")
+	public String home(Model model) {
+		UserWithName user = (UserWithName)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (!isAgree(user.getId())) {
+			model.addAttribute("username", user.getUsername());
+			model.addAttribute("humanname", user.getHumanname());
+			model.addAttribute("periods", periods);
+			
+			return "agreement";
+		} else {
+			return logForPeriod(null, null, PERIOD_CURMONTH, model);
+		}
+	}
+	
+	@RequestMapping(value = "/agreement")
+	public String agreement(HttpServletRequest request, Model model) {
+		Map<String, String[]> parameterMap = request.getParameterMap();
+		
+		if (parameterMap.containsKey("agree")) {
+			UserWithName user = (UserWithName)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			partnerDao.setAgree(user.getId());
+			
+			return logForPeriod(null, null, PERIOD_CURMONTH, model);
+		} else {
+			return "loguot";
+		}
 	}
 	
 	@RequestMapping(value = "/byDay")

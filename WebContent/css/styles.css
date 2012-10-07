@@ -108,13 +108,7 @@ div#footer #foot-copyright a{color:#2C8D0D;}
 
 /* ---Footer--- */
 
-
-
-
-
-
-
-
-
-
-
+/* ---Sogl--- */
+.soglTxt {overflow-x:auto;height:400px;width:800px;font-size:13px;color:#232323;border:1px #ddd solid;padding:10px}
+.soglTxt p {margin-top:10px}
+.soglTxt b.SoglTit {font-size:14px;}

@@ -320,4 +320,3 @@ function updatePositionAndSize() {
 	if (event && (event.type == 'resize') && typeof(window.ieCSS3.previous_onresize) == 'function') { window.ieCSS3.previous_onresize(); }
 }
 </script>
-

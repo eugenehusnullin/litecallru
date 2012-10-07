@@ -98,5 +98,19 @@ public class PartnerJdbcDao extends JdbcDao implements PartnerDao {
 		return getMoneyFullSumCustom(userId, strFrom, strTo);
 	}
 
+	@Override
+	public void setAgree(long userId) {
+		int partnerId = getPartnerId(userId);
+		String sql = "insert into partneragree (partnerId) values(?)";
+		jdbcTemplate.update(sql, partnerId);		
+	}
+
+	@Override
+	public boolean getAgree(long userId) {
+		int partnerId = getPartnerId(userId);
+		String sql = "select count(1) from partneragree a where a.partnerId = ?";
+		return jdbcTemplate.queryForInt(sql, partnerId) == 1;
+	}
+
 	
 }
