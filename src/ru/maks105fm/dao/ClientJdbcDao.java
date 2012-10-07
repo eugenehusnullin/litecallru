@@ -71,7 +71,7 @@ public class ClientJdbcDao extends JdbcDao implements ClientDao {
 	}
 
 	@Override
-	public int getCustomCallsCount(String queueName, String from, String to) {
+	public int getCustomAllCallsCount(String queueName, String from, String to) {
 		String strFrom = from + " 00:00:00";
 		String strTo = to + " 23:59:59";
 
@@ -83,19 +83,19 @@ public class ClientJdbcDao extends JdbcDao implements ClientDao {
 	}
 
 	@Override
-	public int getPrvMonthCallsCount(String queueName) {
+	public int getPrvMonthAllCallsCount(String queueName) {
 		String strFrom = DateUtils.getStartOfMonthStr(-1);
 		String strTo = DateUtils.getEndOfMonthStr(-1);
 
-		return getCustomCallsCount(queueName, strFrom, strTo);
+		return getCustomAllCallsCount(queueName, strFrom, strTo);
 	}
 
 	@Override
-	public int getCurMonthCallsCount(String queueName) {
+	public int getCurMonthAllCallsCount(String queueName) {
 		String strFrom = DateUtils.getStartOfMonthStr(0);
 		String strTo = DateUtils.getEndOfMonthStr(0);
 
-		return getCustomCallsCount(queueName, strFrom, strTo);
+		return getCustomAllCallsCount(queueName, strFrom, strTo);
 	}
 
 	@Override
@@ -130,9 +130,10 @@ public class ClientJdbcDao extends JdbcDao implements ClientDao {
 		String strFrom = from + " 00:00:00";
 		String strTo = to + " 23:59:59";
 
-		String sql = "SELECT sum(((calltime / 60) + 1)) FROM cdr_queue_view a WHERE a.queuename = ? AND"
-				+ " a.eventdate >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND"
-				+ " a.eventdate <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS')";
+		String sql = "SELECT sum(((calltime / 60) + 1)) FROM cdr_queue_view a WHERE a.queuename = ? AND " +
+				"a.eventdate >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND " +
+				"a.eventdate <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') " +
+				"a.call = 1";
 
 		return jdbcTemplate.queryForInt(sql, queueName, strFrom, strTo);
 	}

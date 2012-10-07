@@ -114,15 +114,15 @@ public class ClientController {
 			int callsCount = 0;
 
 			if (period.equals(PERIOD_CUSTOM)) {
-				callsCount = clientDao.getCustomCallsCount(queueName, strFrom, strTo);
+				callsCount = clientDao.getCustomAllCallsCount(queueName, strFrom, strTo);
 				calls = clientDao.getQueueLogCustom(queueName, strFrom, strTo, pagesize, page);
 
 			} else if (period.equals(PERIOD_PRVMONTH)) {
-				callsCount = clientDao.getPrvMonthCallsCount(queueName);
+				callsCount = clientDao.getPrvMonthAllCallsCount(queueName);
 				calls = clientDao.getQueueLogPrvMonth(queueName, pagesize, page);
 
 			} else if (period.equals(PERIOD_CURMONTH)) {
-				callsCount = clientDao.getCurMonthCallsCount(queueName);
+				callsCount = clientDao.getCurMonthAllCallsCount(queueName);
 				calls = clientDao.getQueueLogCurMonth(queueName, pagesize, page);
 
 			} else {
@@ -167,19 +167,19 @@ public class ClientController {
 			long sumCallTime = 0;
 
 			if (period.equals(PERIOD_CUSTOM)) {
-				callsCount = clientDao.getCustomCallsCount(queueName, strFrom, strTo);
+				callsCount = clientDao.getCustomAllCallsCount(queueName, strFrom, strTo);
 				receivedCallsCount = clientDao.getCustomReceivedCallsCount(queueName, strFrom, strTo);
 				averageWaitTime = clientDao.getCustomAverageWaitTime(queueName, strFrom, strTo);
 				sumCallTime = clientDao.getCustomSumCallTime(queueName, strFrom, strTo);
 
 			} else if (period.equals(PERIOD_PRVMONTH)) {
-				callsCount = clientDao.getPrvMonthCallsCount(queueName);
+				callsCount = clientDao.getPrvMonthAllCallsCount(queueName);
 				receivedCallsCount = clientDao.getPrvMonthReceivedCallsCount(queueName);
 				averageWaitTime = clientDao.getPrvMonthAverageWaitTime(queueName);
 				sumCallTime = clientDao.getPrvMonthSumCallTime(queueName);
 
 			} else if (period.equals(PERIOD_CURMONTH)) {
-				callsCount = clientDao.getCurMonthCallsCount(queueName);
+				callsCount = clientDao.getCurMonthAllCallsCount(queueName);
 				receivedCallsCount = clientDao.getCurMonthReceivedCallsCount(queueName);
 				averageWaitTime = clientDao.getCurMonthAverageWaitTime(queueName);
 				sumCallTime = clientDao.getCurMonthSumCallTime(queueName);

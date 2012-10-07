@@ -12,11 +12,11 @@ public interface ClientDao {
 
 	List<Map<String, Object>> getQueueLogCurMonth(String queueName, int pagesize, int page);
 
-	int getCustomCallsCount(String queueName, String strFrom, String strTo);
+	int getCustomAllCallsCount(String queueName, String strFrom, String strTo);
 
-	int getPrvMonthCallsCount(String queueName);
+	int getPrvMonthAllCallsCount(String queueName);
 
-	int getCurMonthCallsCount(String queueName);
+	int getCurMonthAllCallsCount(String queueName);
 
 	int getCustomReceivedCallsCount(String queueName, String strFrom, String strTo);
 
