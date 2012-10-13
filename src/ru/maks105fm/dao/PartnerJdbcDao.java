@@ -3,9 +3,19 @@ package ru.maks105fm.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Required;
+
 import ru.maks105fm.utils.DateUtils;
 
 public class PartnerJdbcDao extends JdbcDao implements PartnerDao {
+	
+	private AdminDao adminDao;
+	
+	@Required
+	public void setAdminDao(AdminDao adminDao) {
+		this.adminDao = adminDao;
+	}
+	
 	private int getPartnerId(long userId) {
 		String sql = "select a.partnerid from partneruser a where a.userid = ?";
 		return jdbcTemplate.queryForInt(sql, userId);
@@ -102,7 +112,9 @@ public class PartnerJdbcDao extends JdbcDao implements PartnerDao {
 	public void setAgree(long userId) {
 		int partnerId = getPartnerId(userId);
 		String sql = "insert into partneragree (partnerId) values(?)";
-		jdbcTemplate.update(sql, partnerId);		
+		jdbcTemplate.update(sql, partnerId);
+		
+		adminDao.addUserrole(userId, "ROLE_PARTNER");
 	}
 
 	@Override

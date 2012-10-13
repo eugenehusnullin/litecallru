@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.view.RedirectView;
 
 import ru.maks105fm.dao.PartnerDao;
 import ru.maks105fm.web.security.UserWithName;
@@ -54,30 +55,33 @@ public class PartnerController {
 	
 	@RequestMapping(value = "/")
 	public String home(Model model) {
-		UserWithName user = (UserWithName)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (!isAgree(user.getId())) {
-			model.addAttribute("username", user.getUsername());
-			model.addAttribute("humanname", user.getHumanname());
-			model.addAttribute("periods", periods);
-			
-			return "agreement";
-		} else {
-			return logForPeriod(null, null, PERIOD_CURMONTH, model);
-		}
+		return logForPeriod(null, null, PERIOD_CURMONTH, model);
 	}
 	
 	@RequestMapping(value = "/agreement")
-	public String agreement(HttpServletRequest request, Model model) {
+	public String agreement(Model model) {
+		UserWithName user = (UserWithName)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		model.addAttribute("isAgree", isAgree(user.getId()));
+		model.addAttribute("username", user.getUsername());
+		model.addAttribute("humanname", user.getHumanname());
+		model.addAttribute("periods", periods);
+			
+		return "agreement";
+	}
+	
+	@RequestMapping(value = "/agreement/agree")
+	public RedirectView agree(HttpServletRequest request, Model model) {
 		Map<String, String[]> parameterMap = request.getParameterMap();
 		
 		if (parameterMap.containsKey("agree")) {
 			UserWithName user = (UserWithName)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			partnerDao.setAgree(user.getId());
 			
-			return logForPeriod(null, null, PERIOD_CURMONTH, model);
+			//return new RedirectView("..");
 		} else {
-			return "loguot";
+			//return new RedirectView("../../logout");
 		}
+		return new RedirectView("../../logout");
 	}
 	
 	@RequestMapping(value = "/byDay")

@@ -52,4 +52,6 @@ public interface AdminDao {
 	String getClientEmail(int clientId);
 
 	String getPartnerEmail(int partnerId);
+	
+	void addUserrole(long userId, String roleName);
 }

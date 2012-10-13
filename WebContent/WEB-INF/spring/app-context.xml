@@ -32,6 +32,7 @@
 	
 	<bean id="partnerDao" class="ru.maks105fm.dao.PartnerJdbcDao">
 		<property name="dataSource" ref="dataSource"></property>
+		<property name="adminDao" ref="adminDao"></property>
 	</bean>
 	
 	<bean id="adminDao" class="ru.maks105fm.dao.AdminJdbcDao">
@@ -65,7 +66,9 @@
 	<security:http pattern="/login.jsp*" security="none"></security:http>
 	
 	<security:http auto-config="true">
-		<security:intercept-url pattern="/" access="ROLE_PARTNER,ROLE_ADMIN,ROLE_CLIENT"/>
+<!-- 		<security:intercept-url pattern="/" access="ROLE_PARTNER,ROLE_ADMIN,ROLE_CLIENT"/> -->
+		<security:intercept-url pattern="/" access="ROLE_UNBELEVABLE"/>
+		<security:intercept-url pattern="/partner/agreement/**" access="ROLE_AGREEPARTNER"/>		
 		<security:intercept-url pattern="/partner/**" access="ROLE_PARTNER"/>
 		<security:intercept-url pattern="/admin/**" access="ROLE_ADMIN"/>
 		<security:intercept-url pattern="/client/**" access="ROLE_CLIENT"/>

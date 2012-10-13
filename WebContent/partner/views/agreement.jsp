@@ -78,13 +78,16 @@
 <p>5.2. Все изменения и дополнения к настоящему Соглашению вступают в силу и считаются действительными с момента их опубликования на сайте LiteCall.ru, расположенного по адресу </p>
   </div>
  
-   <form action="agreement" method="post"  >
+  <c:if test="${isAgree != true}">
+   <form action="agreement/agree" method="post"  >
 	   <br />
 	   <div class="clear"></div>
+	   <p><b>После соглашения вам необходимо войти в систему заного.</b></p>
 	   <input type="submit" name="dontagree"  class="greenBtn" value="Не согласен" />
 	   <input type="submit"  name="agree"  class="greenBtn " value="Я ознакомлен и согласен с правилами участия в Партнерской программе" id="EnterSogl" />
 	   <div class="clear"></div>
    </form>
+  </c:if>
  </div>
 </div> 
 

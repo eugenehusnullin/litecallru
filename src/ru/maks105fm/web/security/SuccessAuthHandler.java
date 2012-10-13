@@ -13,6 +13,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 public class SuccessAuthHandler implements AuthenticationSuccessHandler {
 	
 	private SimpleGrantedAuthority authPartner = new SimpleGrantedAuthority("ROLE_PARTNER");
+	private SimpleGrantedAuthority authAgreePartner = new SimpleGrantedAuthority("ROLE_AGREEPARTNER");
 	private SimpleGrantedAuthority authUser = new SimpleGrantedAuthority("ROLE_CLIENT");
 	private SimpleGrantedAuthority authAdmin = new SimpleGrantedAuthority("ROLE_ADMIN");
 
@@ -23,6 +24,8 @@ public class SuccessAuthHandler implements AuthenticationSuccessHandler {
 		httpServletRequest.getRequestURI();
 		if (authentication.getAuthorities().contains(authPartner)) {
 			httpServletResponse.sendRedirect("partner");
+		} else if (authentication.getAuthorities().contains(authAgreePartner)) {
+			httpServletResponse.sendRedirect("partner/agreement");
 		} else if (authentication.getAuthorities().contains(authAdmin)) {
 			httpServletResponse.sendRedirect("admin");
 		} else if (authentication.getAuthorities().contains(authUser)) {

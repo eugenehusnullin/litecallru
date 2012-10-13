@@ -239,20 +239,20 @@ public class AdminJdbcDao extends JdbcDao implements AdminDao {
 	public void addClientUser(int clientId, String password) {
 		int userId = addUser(Integer.toString(clientId), password, "client");
 		
-		addUserrole(userId, "ROLE_CLIENT");
-		
 		String sql = "insert into clientuser (clientid, userid) values (?, ?)";
 		jdbcTemplate.update(sql, clientId, userId);
+		
+		addUserrole(userId, "ROLE_CLIENT");
 	}
 	
 	@Override
 	public void addPartnerUser(int partnerId, String password) {
 		int userId = addUser(Integer.toString(partnerId), password, "partner");
 		
-		addUserrole(userId, "ROLE_PARTNER");
-		
 		String sql = "insert into partneruser (partnerid, userid) values (?, ?)";
 		jdbcTemplate.update(sql, partnerId, userId);
+		
+		addUserrole(userId, "ROLE_AGREEPARTNER");
 	}
 	
 	private int addUser(final String username, final String password, final String usertype) {
@@ -276,7 +276,8 @@ public class AdminJdbcDao extends JdbcDao implements AdminDao {
 		return keyHolder.getKey().intValue();
 	}
 	
-	private void addUserrole(int userId, String roleName) {
+	@Override
+	public void addUserrole(long userId, String roleName) {
 		String sql = "insert into userrole (userid, role) values (?, ?)";
 		jdbcTemplate.update(sql, userId, roleName);
 	}
