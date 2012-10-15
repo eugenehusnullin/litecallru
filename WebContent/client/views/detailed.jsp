@@ -45,7 +45,7 @@
 									</thead>
 									<c:forEach items="${calls}" var="call">
 										<tr>
-											<td>${((curPage-1)*10)+call.rownum}</td>
+											<td>${call.rownum}</td>
 											<td>${call.eventdate}</td>
 											<td>${call.callerid}</td>
 											<td>${call.waittime}</td>
