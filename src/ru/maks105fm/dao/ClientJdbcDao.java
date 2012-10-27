@@ -20,8 +20,11 @@ public class ClientJdbcDao extends JdbcDao implements ClientDao {
 			return null;
 		}
 
-		return jdbcTemplate.queryForList("select a.name, a.description"
-				+ " from queue a where a.clientid = ?" + " order by a.name",
+		return jdbcTemplate.queryForList("select a.name, a.description " +
+				"from queue a " +
+				"where a.clientid = ? " +
+				"and a.deleted = 0" +
+				"order by a.name",
 				clientid);
 	}
 
