@@ -12,29 +12,59 @@ public interface ClientDao {
 
 	List<Map<String, Object>> getQueueLogCurMonth(String queueName, int pagesize, int page);
 
-	int getCustomAllCallsCount(String queueName, String strFrom, String strTo);
+	int getCustomQueueCalls(String queueName, String strFrom, String strTo);
 
-	int getPrvMonthAllCallsCount(String queueName);
+	int getPrvMonthQueueCalls(String queueName);
 
-	int getCurMonthAllCallsCount(String queueName);
+	int getCurMonthQueueCalls(String queueName);
 
-	int getCustomReceivedCallsCount(String queueName, String strFrom, String strTo);
+	int getCustomReceivedQueueCalls(String queueName, String strFrom, String strTo);
 
-	int getCustomAverageWaitTime(String queueName, String strFrom, String strTo);
+	int getCustomQueueAverageWaitTime(String queueName, String strFrom, String strTo);
 
-	long getCustomSumCallTime(String queueName, String strFrom, String strTo);
+	long getCustomQueueSumCallTime(String queueName, String strFrom, String strTo);
 
-	int getPrvMonthReceivedCallsCount(String queueName);
+	int getPrvMonthReceivedQueueCalls(String queueName);
 
-	int getPrvMonthAverageWaitTime(String queueName);
+	int getPrvMonthQueueAverageWaitTime(String queueName);
 
-	long getPrvMonthSumCallTime(String queueName);
+	long getPrvMonthQueueSumCallTime(String queueName);
 
-	int getCurMonthReceivedCallsCount(String queueName);
+	int getCurMonthReceivedQueueCalls(String queueName);
 
-	int getCurMonthAverageWaitTime(String queueName);
+	int getCurMonthQueueAverageWaitTime(String queueName);
 
-	long getCurMonthSumCallTime(String queueName);
+	long getCurMonthQueueSumCallTime(String queueName);
 	
 	boolean hasUserRights(long userId, String queuename);
+
+	int getCustomOutCalls(String queueName, String from, String to);
+
+	List<Map<String, Object>> getOutLogCustom(String queueName, String from, String to, int pagesize, Integer page);
+
+	int getPrvMonthOutCalls(String queueName);
+
+	List<Map<String, Object>> getOutLogPrvMonth(String queueName, int pagesize, Integer page);
+
+	int getCurMonthOutCalls(String queueName);
+
+	List<Map<String, Object>> getOutLogCurMonth(String queueName, int pagesize, Integer page);
+
+	int getCustomReceivedOutCalls(String queueName, String from, String to);
+
+	int getCustomOutAverageWaitTime(String queueName, String from, String to);
+
+	long getCustomOutSumCallTime(String queueName, String from, String to);
+
+	int getPrvMonthReceivedOutCalls(String queueName);
+
+	int getPrvMonthOutAverageWaitTime(String queueName);
+
+	long getPrvMonthOutSumCallTime(String queueName);
+
+	int getCurMonthReceivedOutCalls(String queueName);
+
+	int getCurMonthOutAverageWaitTime(String queueName);
+
+	long getCurMonthOutSumCallTime(String queueName);
 }

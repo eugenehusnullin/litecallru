@@ -33,7 +33,7 @@
 							<c:choose>	
 								<c:when test="${callsCount!=0}">
 									<table id="statInfo">
-										<tr><td>Кол-во звонков на номер</td><td>${callsCount}</td></tr>
+										<tr><td>Кол-во звонков</td><td>${callsCount}</td></tr>
 										<tr><td>Кол-во обработанных звонков</td><td>${receivedCallsCount}</td></tr>
 										<tr><td>Кол-во не обработанных звонков</td><td>${unreceivedCallsCount}</td></tr>
 										<tr><td>Среднее время ожидания ответа в сек.</td><td>${averageWaitTime}</td></tr>

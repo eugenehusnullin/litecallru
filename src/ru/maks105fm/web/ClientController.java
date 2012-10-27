@@ -112,19 +112,41 @@ public class ClientController {
 		if (period != null && !period.isEmpty()) {
 			List<Map<String, Object>> calls = null;
 			int callsCount = 0;
-
-			if (period.equals(PERIOD_CUSTOM)) {
-				callsCount = clientDao.getCustomAllCallsCount(queueName, strFrom, strTo);
-				calls = clientDao.getQueueLogCustom(queueName, strFrom, strTo, pagesize, page);
-
-			} else if (period.equals(PERIOD_PRVMONTH)) {
-				callsCount = clientDao.getPrvMonthAllCallsCount(queueName);
-				calls = clientDao.getQueueLogPrvMonth(queueName, pagesize, page);
-
-			} else if (period.equals(PERIOD_CURMONTH)) {
-				callsCount = clientDao.getCurMonthAllCallsCount(queueName);
-				calls = clientDao.getQueueLogCurMonth(queueName, pagesize, page);
-
+			
+			
+			int innerTypeId = getChannelInnerTypeId(queueName, model);
+			if (innerTypeId == 1) {
+				if (period.equals(PERIOD_CUSTOM)) {
+					callsCount = clientDao.getCustomQueueCalls(queueName, strFrom, strTo);
+					calls = clientDao.getQueueLogCustom(queueName, strFrom, strTo, pagesize, page);
+	
+				} else if (period.equals(PERIOD_PRVMONTH)) {
+					callsCount = clientDao.getPrvMonthQueueCalls(queueName);
+					calls = clientDao.getQueueLogPrvMonth(queueName, pagesize, page);
+	
+				} else if (period.equals(PERIOD_CURMONTH)) {
+					callsCount = clientDao.getCurMonthQueueCalls(queueName);
+					calls = clientDao.getQueueLogCurMonth(queueName, pagesize, page);
+	
+				} else {
+					// error
+				}
+			} else if (innerTypeId == 2) {
+				if (period.equals(PERIOD_CUSTOM)) {
+					callsCount = clientDao.getCustomOutCalls(queueName, strFrom, strTo);
+					calls = clientDao.getOutLogCustom(queueName, strFrom, strTo, pagesize, page);
+	
+				} else if (period.equals(PERIOD_PRVMONTH)) {
+					callsCount = clientDao.getPrvMonthOutCalls(queueName);
+					calls = clientDao.getOutLogPrvMonth(queueName, pagesize, page);
+	
+				} else if (period.equals(PERIOD_CURMONTH)) {
+					callsCount = clientDao.getCurMonthOutCalls(queueName);
+					calls = clientDao.getOutLogCurMonth(queueName, pagesize, page);
+	
+				} else {
+					// error
+				}
 			} else {
 				// error
 			}
@@ -141,6 +163,19 @@ public class ClientController {
 		}
 
 		return "detailed";
+	}
+	
+	private int getChannelInnerTypeId(String queueName, Model model) {
+		@SuppressWarnings("unchecked")
+		List<Map<String, Object>> queues = (List<Map<String, Object>>) model.asMap().get("queues");
+		
+		for (Map<String, Object> map : queues) {
+			if (((String)map.get("name")).equals(queueName)) {
+				return (Integer) map.get("innertypeid");
+			}
+		}
+		
+		return 0;		
 	}
 
 	@RequestMapping(value = "/commonLog", method = RequestMethod.GET)
@@ -166,24 +201,51 @@ public class ClientController {
 			int averageWaitTime = 0;
 			long sumCallTime = 0;
 
-			if (period.equals(PERIOD_CUSTOM)) {
-				callsCount = clientDao.getCustomAllCallsCount(queueName, strFrom, strTo);
-				receivedCallsCount = clientDao.getCustomReceivedCallsCount(queueName, strFrom, strTo);
-				averageWaitTime = clientDao.getCustomAverageWaitTime(queueName, strFrom, strTo);
-				sumCallTime = clientDao.getCustomSumCallTime(queueName, strFrom, strTo);
-
-			} else if (period.equals(PERIOD_PRVMONTH)) {
-				callsCount = clientDao.getPrvMonthAllCallsCount(queueName);
-				receivedCallsCount = clientDao.getPrvMonthReceivedCallsCount(queueName);
-				averageWaitTime = clientDao.getPrvMonthAverageWaitTime(queueName);
-				sumCallTime = clientDao.getPrvMonthSumCallTime(queueName);
-
-			} else if (period.equals(PERIOD_CURMONTH)) {
-				callsCount = clientDao.getCurMonthAllCallsCount(queueName);
-				receivedCallsCount = clientDao.getCurMonthReceivedCallsCount(queueName);
-				averageWaitTime = clientDao.getCurMonthAverageWaitTime(queueName);
-				sumCallTime = clientDao.getCurMonthSumCallTime(queueName);
-
+			int innerTypeId = getChannelInnerTypeId(queueName, model);
+			if (innerTypeId == 1) {
+				if (period.equals(PERIOD_CUSTOM)) {
+					callsCount = clientDao.getCustomQueueCalls(queueName, strFrom, strTo);
+					receivedCallsCount = clientDao.getCustomReceivedQueueCalls(queueName, strFrom, strTo);
+					averageWaitTime = clientDao.getCustomQueueAverageWaitTime(queueName, strFrom, strTo);
+					sumCallTime = clientDao.getCustomQueueSumCallTime(queueName, strFrom, strTo);
+	
+				} else if (period.equals(PERIOD_PRVMONTH)) {
+					callsCount = clientDao.getPrvMonthQueueCalls(queueName);
+					receivedCallsCount = clientDao.getPrvMonthReceivedQueueCalls(queueName);
+					averageWaitTime = clientDao.getPrvMonthQueueAverageWaitTime(queueName);
+					sumCallTime = clientDao.getPrvMonthQueueSumCallTime(queueName);
+	
+				} else if (period.equals(PERIOD_CURMONTH)) {
+					callsCount = clientDao.getCurMonthQueueCalls(queueName);
+					receivedCallsCount = clientDao.getCurMonthReceivedQueueCalls(queueName);
+					averageWaitTime = clientDao.getCurMonthQueueAverageWaitTime(queueName);
+					sumCallTime = clientDao.getCurMonthQueueSumCallTime(queueName);
+	
+				} else {
+					// error
+				}
+			} else if (innerTypeId == 2) {
+				if (period.equals(PERIOD_CUSTOM)) {
+					callsCount = clientDao.getCustomOutCalls(queueName, strFrom, strTo);
+					receivedCallsCount = clientDao.getCustomReceivedOutCalls(queueName, strFrom, strTo);
+					averageWaitTime = clientDao.getCustomOutAverageWaitTime(queueName, strFrom, strTo);
+					sumCallTime = clientDao.getCustomOutSumCallTime(queueName, strFrom, strTo);
+	
+				} else if (period.equals(PERIOD_PRVMONTH)) {
+					callsCount = clientDao.getPrvMonthOutCalls(queueName);
+					receivedCallsCount = clientDao.getPrvMonthReceivedOutCalls(queueName);
+					averageWaitTime = clientDao.getPrvMonthOutAverageWaitTime(queueName);
+					sumCallTime = clientDao.getPrvMonthOutSumCallTime(queueName);
+	
+				} else if (period.equals(PERIOD_CURMONTH)) {
+					callsCount = clientDao.getCurMonthOutCalls(queueName);
+					receivedCallsCount = clientDao.getCurMonthReceivedOutCalls(queueName);
+					averageWaitTime = clientDao.getCurMonthOutAverageWaitTime(queueName);
+					sumCallTime = clientDao.getCurMonthOutSumCallTime(queueName);
+	
+				} else {
+					// error
+				}
 			} else {
 				// error
 			}

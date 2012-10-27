@@ -20,7 +20,7 @@ public class ClientJdbcDao extends JdbcDao implements ClientDao {
 			return null;
 		}
 
-		return jdbcTemplate.queryForList("select a.name, a.description " +
+		return jdbcTemplate.queryForList("select a.name, a.description, a.innertypeid " +
 				"from queue a " +
 				"where a.clientid = ? " +
 				"and a.deleted = 0" +
@@ -41,7 +41,8 @@ public class ClientJdbcDao extends JdbcDao implements ClientDao {
 
 		String sql = "SELECT to_char(eventdate_msk, 'DD.MM.YY HH24:MI') eventdate, uniqueid, queuename, "
 				+ " agent, event, waittime, (((calltime / 60) + 1))*call calltime, call, callerid, "
-				+ " row_number() over(order by a.eventdate_msk DESC) rownum FROM cdr_queue_view a"
+				+ " row_number() over(order by a.eventdate_msk DESC) rownum " +
+				"FROM cdr_queue_view a"
 				+ " WHERE a.queuename = ? AND"
 				+ " a.eventdate_msk >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND"
 				+ " a.eventdate_msk <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS')"
@@ -74,11 +75,13 @@ public class ClientJdbcDao extends JdbcDao implements ClientDao {
 	}
 
 	@Override
-	public int getCustomAllCallsCount(String queueName, String from, String to) {
+	public int getCustomQueueCalls(String queueName, String from, String to) {
 		String strFrom = from + " 00:00:00";
 		String strTo = to + " 23:59:59";
 
-		String sql = "SELECT count(1) FROM cdr_queue_view a WHERE a.queuename = ? AND"
+		String sql = "SELECT count(1) " +
+				"FROM cdr_queue_view a " +
+				"WHERE a.queuename = ? AND"
 				+ " a.eventdate_msk >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND"
 				+ " a.eventdate_msk <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS')";
 
@@ -86,28 +89,29 @@ public class ClientJdbcDao extends JdbcDao implements ClientDao {
 	}
 
 	@Override
-	public int getPrvMonthAllCallsCount(String queueName) {
+	public int getPrvMonthQueueCalls(String queueName) {
 		String strFrom = DateUtils.getStartOfMonthStr(-1);
 		String strTo = DateUtils.getEndOfMonthStr(-1);
 
-		return getCustomAllCallsCount(queueName, strFrom, strTo);
+		return getCustomQueueCalls(queueName, strFrom, strTo);
 	}
 
 	@Override
-	public int getCurMonthAllCallsCount(String queueName) {
+	public int getCurMonthQueueCalls(String queueName) {
 		String strFrom = DateUtils.getStartOfMonthStr(0);
 		String strTo = DateUtils.getEndOfMonthStr(0);
 
-		return getCustomAllCallsCount(queueName, strFrom, strTo);
+		return getCustomQueueCalls(queueName, strFrom, strTo);
 	}
 
 	@Override
-	public int getCustomReceivedCallsCount(String queueName, String from,
+	public int getCustomReceivedQueueCalls(String queueName, String from,
 			String to) {
 		String strFrom = from + " 00:00:00";
 		String strTo = to + " 23:59:59";
 
-		String sql = "SELECT count(1) FROM cdr_queue_view a WHERE a.queuename = ? AND"
+		String sql = "SELECT count(1) " +
+				"FROM cdr_queue_view a WHERE a.queuename = ? AND"
 				+ " a.eventdate_msk >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND"
 				+ " a.eventdate_msk <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND a.call = 1";
 
@@ -115,11 +119,12 @@ public class ClientJdbcDao extends JdbcDao implements ClientDao {
 	}
 
 	@Override
-	public int getCustomAverageWaitTime(String queueName, String from, String to) {
+	public int getCustomQueueAverageWaitTime(String queueName, String from, String to) {
 		String strFrom = from + " 00:00:00";
 		String strTo = to + " 23:59:59";
 
-		String sql = "SELECT round(avg(a.waittime)) FROM cdr_queue_view a " +
+		String sql = "SELECT round(avg(a.waittime)) " +
+				"FROM cdr_queue_view a " +
 				"WHERE a.queuename = ? AND " +
 				"a.eventdate_msk >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND " +
 				"a.eventdate_msk <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND " +
@@ -129,11 +134,13 @@ public class ClientJdbcDao extends JdbcDao implements ClientDao {
 	}
 
 	@Override
-	public long getCustomSumCallTime(String queueName, String from, String to) {
+	public long getCustomQueueSumCallTime(String queueName, String from, String to) {
 		String strFrom = from + " 00:00:00";
 		String strTo = to + " 23:59:59";
 
-		String sql = "SELECT sum(((calltime / 60) + 1)) FROM cdr_queue_view a WHERE a.queuename = ? AND " +
+		String sql = "SELECT sum(((calltime / 60) + 1)) " +
+				"FROM cdr_queue_view a " +
+				"WHERE a.queuename = ? AND " +
 				"a.eventdate_msk >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND " +
 				"a.eventdate_msk <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND " +
 				"a.call = 1";
@@ -142,51 +149,51 @@ public class ClientJdbcDao extends JdbcDao implements ClientDao {
 	}
 
 	@Override
-	public int getPrvMonthReceivedCallsCount(String queueName) {
+	public int getPrvMonthReceivedQueueCalls(String queueName) {
 		String strFrom = DateUtils.getStartOfMonthStr(-1);
 		String strTo = DateUtils.getEndOfMonthStr(-1);
 
-		return getCustomReceivedCallsCount(queueName, strFrom, strTo);
+		return getCustomReceivedQueueCalls(queueName, strFrom, strTo);
 	}
 
 	@Override
-	public int getPrvMonthAverageWaitTime(String queueName) {
+	public int getPrvMonthQueueAverageWaitTime(String queueName) {
 		String strFrom = DateUtils.getStartOfMonthStr(-1);
 		String strTo = DateUtils.getEndOfMonthStr(-1);
 
-		return getCustomAverageWaitTime(queueName, strFrom, strTo);
+		return getCustomQueueAverageWaitTime(queueName, strFrom, strTo);
 	}
 
 	@Override
-	public long getPrvMonthSumCallTime(String queueName) {
+	public long getPrvMonthQueueSumCallTime(String queueName) {
 		String strFrom = DateUtils.getStartOfMonthStr(-1);
 		String strTo = DateUtils.getEndOfMonthStr(-1);
 
-		return getCustomSumCallTime(queueName, strFrom, strTo);
+		return getCustomQueueSumCallTime(queueName, strFrom, strTo);
 	}
 
 	@Override
-	public int getCurMonthReceivedCallsCount(String queueName) {
+	public int getCurMonthReceivedQueueCalls(String queueName) {
 		String strFrom = DateUtils.getStartOfMonthStr(0);
 		String strTo = DateUtils.getEndOfMonthStr(0);
 
-		return getCustomReceivedCallsCount(queueName, strFrom, strTo);
+		return getCustomReceivedQueueCalls(queueName, strFrom, strTo);
 	}
 
 	@Override
-	public int getCurMonthAverageWaitTime(String queueName) {
+	public int getCurMonthQueueAverageWaitTime(String queueName) {
 		String strFrom = DateUtils.getStartOfMonthStr(0);
 		String strTo = DateUtils.getEndOfMonthStr(0);
 
-		return getCustomAverageWaitTime(queueName, strFrom, strTo);
+		return getCustomQueueAverageWaitTime(queueName, strFrom, strTo);
 	}
 
 	@Override
-	public long getCurMonthSumCallTime(String queueName) {
+	public long getCurMonthQueueSumCallTime(String queueName) {
 		String strFrom = DateUtils.getStartOfMonthStr(0);
 		String strTo = DateUtils.getEndOfMonthStr(0);
 
-		return getCustomSumCallTime(queueName, strFrom, strTo);
+		return getCustomQueueSumCallTime(queueName, strFrom, strTo);
 	}
 	
 	@Override
@@ -200,5 +207,166 @@ public class ClientJdbcDao extends JdbcDao implements ClientDao {
 		long cnt = jdbcTemplate.queryForLong(sql, clientid, queuename);
 		
 		return cnt != 0;
+	}
+
+	@Override
+	public int getCustomOutCalls(String queueName, String from, String to) {
+		String strFrom = from + " 00:00:00";
+		String strTo = to + " 23:59:59";
+
+		String sql = "SELECT count(1) " +
+				"FROM cdr_out_view a " +
+				"WHERE a.queuename = ? AND"
+				+ " a.eventdate_msk >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND"
+				+ " a.eventdate_msk <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS')";
+
+		return jdbcTemplate.queryForInt(sql, queueName, strFrom, strTo);
+	}
+
+	@Override
+	public List<Map<String, Object>> getOutLogCustom(String queueName, String from, String to, int pagesize,
+			Integer page) {
+		String strFrom = from + " 00:00:00";
+		String strTo = to + " 23:59:59";
+
+		// calculate pagination
+		int offset = (page - 1) * pagesize;
+		int limit = pagesize;
+
+		String sql = "SELECT to_char(eventdate_msk, 'DD.MM.YY HH24:MI') eventdate, uniqueid, queuename, "
+				+ " agent, event, waittime, (((calltime / 60) + 1))*call calltime, call, callerid, "
+				+ " row_number() over(order by a.eventdate_msk DESC) rownum " +
+				"FROM cdr_out_view a"
+				+ " WHERE a.queuename = ? AND"
+				+ " a.eventdate_msk >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND"
+				+ " a.eventdate_msk <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS')"
+				+ " ORDER BY a.eventdate_msk DESC LIMIT ? OFFSET ?";
+
+		return jdbcTemplate.queryForList(sql, queueName, strFrom, strTo, limit,
+				offset);
+	}
+
+	@Override
+	public int getPrvMonthOutCalls(String queueName) {
+		String strFrom = DateUtils.getStartOfMonthStr(-1);
+		String strTo = DateUtils.getEndOfMonthStr(-1);
+
+		return getCustomOutCalls(queueName, strFrom, strTo);
+	}
+
+	@Override
+	public List<Map<String, Object>> getOutLogPrvMonth(String queueName, int pagesize, Integer page) {
+		String strFrom = DateUtils.getStartOfMonthStr(-1);
+		String strTo = DateUtils.getEndOfMonthStr(-1);
+
+		return getOutLogCustom(queueName, strFrom, strTo, pagesize, page);
+	}
+
+	@Override
+	public int getCurMonthOutCalls(String queueName) {
+		String strFrom = DateUtils.getStartOfMonthStr(0);
+		String strTo = DateUtils.getEndOfMonthStr(0);
+
+		return getCustomOutCalls(queueName, strFrom, strTo);
+	}
+
+	@Override
+	public List<Map<String, Object>> getOutLogCurMonth(String queueName, int pagesize, Integer page) {
+		String strFrom = DateUtils.getStartOfMonthStr(0);
+		String strTo = DateUtils.getEndOfMonthStr(0);
+
+		return getOutLogCustom(queueName, strFrom, strTo, pagesize, page);
+	}
+
+	@Override
+	public int getCustomReceivedOutCalls(String queueName, String from, String to) {
+		String strFrom = from + " 00:00:00";
+		String strTo = to + " 23:59:59";
+
+		String sql = "SELECT count(1) " +
+				"FROM cdr_out_view a " +
+				"WHERE a.queuename = ? AND"
+				+ " a.eventdate_msk >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND"
+				+ " a.eventdate_msk <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND a.call = 1";
+
+		return jdbcTemplate.queryForInt(sql, queueName, strFrom, strTo);
+	}
+
+	@Override
+	public int getCustomOutAverageWaitTime(String queueName, String from, String to) {
+		String strFrom = from + " 00:00:00";
+		String strTo = to + " 23:59:59";
+
+		String sql = "SELECT round(avg(a.waittime)) " +
+				"FROM cdr_out_view a " +
+				"WHERE a.queuename = ? AND " +
+				"a.eventdate_msk >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND " +
+				"a.eventdate_msk <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND " +
+				"a.call = 1";
+
+		return jdbcTemplate.queryForInt(sql, queueName, strFrom, strTo);
+	}
+
+	@Override
+	public long getCustomOutSumCallTime(String queueName, String from, String to) {
+		String strFrom = from + " 00:00:00";
+		String strTo = to + " 23:59:59";
+
+		String sql = "SELECT sum(((calltime / 60) + 1)) " +
+				"FROM cdr_out_view a " +
+				"WHERE a.queuename = ? AND " +
+				"a.eventdate_msk >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND " +
+				"a.eventdate_msk <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND " +
+				"a.call = 1";
+
+		return jdbcTemplate.queryForInt(sql, queueName, strFrom, strTo);
+	}
+
+	@Override
+	public int getPrvMonthReceivedOutCalls(String queueName) {
+		String strFrom = DateUtils.getStartOfMonthStr(-1);
+		String strTo = DateUtils.getEndOfMonthStr(-1);
+
+		return getCustomReceivedOutCalls(queueName, strFrom, strTo);
+	}
+
+	@Override
+	public int getPrvMonthOutAverageWaitTime(String queueName) {
+		String strFrom = DateUtils.getStartOfMonthStr(-1);
+		String strTo = DateUtils.getEndOfMonthStr(-1);
+
+		return getCustomOutAverageWaitTime(queueName, strFrom, strTo);
+	}
+
+	@Override
+	public long getPrvMonthOutSumCallTime(String queueName) {
+		String strFrom = DateUtils.getStartOfMonthStr(-1);
+		String strTo = DateUtils.getEndOfMonthStr(-1);
+
+		return getCustomOutSumCallTime(queueName, strFrom, strTo);
+	}
+
+	@Override
+	public int getCurMonthReceivedOutCalls(String queueName) {
+		String strFrom = DateUtils.getStartOfMonthStr(0);
+		String strTo = DateUtils.getEndOfMonthStr(0);
+
+		return getCustomReceivedOutCalls(queueName, strFrom, strTo);
+	}
+
+	@Override
+	public int getCurMonthOutAverageWaitTime(String queueName) {
+		String strFrom = DateUtils.getStartOfMonthStr(0);
+		String strTo = DateUtils.getEndOfMonthStr(0);
+
+		return getCustomOutAverageWaitTime(queueName, strFrom, strTo);
+	}
+
+	@Override
+	public long getCurMonthOutSumCallTime(String queueName) {
+		String strFrom = DateUtils.getStartOfMonthStr(0);
+		String strTo = DateUtils.getEndOfMonthStr(0);
+
+		return getCustomOutSumCallTime(queueName, strFrom, strTo);
 	}
 }
