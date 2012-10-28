@@ -138,7 +138,7 @@ public class ClientJdbcDao extends JdbcDao implements ClientDao {
 		String strFrom = from + " 00:00:00";
 		String strTo = to + " 23:59:59";
 
-		String sql = "SELECT sum(((calltime / 60) + 1)) " +
+		String sql = "SELECT sum(((calltime / 60) + 1)*call) " +
 				"FROM cdr_queue_view a " +
 				"WHERE a.queuename = ? AND " +
 				"a.eventdate_msk >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND " +
@@ -312,7 +312,7 @@ public class ClientJdbcDao extends JdbcDao implements ClientDao {
 		String strFrom = from + " 00:00:00";
 		String strTo = to + " 23:59:59";
 
-		String sql = "SELECT sum(((calltime / 60) + 1)) " +
+		String sql = "SELECT sum(((calltime / 60) + 1)*call) " +
 				"FROM cdr_out_view a " +
 				"WHERE a.queuename = ? AND " +
 				"a.eventdate_msk >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND " +
