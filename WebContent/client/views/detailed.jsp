@@ -52,23 +52,30 @@
 											<td>${call.calltime}</td>
 											<td>
 <c:if test="${call.call==1}">
-	<div id="mon_${call.uniqueid}" style="height:16px;width:150px;">
-<%-- 		<a href="http://${monitorhost}/monitor/${call.uniqueid}.wav">прослушать</a> --%>
-<a href="compare" target="_blank" onclick="ShowWin('http://${monitorhost}/monitor/${call.uniqueid}.wav', 350, 150); return false;">прослушать</a>
-	</div>
-<!--  	<script type="text/javascript"> -->
-<!-- //  		var rnumber = Math.floor(Math.random()*9999999); -->
-<!-- //  		var so = new SWFObject("http://szenprogs.ru/flash/audio.swf?r="+rnumber, "music_code", "150", "16", "9"); -->
-<!-- //  		so.addParam("wmode", "transparent"); -->
-<!-- //  		so.addParam("allowScriptAccess", "always"); -->
-<%-- //  		so.addVariable("song_url", "http://${monitorhost}/monitor/${call.uniqueid}.wav"); --%>
-<!-- //  		so.addVariable("show_copyright", "0"); -->
-<!-- //  		so.addVariable("background_color", "#7da62e"); -->
-<!-- //  		so.addVariable("autoplay", "0"); -->
-<!-- //  		so.addVariable("textoff", "1"); -->
-<!-- //  		so.addVariable("loop", "0"); -->
-<%-- //  		so.write("mon_${call.uniqueid}"); --%>
-<!--  	</script> -->
+<div id="mon_${call.uniqueid}" style="height:16px;width:150px;">
+	<c:choose>
+		<c:when test="${call.iscurrentdate==1}">											
+			
+				<a href="compare" target="_blank" onclick="ShowWin('http://${monitorhost}/monitor/${call.uniqueid}.wav', 350, 150); return false;">прослушать</a>
+			
+		</c:when>
+		<c:otherwise>		
+		  	<script type="text/javascript">
+		  		var rnumber = Math.floor(Math.random()*9999999);
+		  		var so = new SWFObject("http://szenprogs.ru/flash/audio.swf?r="+rnumber, "music_code", "150", "16", "9");
+		  		so.addParam("wmode", "transparent");
+		  		so.addParam("allowScriptAccess", "always");
+		  		so.addVariable("song_url", "http://${monitorhost}/monitor/${call.uniqueid}.mp3");
+		  		so.addVariable("show_copyright", "0");
+		  		so.addVariable("background_color", "#7da62e");
+		  		so.addVariable("autoplay", "0");
+		  		so.addVariable("textoff", "1");
+		  		so.addVariable("loop", "0");
+		  		so.write("mon_${call.uniqueid}");
+		  	</script>
+		</c:otherwise>
+	</c:choose>
+</div>
 </c:if>
 											</td>
 										</tr>

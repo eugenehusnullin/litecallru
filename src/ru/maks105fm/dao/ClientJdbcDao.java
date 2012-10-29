@@ -39,10 +39,7 @@ public class ClientJdbcDao extends JdbcDao implements ClientDao {
 		int offset = (page - 1) * pagesize;
 		int limit = pagesize;
 
-		String sql = "SELECT to_char(eventdate_msk, 'DD.MM.YY HH24:MI') eventdate, uniqueid, queuename, "
-				+ " agent, event, waittime, (((calltime / 60) + 1))*call calltime, call, callerid, "
-				+ " row_number() over(order by a.eventdate_msk DESC) rownum " +
-				"FROM cdr_queue_view a"
+		String sql = "SELECT a.* FROM client_queuelog_view a"
 				+ " WHERE a.queuename = ? AND"
 				+ " a.eventdate_msk >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND"
 				+ " a.eventdate_msk <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS')"
@@ -233,10 +230,7 @@ public class ClientJdbcDao extends JdbcDao implements ClientDao {
 		int offset = (page - 1) * pagesize;
 		int limit = pagesize;
 
-		String sql = "SELECT to_char(eventdate_msk, 'DD.MM.YY HH24:MI') eventdate, uniqueid, queuename, "
-				+ " agent, event, waittime, (((calltime / 60) + 1))*call calltime, call, callerid, "
-				+ " row_number() over(order by a.eventdate_msk DESC) rownum " +
-				"FROM cdr_out_view a"
+		String sql = "SELECT a.* FROM client_outlog_view a"
 				+ " WHERE a.queuename = ? AND"
 				+ " a.eventdate_msk >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND"
 				+ " a.eventdate_msk <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS')"
