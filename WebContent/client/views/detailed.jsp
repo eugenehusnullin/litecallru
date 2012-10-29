@@ -54,10 +54,9 @@
 <c:if test="${call.call==1}">
 <div id="mon_${call.uniqueid}" style="height:16px;width:150px;">
 	<c:choose>
-		<c:when test="${call.iscurrentdate==1}">											
-			
-				<a href="compare" target="_blank" onclick="ShowWin('http://${monitorhost}/monitor/${call.uniqueid}.wav', 350, 150); return false;">прослушать</a>
-			
+		<c:when test="${call.iscurrentdate==1}">
+			<a href="compare" target="_blank" onclick=
+				"ShowWin('http://${monitorhost}/monitor/${call.uniqueid}.wav', 350, 150); return false;">прослушать</a>
 		</c:when>
 		<c:otherwise>		
 		  	<script type="text/javascript">
