@@ -8,9 +8,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Клиенты</title>
 
-<link href="<c:url value="images/favicon.png"/>" rel="shortcut icon" type="image/png" ></link>
-<link href="<c:url value="css/styles.css"/>" rel="stylesheet" type="text/css" ></link>
-<script src="<c:url value="js/jquery.js"/>" type="text/javascript" ></script>
+<link href="<c:url value="/images/favicon.png"/>" rel="shortcut icon" type="image/png" ></link>
+<link href="<c:url value="/css/styles.css"/>" rel="stylesheet" type="text/css" ></link>
+<script src="<c:url value="/js/jquery-1.8.2.js"/>" type="text/javascript" ></script>
+<script src="<c:url value="/js/modal-window.js"/>" type="text/javascript" ></script>
 </head>
 <body>
 	<div id="wrapper">
@@ -101,8 +102,6 @@
 		</div>
 	</div>
 	<%@ include file="../../views/footer.html" %>
-	
-	<script type="text/javascript" src="js/modal-window.js"></script>
 	
 	<div id="addClient" style="display:none;">
 		<span id="title-pop">Добавление клиента</span>

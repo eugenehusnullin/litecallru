@@ -12,7 +12,7 @@ function WaitShadowClass(options)
         var _this = this;
 
         var block = $('<div>');
-        block.css('background', 'url(images/shadow.png) top left repeat');
+        block.css('background', 'url(../images/shadow.png) top left repeat');
         block.css('position', 'absolute');
         block.css('zIndex', '1000');
         block.hide();
