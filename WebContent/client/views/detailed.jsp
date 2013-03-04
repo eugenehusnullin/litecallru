@@ -41,6 +41,9 @@
 											<td>Время ожидания в сек.</td>
 											<td>Длительность разговора в мин.</td>
 											<td>Запись разговора</td>
+											<c:if test="${allowDownload == true}">
+												<td>Скачать</td>
+											</c:if>
 										</tr>
 									</thead>
 									<c:forEach items="${calls}" var="call">
@@ -77,6 +80,18 @@
 </div>
 </c:if>
 											</td>
+											<c:if test="${allowDownload == true}">
+												<td><c:if test="${call.call==1}">
+													<c:choose>
+														<c:when test="${call.iscurrentdate==1}">															
+															<a href="http://${monitorhost}/monitor/${call.uniqueid}.wav">${call.uniqueid}.wav</a>
+														</c:when>
+														<c:otherwise>		
+														  	<a href="http://${monitorhost}/monitor/${call.uniqueid}.mp3">${call.uniqueid}.mp3</a>
+														</c:otherwise>
+													</c:choose>													
+												</c:if></td>
+											</c:if>
 										</tr>
 									</c:forEach>
 								</table>

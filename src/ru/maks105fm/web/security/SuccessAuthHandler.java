@@ -16,6 +16,7 @@ public class SuccessAuthHandler implements AuthenticationSuccessHandler {
 	private SimpleGrantedAuthority authAgreePartner = new SimpleGrantedAuthority("ROLE_AGREEPARTNER");
 	private SimpleGrantedAuthority authUser = new SimpleGrantedAuthority("ROLE_CLIENT");
 	private SimpleGrantedAuthority authAdmin = new SimpleGrantedAuthority("ROLE_ADMIN");
+	public static SimpleGrantedAuthority AuthAllowDownload = new SimpleGrantedAuthority("ROLE_ALLOWDOWNLOAD");
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest httpServletRequest,

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import ru.maks105fm.dao.ClientDao;
+import ru.maks105fm.web.security.SuccessAuthHandler;
 import ru.maks105fm.web.security.UserWithName;
 
 @Controller
@@ -64,6 +65,8 @@ public class ClientController {
 
 		// periods
 		model.addAttribute("periods", periods);
+		
+		model.addAttribute("allowDownload", user.getAuthorities().contains(SuccessAuthHandler.AuthAllowDownload));
 	}
 
 	@RequestMapping(value = "/")
