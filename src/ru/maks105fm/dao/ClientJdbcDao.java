@@ -39,7 +39,8 @@ public class ClientJdbcDao extends JdbcDao implements ClientDao {
 		int offset = (page - 1) * pagesize;
 		int limit = pagesize;
 
-		String sql = "SELECT a.* FROM client_queuelog_view a"
+		String sql = "SELECT a.*, row_number() OVER (ORDER BY a.eventdate_msk DESC) AS rownum"
+				+ " FROM client_queuelog_view a"
 				+ " WHERE a.queuename = ? AND"
 				+ " a.eventdate_msk >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND"
 				+ " a.eventdate_msk <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS')"
@@ -230,7 +231,8 @@ public class ClientJdbcDao extends JdbcDao implements ClientDao {
 		int offset = (page - 1) * pagesize;
 		int limit = pagesize;
 
-		String sql = "SELECT a.* FROM client_outlog_view a"
+		String sql = "SELECT a.*, row_number() OVER (ORDER BY a.eventdate_msk DESC) AS rownum"
+				+ " FROM client_outlog_view a"
 				+ " WHERE a.queuename = ? AND"
 				+ " a.eventdate_msk >= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS') AND"
 				+ " a.eventdate_msk <= to_timestamp(?, 'dd.mm.yyyy HH24:MI:SS')"
